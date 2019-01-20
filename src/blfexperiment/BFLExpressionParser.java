@@ -323,7 +323,7 @@ public class BFLExpressionParser
     *              |                               |
     *              |--------Number.Unit-------------|
     *              |                               |
-    *              |-------- l-------------|
+    *              |-------- number-------------|
 
     *  </pre>
     *  parse a number can return null if not number 
