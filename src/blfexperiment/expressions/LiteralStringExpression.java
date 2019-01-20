@@ -1,0 +1,68 @@
+/*
+ * Copyright (C) 2019 Sheep Dalton.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301  USA
+ */
+
+package blfexperiment.expressions;
+
+import java.math.BigDecimal;
+
+/**
+ *
+ * @author Sheep Dalton
+ */
+public class LiteralStringExpression implements  NumericExpression
+{
+
+    GeneralText theText ; 
+    public LiteralStringExpression( String theLiteralString )
+    { 
+       assert theLiteralString != null:" NULL literlas NOT ALLOWED.";
+       this.theText =  new GeneralText(theLiteralString);  
+    }
+    @Override
+    public GeneralObject doIt()
+    {
+        return theText; //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean isANumber()
+    {
+        return false ; 
+    }
+    public String getNumberAsText()
+    {
+        return theText.peekText();
+    }
+    /**
+     *  IN BFL a   doing 2 + "4" gives 6 NOT SURE IF THIS IS TRUELY A GOOD IDEA.
+     */
+    
+     @Override 
+    public BigDecimal evaluateCalculation()
+    { 
+      return  new BigDecimal( theText.peekText() ) ; 
+    }
+
+    @Override
+    public String getType()
+    {
+        return theText.getType(); // mostly TEXT might be other types.
+    }
+
+}
