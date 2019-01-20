@@ -32,7 +32,7 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 
 /**
- * Project not on github.
+ * Project now on github.
  * @author Sheep Dalton
  */ 
 public class BFLParser extends BFLExpressionParser 
