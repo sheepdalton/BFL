@@ -19,6 +19,7 @@
 
 package blfexperiment.expressions;
 
+import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 import java.lang.ArithmeticException; 
 
@@ -56,12 +57,12 @@ public class UnariyExpression  implements NumericExpression
     public String getType() 
     { 
        // if operator = ¬ then return question 
-        if( operator == '√' && left.isANumber()) return Expression.number;  
+        if( operator == '√' && left.isANumber()) return BFLExpressionParser.number;  
         
         if( isQuestion() )
         { 
   
-        return typeQuestion ; // "Question";
+        return BFLExpressionParser.typeQuestion ; // "Question";
         } 
         
         return left.getType();

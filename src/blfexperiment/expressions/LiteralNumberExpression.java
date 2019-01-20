@@ -5,6 +5,7 @@
  */
 package blfexperiment.expressions;
 
+import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 
 /**
@@ -14,12 +15,12 @@ import java.math.BigDecimal;
 public class LiteralNumberExpression implements NumericExpression
 {
     String numberAsText = "0"; 
-    String type = typeInt;
+    String type = BFLExpressionParser.typeInt;
     //--------------------------------------------------------------------------
     public LiteralNumberExpression( String number )
     {
        this.numberAsText = number;  
-       if( number.contains("."))type = typeFloat;
+       if( number.contains("."))type = BFLExpressionParser.typeFloat;
     }
     //--------------------------------------------------------------------------
     public LiteralNumberExpression( String number , String type )

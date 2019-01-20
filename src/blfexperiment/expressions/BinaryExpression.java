@@ -5,6 +5,7 @@
  */
 package blfexperiment.expressions;
 
+import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
@@ -30,7 +31,7 @@ public class BinaryExpression implements NumericExpression
     //--------------------------------------------------------------------------
     public boolean isRawNumberType( String s )
     { 
-        return   s.equals(this.typeInt) ||  s.equals(this.typeFloat) ; 
+        return   s.equals(BFLExpressionParser.typeInt) ||  s.equals(BFLExpressionParser.typeFloat) ; 
     }
     //--------------------------------------------------------------------------
     @Override public boolean isQuestion( ) 
@@ -58,7 +59,7 @@ public class BinaryExpression implements NumericExpression
         String myType = "void";
         //if( "≠<=>".indexOf(operator)!= -1 )
        
-        if( isQuestion() ) return typeQuestion ; // "Question";
+        if( isQuestion() ) return BFLExpressionParser.typeQuestion ; // "Question";
         // System.out.println("QUESTION  ****" +   "≠<=>".indexOf(operator));
         
         if(  before != null )myType = before.getType();
@@ -67,14 +68,23 @@ public class BinaryExpression implements NumericExpression
         { 
             String rightType = after.getType();
             
-            //System.out.printf( "COMPARE %s to %s \n", myType , rightType);
-            
-             if( Expression.isACurrency( myType ) &&  
+            System.out.printf( "COMPARE '%s' to '%s' \n", myType , rightType);
+            System.out.printf( " Units %b %b\n" , BFLExpressionParser.isAUnit( rightType ) ,
+                    BFLExpressionParser.isAUnit( myType )); 
+             if( BFLExpressionParser.isACurrency( myType ) &&
+                     BFLExpressionParser.isACurrency(rightType) && 
+                           rightType.equalsIgnoreCase(myType)== false   )
+             { 
+                return "Error:  Cannot combine types "+ myType+" does not match  "
+                        +  rightType+ ". Use conversion with an exchange rate.  ";  
+             }
+                     
+             if( BFLExpressionParser.isACurrency( myType ) &&  
                                             isRawNumberType( rightType ))
              {
                  return myType; 
              }
-            if( Expression.isACurrency(rightType ) &&  
+            if( BFLExpressionParser.isACurrency(rightType ) &&  
                                             isRawNumberType(myType ))
             {
                  return rightType; 
@@ -83,8 +93,8 @@ public class BinaryExpression implements NumericExpression
                 operator == '/' ||  operator  == '÷'   || 
                     operator == '^') 
             { 
-                if( Expression.isACurrency(myType ) && 
-                    Expression.isACurrency(rightType ) )
+                if( BFLExpressionParser.isACurrency(myType ) && 
+                    BFLExpressionParser.isACurrency(rightType ) )
                 { 
                     return "Error: Multiplying or dividing "+ myType+" by " +  rightType+ " does not make sense lifeform"; 
                 }
@@ -103,21 +113,21 @@ public class BinaryExpression implements NumericExpression
            
             if( rightType.equals(myType))return myType; // int == int , float == float
             
-            if(  myType.equals(this.typeInt) && rightType.equals(this.typeFloat) )// type promtion to more general. 
+            if(  myType.equals(BFLExpressionParser.typeInt) && rightType.equals(BFLExpressionParser.typeFloat) )// type promtion to more general. 
             { 
-                return this.typeFloat;
+                return BFLExpressionParser.typeFloat;
             }
-            if(  myType.equals(this.typeFloat ) && rightType.equals(this.typeInt) )
+            if(  myType.equals(BFLExpressionParser.typeFloat ) && rightType.equals(BFLExpressionParser.typeInt) )
             { 
-                return this.typeFloat;
+                return BFLExpressionParser.typeFloat;
             }
-            if(  myType.equals(this.typeInt) &&   Expression.isAUnit( rightType )) return rightType; 
-            if(  myType.equals(this.typeFloat) &&   Expression.isAUnit( rightType )) return rightType; 
+            if(  myType.equals(BFLExpressionParser.typeInt) &&   BFLExpressionParser.isAUnit( rightType )) return rightType; 
+            if(  myType.equals(BFLExpressionParser.typeFloat) &&   BFLExpressionParser.isAUnit( rightType )) return rightType; 
            
-            if(  rightType.equals(this.typeInt) &&   Expression.isAUnit( myType )) return rightType; 
-            if(  rightType.equals(this.typeFloat) &&   Expression.isAUnit( myType )) return rightType;
+            if(  rightType.equals(BFLExpressionParser.typeInt) &&   BFLExpressionParser.isAUnit( myType )) return rightType; 
+            if(  rightType.equals(BFLExpressionParser.typeFloat) &&   BFLExpressionParser.isAUnit( myType )) return rightType;
                    
-            if(  Expression.isAUnit( rightType ) &&  Expression.isAUnit( myType ) )// don't need rightType.not equal to myType
+            if(  BFLExpressionParser.isAUnit( rightType ) &&  BFLExpressionParser.isAUnit( myType ) )// don't need rightType.not equal to myType
             { 
                 return "Error: " + myType + " does not match " + rightType ; 
             }

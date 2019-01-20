@@ -5,6 +5,7 @@
  */
 package blfexperiment.expressions;
 
+import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 
 /**
@@ -14,46 +15,7 @@ import java.math.BigDecimal;
 public interface Expression
 {
     // This predefines all the basic expression Types 
-    public static String typeInt = "integer"; 
-    public static String typeFloat = "real";
-    public static String number = "number"; 
-    public static String typeDollar = "dollar"; 
-    public static String typePoundSterling = "poundSterling"; 
-    public static String typeEuro = "euro";
-    public static String typeText = "text";
     
-    public static String typeKilogram = "Kg";
-    public static String typeQuestion = "Question"; 
-    
-    // subset of types
-    public static String allunits[] = 
-    { 
-        typeDollar, typePoundSterling , typeEuro , 
-        typeKilogram 
-    };
-    //--------------------------------------------------------------------------
-    static public boolean isAUnit( String item)
-    { assert item != null ; 
-        for( String s : allunits)
-        { 
-            if( item.equals(s))return true ; 
-        }
-        return false ; 
-    }
-    //--------------------------------------------------------------------------
-    public static String allCurrency[] = 
-    { 
-        typeDollar, typePoundSterling , typeEuro 
-    };
-    //--------------------------------------------------------------------------
-    static public boolean isACurrency( String item)
-    { assert item != null ; 
-        for( String s : allunits)
-        { 
-            if( item.equals(s))return true ; 
-        }
-        return false ; 
-    } 
     /** 
      * THIS IS A DEBUG TIHING
      * @return  string 
@@ -114,7 +76,7 @@ public interface Expression
      * @return 
      */
      default boolean purelyLogic(){ return false ; }
-     default boolean isQuestion() { return   getType().equals(typeQuestion); } 
+     default boolean isQuestion() { return   getType().equals(BFLExpressionParser.typeQuestion); } 
      
     //--------------------------------------------------------------------------
     /** 

@@ -19,6 +19,8 @@
 
 package blfexperiment.expressions;
 
+import blfexperiment.BFLExpressionParser;
+
 /**
  *
  * @author Sheep Dalton
@@ -39,6 +41,6 @@ public class GeneralText  implements GeneralObject
   }
   public  String getType()
     { 
-        return Expression.typeText; 
+        return BFLExpressionParser.typeText; 
     }
 }

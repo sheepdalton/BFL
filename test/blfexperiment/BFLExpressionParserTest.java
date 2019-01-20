@@ -78,7 +78,17 @@ public class BFLExpressionParserTest
         } 
     }
 
-    
+    @Test
+    public void testUnits()
+    { 
+       assert   BFLExpressionParser.isAUnit( "dollar" ) == false ;
+       assert   BFLExpressionParser.isAUnit( "poundSterling" ) == false ; 
+       
+       assert BFLExpressionParser.isACurrency("dollar") == true ; 
+       assert BFLExpressionParser.isACurrency("poundSterling") == true ;
+       assert BFLExpressionParser.isACurrency("euro") == true ;
+       
+    }
 
     /**
      * Test of parseLongNumber method, of class BFLExpressionParser.

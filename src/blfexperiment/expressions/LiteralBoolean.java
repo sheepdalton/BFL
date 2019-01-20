@@ -19,8 +19,8 @@
 
 package blfexperiment.expressions;
 
-import static blfexperiment.expressions.Expression.typeFloat;
-import static blfexperiment.expressions.Expression.typeInt;
+
+import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 
 /**
@@ -36,7 +36,7 @@ public class LiteralBoolean extends LiteralNumberExpression
     public LiteralBoolean( String boolAsText )
     {
        super( (boolAsText.equalsIgnoreCase("YES")|| boolAsText.equalsIgnoreCase("TRUE"))? "1":"0" ); 
-       this.type = typeQuestion;
+       this.type = BFLExpressionParser.typeQuestion;
        
        if( boolAsText.equalsIgnoreCase("YES")|| boolAsText.equalsIgnoreCase("TRUE"))
        {   
@@ -93,7 +93,8 @@ public class LiteralBoolean extends LiteralNumberExpression
      @Override 
       public boolean purelyLogic(){ return true ; }
      @Override 
-      public boolean isQuestion() { return   getType().equals(typeQuestion); } 
+      public boolean isQuestion() 
+      { return  getType().equals(BFLExpressionParser.typeQuestion); } 
      
     //--------------------------------------------------------------------------
     @Override 

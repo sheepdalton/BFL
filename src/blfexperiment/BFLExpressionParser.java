@@ -232,25 +232,25 @@ public class BFLExpressionParser
         { 
             Lexer.Token dollar = tokenStream.removeNextToken(); 
             LiteralNumberExpression lit =  parseLongNumber(); assert  lit != null ; 
-            lit.setType(Expression.typeDollar);
+            lit.setType(typeDollar);
             return  lit ; 
         }
         if(  tokenStream.hasThisSymbol('£') )
         { 
             Lexer.Token dollar = tokenStream.removeNextToken(); 
             LiteralNumberExpression lit =  parseLongNumber(); assert  lit != null ; 
-            lit.setType(Expression.typePoundSterling);
+            lit.setType(typePoundSterling);
             return  lit ; 
         }
         if(  tokenStream.hasThisSymbol('€') )
         { 
             Lexer.Token dollar = tokenStream.removeNextToken(); 
             LiteralNumberExpression lit =  parseLongNumber(); assert  lit != null ; 
-            lit.setType(Expression.typeEuro);
+            lit.setType(typeEuro);
             return  lit ; 
         }
-        assert false ; 
-        return null ; 
+    assert false ; 
+    return null ; 
    }
    //---------------------------------------------------------------------------
    /** 
@@ -281,31 +281,61 @@ public class BFLExpressionParser
     */
    LiteralNumberExpression parseUnits( LiteralNumberExpression ex ) throws ParseError
    { 
-       Lexer.Token t = tokenStream.removeNextToken();
-        if(  t.getTokenType() != TT_WORD ) 
-        { 
-            tokenStream.pushTokenBackToHead(t);
-            return ex ; 
-        }
-       
-       Lexer.WordToken unitWord = (Lexer.WordToken)t;  
-       String it = unitWord.getText(); 
-               
-       for( String ut: units ) 
+    Lexer.Token t = tokenStream.removeNextToken();
+    if(  t.getTokenType() != TT_WORD ) 
+    { 
+        tokenStream.pushTokenBackToHead(t);
+        return ex ; 
+    }
+   
+   Lexer.WordToken unitWord = (Lexer.WordToken)t;  
+   String it = unitWord.getText(); 
+
+   for( String ut: allunits ) 
+   { 
+       if( ut.equalsIgnoreCase(it))
        { 
-           if( ut.equalsIgnoreCase(it))
-           { 
-               ex.setType(ut);
-               return ex ; 
-           }
+           System.out.println("Setting type to '"+ ut + "' from '" + it+"'");
+           ex.setType(ut);
+           return ex ; 
        }
-       tokenStream.pushTokenBackToHead(t);
-       return ex ; 
    }
-   /***
+   tokenStream.pushTokenBackToHead(t);
+   return ex ; 
+   }
+   //---------------------------------------------------------------------------
+    public static String typeInt = "integer"; 
+    public static String typeFloat = "real";
+    public static String number = "number"; 
+    public static String typeDollar = "dollar"; 
+    public static String typePoundSterling = "poundSterling"; 
+    public static String typeEuro = "euro";
+    public static String typeText = "text";
+    
+    public static String typeKilogram = "kg";
+    public static String typePound = "lb";
+    public static String typeMilimeter = "mm";
+    public static String typeMeter = "meter";
+    public static String typeCentiMeter = "meter";
+    public static String typeKilometer = "km";
+    public static String typeMile = "mile";
+    public static String typeYard = "yard";
+    public static String typeFoot = "ft";
+    public static String typeInches = "inches";
+    public static String typeQuestion = "Question"; 
+    
+    // subset of types all stinrgs of names.
+    public static String allunits[] = 
+    { 
+        typeKilogram , typePound, 
+        typeMilimeter , typeMeter, typeYard , typeFoot, typeInches,typeCentiMeter,
+        typeYard, 
+        typeCentiMeter, typeKilometer, typeMile
+    };
+     /***
     * Post fixes of all units recognised. 
     */
-   String units[] =
+   /*String units[] =
    { 
       "feet", "ft","inch", "yard", "meter", "mm", "cm", 
       "Km", "mile", 
@@ -313,7 +343,32 @@ public class BFLExpressionParser
       
       "em", 
       "kg", "gram", "lb","ton" 
-   };
+   };*/
+    //--------------------------------------------------------------------------
+    static public boolean isAUnit( String item)
+    { assert item != null ; 
+        for( String s : allunits)
+        { 
+            //@@@ TODO - or equals ignore case.
+            if( item.equalsIgnoreCase(s))return true ; 
+        }
+        return false ; 
+    }
+    //--------------------------------------------------------------------------
+    public static String allCurrency[] = 
+    { 
+        typeDollar, typePoundSterling , typeEuro 
+    };
+    //--------------------------------------------------------------------------
+    static public boolean isACurrency( String item)
+    { assert item != null ; 
+        for( String s : allCurrency)
+        { 
+            if( item.equals(s))return true ; 
+        }
+        return false ; 
+    } 
+  
    //---------------------------------------------------------------------------
    /** 
     * <pre>
@@ -339,7 +394,8 @@ public class BFLExpressionParser
        System.out.println("parseLiteralNumber -> 2 " + 
                                                         tokenStream.hasNumber());
        */
-       if( tokenStream.hasThisSymbol('$') || tokenStream.hasThisSymbol('£')  || 
+       if(     tokenStream.hasThisSymbol('$') || 
+               tokenStream.hasThisSymbol('£')  || 
                tokenStream.hasThisSymbol('€') ) 
        { 
            result = parseCurrency(); 
@@ -352,13 +408,14 @@ public class BFLExpressionParser
            
            tokenStream.setSkipWhiteSpace(old);
            
-           if( tokenStream.hasWords(units ))
+           if( tokenStream.hasWords(allunits ))
            { 
              result = parseUnits( result ); 
            }
        }
        return result ; 
    }
+//------------------------------------------------------------------------------
    /* 
    . o O { thought } 
     ≡ identical to  
@@ -380,7 +437,6 @@ public class BFLExpressionParser
 ¬ not sign
 
 ∞ infinity 
-
 
 ⋅ dot operator . Full stop 
 ⊚ dot operator 
@@ -1228,7 +1284,8 @@ public class BFLExpressionParser
        System.out.print("TEST SimpleExpression "); 
        try 
         {  
-            assert runSimpleExpression(" 200 ≤ 50000 " ).equals("YES");// compiled 
+            assert runSimpleExpression(" 200 ≤ 50000 " ).equals("YES");// compiled
+             
             runSimpleExpression(" 200 ≤ 50000 " );
             runSimpleExpression("$892.9 + $436,000" ); 
             runSimpleExpression(" 564 + 436" ); 
@@ -1247,6 +1304,7 @@ public class BFLExpressionParser
             System.out.println("TEST SimpleExpression: PARSE ERROR->"+ e);
             return false ; 
         }
+       
        try 
         { 
             System.out.println(" TEST FOR FAIL €100 * £300 ");
@@ -1319,7 +1377,7 @@ public class BFLExpressionParser
             assert bl != null ;
             assert false : " $100 + £200 should fail  "; 
         }
-       catch(  ParseError e )
+        catch(  ParseError e )
         { 
              System.out.println("TEST FOR FAIL passed");
         }
@@ -1455,6 +1513,7 @@ public class BFLExpressionParser
             LiteralNumberExpression ex = bfl.parseCurrency(); 
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            assert ex.getType().equals( BFLExpressionParser.typeDollar ):" WRONG TYPE"; 
             //System.out.println( ex.getNumberAsText());
             
             expr = "£100,000.00";
@@ -1463,6 +1522,7 @@ public class BFLExpressionParser
             ex = bfl.parseCurrency(); 
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            assert ex.getType().equals( BFLExpressionParser.typePoundSterling ):" WRONG TYPE 2"; 
             // System.out.println( ex.getNumberAsText());
              
             expr = "€100,000.0";
@@ -1471,6 +1531,7 @@ public class BFLExpressionParser
             ex = bfl.parseCurrency(); 
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal";
+            assert ex.getType().equals( BFLExpressionParser.typeEuro ):" WRONG TYPE 3"; 
            // System.out.println( ex.getNumberAsText());
         } 
         catch(  ParseError e )
@@ -1521,36 +1582,33 @@ public class BFLExpressionParser
            it.setType(e.getType());
            
            String t = e.getType(); 
-       String front = "" ; 
-       if( t.equalsIgnoreCase("dollar"))
-       { 
-          front = "$" ; t= ""; 
-       }else if( t.equalsIgnoreCase("pound"))
-       { 
-           front = "£"; t ="" ; 
-       }else if( t.equalsIgnoreCase("euro"))
-       { 
-           front = "€"; t = "" ; 
-       }else if ( t.equals("integer"))
-       { 
-           t = " (int)"; 
-       }else if( t.equals("float" ))
-       { 
-           t = ""; 
-       }if( t.equalsIgnoreCase("Question"))
-       { 
-        t  = "?"; 
-        String s = "NOT SURE" ;  
-        if( d.compareTo(BigDecimal.ZERO)==0 ) s = "NO";
-        if( d.compareTo(BigDecimal.ONE)==0 ) s = "YES";
-        System.out.printf( "Answer to your question  %s  \n", s ) ; // d.compareTo(BigDecimal.ONE));
-        return s ; 
-       }
-       
-       System.out.printf( "Answer =  %s%s%s \n", front,  d.toPlainString(),t);
-
-      
-       
+           
+           String front = "" ; 
+           if( t.equalsIgnoreCase("dollar"))
+           { 
+              front = "$" ; t= ""; 
+           }else if( t.equalsIgnoreCase("pound"))
+           { 
+               front = "£"; t ="" ; 
+           }else if( t.equalsIgnoreCase("euro"))
+           { 
+               front = "€"; t = "" ; 
+           }else if ( t.equals("integer"))
+           { 
+               t = " (int)"; 
+           }else if( t.equals("float" ))
+           { 
+               t = ""; 
+           }if( t.equalsIgnoreCase("Question"))
+           { 
+            t  = "?"; 
+            String s = "NOT SURE" ;  
+            if( d.compareTo(BigDecimal.ZERO)==0 ) s = "NO";
+            if( d.compareTo(BigDecimal.ONE)==0 ) s = "YES";
+            System.out.printf( "Answer to your question  %s  \n", s ) ; // d.compareTo(BigDecimal.ONE));
+            return s ; 
+           }
+           System.out.printf( "Answer =  %s%s%s \n", front,  d.toPlainString(),t);
        } else if( e.isQuestion() )
        { 
         boolean b = e.evaluateLogic(); 

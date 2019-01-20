@@ -18,6 +18,7 @@
  */
 package blfexperiment.expressions;
 
+import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,7 +30,6 @@ import static org.junit.Assert.*;
  */
 public class LiteralNumberExpressionTest
 {
-    
     public LiteralNumberExpressionTest()
     {
     }
@@ -50,7 +50,6 @@ public class LiteralNumberExpressionTest
         String expResult = "1.0";
         String result = instance.getNumberAsText();
         assertEquals(expResult, result);
- 
     }
 
     /**
@@ -61,11 +60,10 @@ public class LiteralNumberExpressionTest
     {
         System.out.println("getType");
         LiteralNumberExpression instance =  new LiteralNumberExpression("1.0");;
-        String expResult = Expression.typeFloat;
+        String expResult = BFLExpressionParser.typeFloat;
         String result = instance.getType();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-       
     }
 
     /**
@@ -77,10 +75,10 @@ public class LiteralNumberExpressionTest
         System.out.println("setType");
         String type = "";
         LiteralNumberExpression instance =  new LiteralNumberExpression("1.0");;
-        instance.setType(Expression.typeEuro);
+        instance.setType(BFLExpressionParser.typeEuro);
         // TODO review the generated test code and remove the default call to fail.
          String result = instance.getType();
-        assertEquals(Expression.typeEuro, result);
+        assertEquals(BFLExpressionParser.typeEuro, result);
     }
 
     /**
@@ -95,8 +93,5 @@ public class LiteralNumberExpressionTest
         BigDecimal result = instance.evaluateCalculation();
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
-       
     }
-
-    
 }

@@ -70,8 +70,7 @@ public class BLFExperiment
               { 
                 if( debugLastExpression == null )   
                     System.out.println("No last expression" ) ; 
-                else 
-                    
+                else
                     System.out.println(debugLastExpression.toString()) ; 
                 continue ; 
               }
@@ -95,7 +94,6 @@ public class BLFExperiment
               { 
                  System.out.println("Sorry Dave I can't do that "+ name+ "\n"+ae);
               }
-           
            }
            System.out.println("END OF LINE - complete."); 
         } 
