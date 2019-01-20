@@ -68,9 +68,8 @@ public class BinaryExpression implements NumericExpression
         { 
             String rightType = after.getType();
             
-            System.out.printf( "COMPARE '%s' to '%s' \n", myType , rightType);
-            System.out.printf( " Units %b %b\n" , BFLExpressionParser.isAUnit( rightType ) ,
-                    BFLExpressionParser.isAUnit( myType )); 
+            //System.out.printf( "COMPARE '%s' to '%s' \n", myType , rightType);
+            //System.out.printf( " Units %b %b\n" , BFLExpressionParser.isAUnit( rightType ) ,  BFLExpressionParser.isAUnit( myType )); 
              if( BFLExpressionParser.isACurrency( myType ) &&
                      BFLExpressionParser.isACurrency(rightType) && 
                            rightType.equalsIgnoreCase(myType)== false   )

@@ -733,14 +733,28 @@ public class BFLExpressionParser
       NumericExpression factor = parseFactor();
       if( debugTrace) { System.out.println("    END PARASE FACTOR (fro power"); } 
       boolean oldSetting =  tokenStream.setSkipWhiteSpace(true);
-      if(  tokenStream.hasThisSymbol('^'))
+      boolean parsePower = false ; 
+      Lexer.WordToken w =null; 
+      //if(  tokenStream.hasWord("to") ) w = tokenStream.removeNextTokenAsWord();
+      //if(  tokenStream.hasWord("the ") ) w = tokenStream.removeNextTokenAsWord();
+      if( tokenStream.hasWord("power"))
       { 
+           w = tokenStream.removeNextTokenAsWord();
+           assert w.getText().equalsIgnoreCase("power"); 
+           parsePower = true ; 
+          System.out.println("-----------PARSE POWER 1 -------------" + parsePower  );
+      }else  if(  tokenStream.hasThisSymbol('^'))
+      { 
+          parsePower = true ; 
+          Lexer.SingleSymbol sym = tokenStream.removeNextTokenAsSymbol(); assert sym instanceof Lexer.SingleSymbol ; 
+          assert( sym.getSymbol() == '^'  ); 
+      }//else  //if( w != null && parsePower == false ) this.parseErrorStop("Expected 'power' at this point");
+       
+      if( true == parsePower )
+      { 
+          System.out.println("-----------PARSE POWER-------------");
           BinaryExpression bx = null ; 
-          
-          if( tokenStream.hasThisSymbol('^') )
-          {   
-              Lexer.SingleSymbol sym = tokenStream.removeNextTokenAsSymbol(); assert sym instanceof Lexer.SingleSymbol ; 
-              assert( sym.getSymbol() == '^'  ); 
+  
               bx  = makeBinaryExpression( '^' );assert bx != null ; 
               bx.setBefore(factor);
               
@@ -757,7 +771,7 @@ public class BFLExpressionParser
               System.out.println( " RETURNING "  + bx );
               
               return bx; 
-          }
+          
       }
       tokenStream.setSkipWhiteSpace(oldSetting);
       return factor ;  
