@@ -34,12 +34,9 @@ import java.math.BigDecimal;
 /**
  *
  * @author Sheep Dalton
- */
+ */ 
 public class BFLParser extends BFLExpressionParser 
 {
-
-   
-   
     public BFLParser (  BufferedReader source ) 
     { 
         super( source); 
