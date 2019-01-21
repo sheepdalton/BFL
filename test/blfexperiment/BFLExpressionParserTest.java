@@ -233,7 +233,40 @@ public class BFLExpressionParserTest
              fail("TEST Term: PARSE ERROR->"+e);
         }
     }
-    
+    //--------------------------------------------------------------------------
+    @Test
+    public void testparsePowerExpression()
+    { 
+        System.out.print("testparsePowerExpression:");
+        try 
+        { 
+             runSimpleExpression("4 ^ 2 + 1 " ).equals("17");
+             runSimpleExpression("3 * 2^2 " ).equals("12"); // make sure operator precidance works OK.
+             runSimpleExpression("4 squared + 1" ).equals("17");// 
+             runSimpleExpression("2 cubed + 1" ).equals("17");
+             runSimpleExpression("4 to the power of 2" ).equals("16");
+             runSimpleExpression("4 to the power 2" ).equals("16");
+             runSimpleExpression("4 to power 2" ).equals("16");
+             runSimpleExpression("4 to power of 2" ).equals("16");
+             runSimpleExpression("4 power 2" ).equals("16");
+             runSimpleExpression("4 the power 2" ).equals("16");
+        }catch(  ParseError e )
+        { 
+            System.out.println("TEST testparsePowerExpression: PARSE ERROR->"+ e);
+            fail("testparseLogicExpression .");
+        }
+        
+        try 
+        { 
+            runSimpleExpression("4 the to power 2" ).equals("16");
+            fail("testparseLogicExpression .");
+        }catch(  ParseError e )
+        { 
+            System.out.println("TEST testparseLogicExpression: Caught miss compile OK");
+            // It is good it reah 
+        }
+    }
+    //--------------------------------------------------------------------------
     @Test
     public void testparseLogicExpression()
     { 
@@ -241,7 +274,7 @@ public class BFLExpressionParserTest
         { 
                 runSimpleExpression(" 564 = 436" ); // test compile 
         }
-            catch(  ParseError e )
+        catch(  ParseError e )
         { 
             System.out.println("TEST testparseLogicExpression: PARSE ERROR->"+ e);
             fail("testparseLogicExpression .");

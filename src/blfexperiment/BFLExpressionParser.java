@@ -734,15 +734,34 @@ public class BFLExpressionParser
       if( debugTrace) { System.out.println("    END PARASE FACTOR (fro power"); } 
       boolean oldSetting =  tokenStream.setSkipWhiteSpace(true);
       boolean parsePower = false ; 
-      Lexer.WordToken w =null; 
-      //if(  tokenStream.hasWord("to") ) w = tokenStream.removeNextTokenAsWord();
-      //if(  tokenStream.hasWord("the ") ) w = tokenStream.removeNextTokenAsWord();
-      if( tokenStream.hasWord("power"))
+      Lexer.WordToken w =null, w2 = null; 
+      if(  tokenStream.hasWord("squared"))
       { 
+          w = tokenStream.removeNextTokenAsWord();
+          NumericExpression two = this.makeLiteralNumberExpression("2"); 
+          BinaryExpression bx  = makeBinaryExpression( '^' ,factor, two);assert bx != null ; 
+          tokenStream.setSkipWhiteSpace(oldSetting);
+          return bx; 
+      }
+      if(  tokenStream.hasWord("cubed"))
+      { 
+          w = tokenStream.removeNextTokenAsWord();
+          NumericExpression two = this.makeLiteralNumberExpression("3"); 
+          BinaryExpression bx  = makeBinaryExpression( '^' ,factor, two);assert bx != null ; 
+          tokenStream.setSkipWhiteSpace(oldSetting);
+          return bx; 
+      }
+      if(  tokenStream.hasWord("to") ) w = tokenStream.removeNextTokenAsWord();// optional 
+      if(  tokenStream.hasWord("the") ) w2 = tokenStream.removeNextTokenAsWord();
+      if(  tokenStream.hasWord("to") ) this.parseErrorStop(" THE TO POWER don't you mean TO *THE* POWER?");
+
+      if( tokenStream.hasWord("power"))
+      {         
            w = tokenStream.removeNextTokenAsWord();
            assert w.getText().equalsIgnoreCase("power"); 
            parsePower = true ; 
-          System.out.println("-----------PARSE POWER 1 -------------" + parsePower  );
+          //System.out.println("-----------PARSE POWER 1 -------------" + parsePower  );
+          if(  tokenStream.hasWord("of") ) w = tokenStream.removeNextTokenAsWord(); // OPTIONAL.
       }else  if(  tokenStream.hasThisSymbol('^'))
       { 
           parsePower = true ; 
@@ -752,7 +771,7 @@ public class BFLExpressionParser
        
       if( true == parsePower )
       { 
-          System.out.println("-----------PARSE POWER-------------");
+          
           BinaryExpression bx = null ; 
   
               bx  = makeBinaryExpression( '^' );assert bx != null ; 
@@ -768,7 +787,7 @@ public class BFLExpressionParser
               
               tokenStream.setSkipWhiteSpace(oldSetting);
               
-              System.out.println( " RETURNING "  + bx );
+              //System.out.println( " RETURNING "  + bx );
               
               return bx; 
           
