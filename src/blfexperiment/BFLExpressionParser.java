@@ -720,7 +720,7 @@ public class BFLExpressionParser
         Lexer.StringToken str = tokenStream.removeNextTokenAsLiteralString(); 
         return new LiteralStringExpression(str.getText()); 
     }
-
+// LITERAL BOOLEAN WORD
      String booleanliteralWords[] = { "YES", "NO", "TRUE", "FALSE" } ; 
      if( tokenStream.hasWords( booleanliteralWords))
      { 
@@ -1378,8 +1378,9 @@ public class BFLExpressionParser
    //-------
 
     /**
-     *
-     * @return
+     *  THIS IS THE PLACE TO CALL one you have a parser. Thise does low level 
+     * parseing.
+     * @return NumericExpression - something you can either compile or execute.
      * @throws ParseError
      */
    public NumericExpression parseExpression( )  throws ParseError
