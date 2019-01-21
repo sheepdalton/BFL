@@ -19,6 +19,7 @@
 
 package blfexperiment.expressions;
 
+import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
@@ -58,7 +59,7 @@ public class LogicBinaryExpression extends BinaryExpression
     public boolean isQuestion( ) { return true ; } 
     //--------------------------------------------------------------------------
     /** 
-     *  CURRENLT THIS CODE IS NOT BEING CALLED IN UNIT TESTS.
+     *  This code is not called as much as we woudl like in the unit tests. 
      * @return 
      */
     protected boolean processLogic()
@@ -66,7 +67,7 @@ public class LogicBinaryExpression extends BinaryExpression
         //@@@ TODO call this code un unit tests.
           boolean beforeVal  = before.evaluateLogic(); 
           boolean afterVal   = after.evaluateLogic();
-          System.out.println(">>>>PROCESSING LOGIC!!!");
+          //System.out.println(">>>>PROCESSING LOGIC!!!");
           
           switch (  operator )
             { 
@@ -87,6 +88,12 @@ public class LogicBinaryExpression extends BinaryExpression
           return false ; 
     }
     //--------------------------------------------------------------------------
+    /** 
+     *   This code is called when we are a logical parse tree but we have NON 
+     * logical sub items ( for example we return true but argyments are numbers.
+     * 
+     * @return 
+     */
     public boolean evaluateLogic()
     { 
         assert  before != null :"No BEfore";
@@ -101,24 +108,24 @@ public class LogicBinaryExpression extends BinaryExpression
        { 
         case '=': 
         { 
-            System.out.println("= LEfT  " + leftVal + "  R = "+ (rigthVal)); 
+            //System.out.println("= LEfT  " + leftVal + "  R = "+ (rigthVal)); 
             assert ( BigDecimal.ONE.compareTo(BigDecimal.ONE) == 0 ) ; 
             assert ( BigDecimal.ZERO.compareTo(BigDecimal.ONE ) == -1 ) ; 
             
-            System.out.println("= evL @@ " + leftVal.compareTo(rigthVal)  );
+            //System.out.println("= evL @@ " + leftVal.compareTo(rigthVal)  );
             if( leftVal.compareTo(rigthVal) == 0 )
             { 
-                System.out.println("RETURN 1  " ); 
+                //System.out.println("RETURN 1  " ); 
                 return true ;
             }
-            System.out.println("RETURN 0  " ); 
+            //System.out.println("RETURN 0  " ); 
             return false; 
         } 
         case '>': 
         { 
            if( leftVal.compareTo(rigthVal) >  0 )
             { 
-                System.out.println("RETURN 1 >   " ); 
+                //System.out.println("RETURN 1 >   " ); 
                 return true;
             } return false ; 
         }
@@ -126,7 +133,7 @@ public class LogicBinaryExpression extends BinaryExpression
         { 
            if( leftVal.compareTo(rigthVal) >=  0 )
             { 
-                System.out.println("RETURN 1 >=   " ); 
+                //System.out.println("RETURN 1 >=   " ); 
                 return true;
             } return false ; 
         }
@@ -143,4 +150,37 @@ public class LogicBinaryExpression extends BinaryExpression
      }// end switch 
     return false ; 
     }// end method.  
+    
+    @Override 
+    public String getType() 
+    { 
+        String myType = "void";
+        //assert false ;  // looks like this code is never called.
+       
+        switch (  operator )
+       { 
+            case '&': case'|':
+        case '~':
+        case '=':
+        case '>':
+        case '≥': 
+        case '<': 
+        case '≠': 
+        {  
+         assert before != null ; 
+         myType = before.getType();
+         assert after != null ; 
+         String afterType = after.getType();
+        
+         if(  myType.equalsIgnoreCase(afterType)) return BFLExpressionParser.typeQuestion; 
+         assert false ; 
+        } 
+       default: assert false : " " + operator + " " + (char)operator+ " not implmented BinaryExpression " ; 
+     }// end switch
+       
+        assert false ; 
+        if( isQuestion() ) return BFLExpressionParser.typeQuestion ; // "Question";
+        return BFLExpressionParser.typeQuestion ;
+    } 
+    
 }

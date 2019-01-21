@@ -9,7 +9,13 @@ import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 
 /**
- *
+ * Expressions are the parse Tree - the high level description of the result of 
+ * parsing the BFL source code. 
+ * The expression system can be used to 
+ *  CHECK TYPE - make sure the program is semantically correct. 
+ *  Provide a means to interpret the BFL code.
+ *  Provide a means to generate BFL code. 
+ * 
  * @author Sheep Dalton
  */
 public interface Expression
@@ -72,6 +78,7 @@ public interface Expression
     /**
      * More specialised version of evaluate which only computes logical outcomes. 
      * zero is false any non zero thing is true. 
+     * Only call this if purelyLogic returns true.
      * @return 
      */
     default boolean evaluateLogic()
@@ -82,13 +89,16 @@ public interface Expression
         return false ;
     }
     /**
-     *  prefer to use evaluateLogic. 
+     *  Is the parse tree/expression a purely logical one. To save passing 
+     * things in complex object referances we can call evaluateLogic. The 
+     * tree times below this one also ALL are logic based. 
+     * if purelyLogic returns YES it's OK to call evaluateLogic 
      * @return 
      */
      default boolean purelyLogic(){ return false ; }
  
     /**
-     *
+     *  check if the type of this expression is a question. 
      * @return
      */
     default boolean isQuestion() { return   getType().equals(BFLExpressionParser.typeQuestion); } 
@@ -96,7 +106,7 @@ public interface Expression
     //--------------------------------------------------------------------------
     /** 
      *  isCompatable tests to see if the object is compatable ( roughtly equal ) 
-     * to this one. 
+     * to this one. Useful for debugging and develoment checks.
      * @param other
      * @return 
      */

@@ -71,7 +71,7 @@ class Lexer
     public class WhiteSpace implements Token
     { 
         int count = 0  ; 
-        WhiteSpace(  ) {  ;count  = 0 ; } 
+        WhiteSpace(  ) {count  = 0 ; } 
         void addSpace(){ count += 1; } 
         void addTab(){ count +=  4 ; } // tab is 4 spaces 
         int  getCount(){ return count; } 
