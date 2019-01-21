@@ -29,16 +29,32 @@ import java.math.MathContext;
 public class LogicBinaryExpression extends BinaryExpression
 {
     
+    /**
+     *
+     * @param operator
+     */
     public LogicBinaryExpression(int operator)
     {
         super(operator);
     }
+
+    /**
+     *
+     * @param operator
+     * @param b
+     * @param after
+     */
     public LogicBinaryExpression(int operator , NumericExpression b , NumericExpression after )
     {
         super(operator, b ,after );
     }
     //--------------------------------------------------------------------------
     public boolean purelyLogic(){ return true ; } 
+
+    /**
+     *
+     * @return
+     */
     public boolean isQuestion( ) { return true ; } 
     //--------------------------------------------------------------------------
     /** 

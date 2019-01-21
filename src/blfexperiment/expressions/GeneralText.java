@@ -29,17 +29,31 @@ public class GeneralText  implements GeneralObject
 {
   String value ; 
   
-  public GeneralText( String theText)
+    /**
+     *
+     * @param theText
+     */
+    public GeneralText( String theText)
   { 
       value = theText; 
   }
-  public String peekText(){ return value ; } 
+ 
+    /**
+     *
+     * @return
+     */
+    public String peekText(){ return value ; } 
   @Override
   public String toString()
   { 
       return "Text:" + value;
   }
-  public  String getType()
+
+    /**
+     *
+     * @return
+     */
+    public  String getType()
     { 
         return BFLExpressionParser.typeText; 
     }

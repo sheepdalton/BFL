@@ -27,7 +27,17 @@ import java.math.BigDecimal;
  */
 public interface Statement extends Expression 
 {
+
+    /**
+     *
+     * @return
+     */
     GeneralObject  evaluteStatement(); 
+
+    /**
+     *
+     * @return
+     */
     @Override
     default  String getType() {  return "void";  }
 }

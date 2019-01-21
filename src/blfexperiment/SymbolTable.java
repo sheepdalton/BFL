@@ -136,6 +136,11 @@ public class SymbolTable
        return false ; 
    }
    //---------------------------------------------------------------------------
+
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) 
     {
         DaitchMokotoffSoundex comparor = new DaitchMokotoffSoundex(); 

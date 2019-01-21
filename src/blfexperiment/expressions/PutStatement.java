@@ -27,20 +27,54 @@ import java.math.BigDecimal;
  */
 public class PutStatement implements Statement 
 {
+
+    /**
+     *
+     */
     public enum HowToPut  
     {
-       NON,  INTO, AFTER, BEFORE 
+ 
+        /**
+         *
+         */
+        NON, 
+
+        /**
+         *
+         */
+        INTO, 
+
+        /**
+         *
+         */
+        AFTER, 
+
+        /**
+         *
+         */
+        BEFORE 
     };
     NumericExpression e  ; 
     HowToPut   how  = HowToPut.NON ; 
     VariableSetExpression variable; // if null means print out. 
     
+    /**
+     *
+     * @param doThis
+     */
     public PutStatement(  NumericExpression doThis ) 
     { 
         assert doThis != null ; 
         e = doThis; 
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param doThis
+     * @param how
+     * @param target
+     */
     public PutStatement(  NumericExpression doThis ,  HowToPut how ,
                 VariableSetExpression target)
     { 

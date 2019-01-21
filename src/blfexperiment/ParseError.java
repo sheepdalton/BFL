@@ -13,6 +13,11 @@ public class ParseError extends Exception
 {
     int linenumber ;
     
+    /**
+     *
+     * @param message
+     * @param line
+     */
     public ParseError(String message, int line ) 
     {
         super(message);

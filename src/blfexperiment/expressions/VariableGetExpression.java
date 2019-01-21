@@ -26,6 +26,11 @@ package blfexperiment.expressions;
 public class VariableGetExpression extends VariableExpression 
 {
 
+    /**
+     *
+     * @param newVariableName
+     * @param linkToVariable
+     */
     public VariableGetExpression(String newVariableName, Variable linkToVariable)
     {
         super(newVariableName, linkToVariable);

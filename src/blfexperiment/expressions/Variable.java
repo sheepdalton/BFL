@@ -33,22 +33,39 @@ import java.util.Objects;
        String type ; //
        BigDecimal value ; // should really be object.  
        //-----------------------------------------------------------------------
+
+    /**
+     *
+     * @param name
+     */
        public Variable(String name)
         {
             this.normailsedform = name.intern();// canoncical versoin save space
         }
 
-        public String getType()
+    /**
+     *
+     * @return
+     */
+    public String getType()
         {
             return type;
         }
 
-        public void setType(String type)
+    /**
+     *
+     * @param type
+     */
+    public void setType(String type)
         {
             this.type = type;
         }
         
-        public String getVarName(){ return normailsedform; }  
+    /**
+     *
+     * @return
+     */
+    public String getVarName(){ return normailsedform; }  
     /**
      *  This is mostly for debugging perposes. This holds the actual 
      *  numeric value should be a GeneralObject which can be either 
@@ -60,6 +77,10 @@ import java.util.Objects;
         return value;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void setValue(BigDecimal value)
     {
         this.value = value;

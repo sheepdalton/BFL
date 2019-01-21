@@ -17,12 +17,23 @@ public class LiteralNumberExpression implements NumericExpression
     String numberAsText = "0"; 
     String type = BFLExpressionParser.typeInt;
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param number
+     */
     public LiteralNumberExpression( String number )
     {
        this.numberAsText = number;  
        if( number.contains("."))type = BFLExpressionParser.typeFloat;
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param number
+     * @param type
+     */
     public LiteralNumberExpression( String number , String type )
     {
        assert number != null ; 

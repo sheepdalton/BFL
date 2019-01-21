@@ -36,6 +36,12 @@ public class UnariyExpression  implements NumericExpression
     int operator  ;// ¬ is possible 
     
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param operator
+     * @param e
+     */
     public UnariyExpression( int operator   ,  NumericExpression e )
     { 
         this.operator = operator;
@@ -53,6 +59,12 @@ public class UnariyExpression  implements NumericExpression
        if unit is Meter 2 ( meters squared ) then Square root gives meters 
        The type system is waiting for version 2. When we know what units Meters 0.5 means. 
     */
+
+    /**
+     *
+     * @return
+     */
+
     @Override 
     public String getType() 
     { 
@@ -68,6 +80,11 @@ public class UnariyExpression  implements NumericExpression
         return left.getType();
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
     @Override public boolean isQuestion( ) 
     { 
         if( operator == '¬' )

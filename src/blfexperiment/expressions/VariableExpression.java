@@ -31,6 +31,11 @@ public class VariableExpression implements NumericExpression
     String newVariableName;
     Variable linkToVariable; // used for the evaluation checks.
 
+    /**
+     *
+     * @param newVariableName
+     * @param linkToVariable
+     */
     public VariableExpression(String newVariableName, Variable linkToVariable)
     {
         assert linkToVariable != null : "NO Variable "; 
@@ -45,11 +50,21 @@ public class VariableExpression implements NumericExpression
         return linkToVariable.getValue();
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
     public Variable getVariable()
     {
         return linkToVariable;
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
     @Override
     public String getType()
     { 

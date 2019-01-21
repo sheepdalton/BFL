@@ -39,6 +39,7 @@ public class BFLExpressionParser
     private boolean debugTrace= false; 
     Lexer tokenStream ; 
     SymbolTable currentSymTable  ; 
+    
     String keyWords[] = { "into", 
                           "put" ,
                           "as" , 
@@ -68,8 +69,14 @@ public class BFLExpressionParser
                           "and", 
                           "or"
             
-    } ; 
+    } ;
    //--------------------------------------------------------------------------- 
+
+    /**
+     * BFLExpressionParser create expression parser using a string or file. 
+     * might want to call parseExpresion or parseStatement.
+     * @param source
+     */
    public  BFLExpressionParser(  BufferedReader source )
    { 
        assert source != null:"No null source";
@@ -77,15 +84,23 @@ public class BFLExpressionParser
        currentSymTable = new SymbolTable(null);// gobal table 
    }
    //---------------------------------------------------------------------------
+
+    /**
+     *
+     * @param source
+     * @param s
+     */
    protected BFLExpressionParser(  BufferedReader source, SymbolTable s  )
    { 
        assert source != null:"No null source";
        this.tokenStream = new Lexer( source );
        currentSymTable = s;// gobal table 
-   }
-    
-   
+   }   
    //---------------------------------------------------------------------------
+    /**
+     *
+     * @return
+     */
    protected SymbolTable pushSymbolTable()
    { 
       SymbolTable  sym = new SymbolTable( currentSymTable );
@@ -93,6 +108,10 @@ public class BFLExpressionParser
       return sym ; 
    }
    //---------------------------------------------------------------------------
+
+    /**
+     *
+     */
    protected void popSymbolTable()
    {
        assert currentSymTable.getParent() != null : 
@@ -100,6 +119,12 @@ public class BFLExpressionParser
        currentSymTable = currentSymTable.getParent(); 
    }
    //---------------------------------------------------------------------------
+
+    /**
+     *
+     * @param normalisedName
+     * @return
+     */
    public boolean isLocalVariableDebug( String normalisedName  ) 
    { 
        return currentSymTable.contains(normalisedName);
@@ -117,6 +142,12 @@ public class BFLExpressionParser
        return p ; 
    }
    //---------------------------------------------------------------------------
+
+    /**
+     *
+     * @param s
+     * @return
+     */
    public boolean  isKeyWord( String s )
    { 
        for( String it: keyWords ){ if( s.equalsIgnoreCase(it))return true; } 
@@ -305,27 +336,102 @@ public class BFLExpressionParser
    return ex ; 
    }
    //---------------------------------------------------------------------------
+
+    /**
+     *
+     */
     public static String typeInt = "integer"; 
+
+    /**
+     *
+     */
     public static String typeFloat = "real";
+
+    /**
+     *
+     */
     public static String number = "number"; 
+
+    /**
+     *
+     */
     public static String typeDollar = "dollar"; 
+
+    /**
+     *
+     */
     public static String typePoundSterling = "poundSterling"; 
+
+    /**
+     *
+     */
     public static String typeEuro = "euro";
+
+    /**
+     *
+     */
     public static String typeText = "text";
     
+    /**
+     *
+     */
     public static String typeKilogram = "kg";
+
+    /**
+     *
+     */
     public static String typePound = "lb";
+
+    /**
+     *
+     */
     public static String typeMilimeter = "mm";
+
+    /**
+     *
+     */
     public static String typeMeter = "meter";
+
+    /**
+     *
+     */
     public static String typeCentiMeter = "cm";
+
+    /**
+     *
+     */
     public static String typeKilometer = "km";
+
+    /**
+     *
+     */
     public static String typeMile = "mile";
+
+    /**
+     *
+     */
     public static String typeYard = "yard";
+
+    /**
+     *
+     */
     public static String typeFoot = "ft";
+
+    /**
+     *
+     */
     public static String typeInches = "inch";
+
+    /**
+     *
+     */
     public static String typeQuestion = "Question"; 
     
     // subset of types all stinrgs of names.
+
+    /**
+     *
+     */
     public static String allunits[] = 
     { 
         typeKilogram , typePound, 
@@ -335,6 +441,8 @@ public class BFLExpressionParser
     };
      /***
     * Post fixes of all units recognised. 
+     * @param item
+     * @return 
     */
    /*String units[] =
    { 
@@ -356,11 +464,21 @@ public class BFLExpressionParser
         return false ; 
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     */
     public static String allCurrency[] = 
     { 
         typeDollar, typePoundSterling , typeEuro 
     };
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param item
+     * @return
+     */
     static public boolean isACurrency( String item)
     { assert item != null ; 
         for( String s : allCurrency)
@@ -595,7 +713,7 @@ public class BFLExpressionParser
      { 
         Lexer.SingleSymbol pos = tokenStream.removeNextTokenAsSymbol();
         result =   parseExpression(); 
-        return result=  makeNewUnariyExpression( '√', result ); 
+        return  makeNewUnariyExpression( '√', result ); 
      }
     if( tokenStream.hasQuoteStringAvailable())
     { 
@@ -715,28 +833,60 @@ public class BFLExpressionParser
     return result ;  
    }
    //---------------------------------------------------------------------------
+
+    /**
+     * makeNewUnariyExpression
+     * @param operator
+     * @param e
+     * @return
+     */
    protected UnariyExpression makeNewUnariyExpression( int operator , NumericExpression e )
    { 
        return  new UnariyExpression( operator, e ); 
    }
    //---------------------------------------------------------------------------
+   /**
+    * makeBinaryExpression 
+    * @param what
+    * @return 
+    */
    BinaryExpression makeBinaryExpression(  int what )
    { 
        return new BinaryExpression( what ); 
    }
    //---------------------------------------------------------------------------
+   /**
+    * makeBinaryExpression
+    * @param what
+    * @param before
+    * @param after
+    * @return 
+    */
    BinaryExpression makeBinaryExpression(  int what , NumericExpression before, 
                                                         NumericExpression after )
    { 
        return new BinaryExpression( what , before , after ); 
    }
    //---------------------------------------------------------------------------
+   /**
+    * makeComparisionExpression 
+    * @param what
+    * @param before
+    * @param after
+    * @return 
+    */
    BinaryExpression makeComparisionExpression(  int what  , NumericExpression before, 
                                                         NumericExpression after )
    { 
        return new LogicBinaryExpression( what  , before , after ); 
    }
    //---------------------------------------------------------------------------
+   /**
+    * makes a Unariy Expression - factory method.
+    * @param what
+    * @param e
+    * @return 
+    */
    UnariyExpression makeUnariyExpression( int what , NumericExpression e )
    { 
        assert e != null ; 
@@ -985,6 +1135,8 @@ public class BFLExpressionParser
     *         -> function returning a list 
     *   
     *  </pre>
+     * @return 
+     * @throws blfexperiment.ParseError
     */
    public NumericExpression parseComparisonExpression() throws ParseError
    { 
@@ -1176,6 +1328,12 @@ public class BFLExpressionParser
       return ex; 
    }
    //---------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     * @throws ParseError
+     */
    public NumericExpression parseLogicExpression() throws ParseError
    {
       boolean oldSetting =  tokenStream.setSkipWhiteSpace(true);
@@ -1218,6 +1376,12 @@ public class BFLExpressionParser
       return ex;
    }
    //-------
+
+    /**
+     *
+     * @return
+     * @throws ParseError
+     */
    public NumericExpression parseExpression( )  throws ParseError
    { 
       return  parseLogicExpression(); 
@@ -1706,6 +1870,9 @@ public class BFLExpressionParser
        return  d.toPlainString();
    }
     //--------------------------------------------------------------------------
+   /** makeRandomExpression
+   
+   */
     static boolean BFLParserSelfTest()
     { 
        return  testFactor() && 
@@ -1716,6 +1883,11 @@ public class BFLExpressionParser
                testComparisonExpression(); 
              
     }
+
+    /**
+     *makeRandomExpression 
+     * @return
+     */
     public static NumericExpression makeRandomExpression()
     {
        final double range = 10000.0; 
@@ -1745,6 +1917,10 @@ public class BFLExpressionParser
        
        return ex ; 
     }
+
+    /**
+     *
+     */
     public static void testRandomExpression() 
     { 
         System.out.println("TEST testRandomExpression "); 

@@ -28,6 +28,12 @@ import java.math.BigDecimal;
 public class VariableSetExpression extends VariableExpression 
 {
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param newVariableName
+     * @param linkToVariable
+     */
     public VariableSetExpression(String newVariableName, Variable linkToVariable)
     {
         super(newVariableName, linkToVariable);

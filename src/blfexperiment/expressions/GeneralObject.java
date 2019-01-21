@@ -27,6 +27,11 @@ import java.math.BigDecimal;
  */
 public interface GeneralObject
 {
+
+    /**
+     *
+     * @return
+     */
     default String getType()
     { 
         return "void"; 
@@ -37,9 +42,29 @@ public interface GeneralObject
     */
     
     default boolean isNumber(){ return false ; } 
+
+    /**
+     *
+     * @return
+     */
     default boolean isQuestion(){ return false ; } 
+
+    /**
+     *
+     * @return
+     */
     default boolean isText(){ return false ; }
+
+    /**
+     *
+     * @return
+     */
     default boolean isList(){ return false ; }
+
+    /**
+     *
+     * @return
+     */
     default boolean iDate(){ return false ; }
     /**
      * All objects have attributes even built in objects.

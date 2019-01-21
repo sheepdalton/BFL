@@ -30,6 +30,12 @@ public class ArrayIndex extends UnariyExpression
     String newVariableName; 
    Variable linkToVariable; 
 
+    /**
+     *
+     * @param newVariableName
+     * @param linkToVariable
+     * @param e
+     */
     public ArrayIndex(String newVariableName, Variable linkToVariable,
                                 NumericExpression e)
     {
@@ -44,6 +50,11 @@ public class ArrayIndex extends UnariyExpression
         return linkToVariable.getValue();
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
     public Variable getVariable()
     {
         return linkToVariable;

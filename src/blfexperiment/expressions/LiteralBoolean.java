@@ -33,6 +33,11 @@ public class LiteralBoolean extends LiteralNumberExpression
     boolean myBooleanValue = false ; 
    
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param boolAsText
+     */
     public LiteralBoolean( String boolAsText )
     {
        super( (boolAsText.equalsIgnoreCase("YES")|| boolAsText.equalsIgnoreCase("TRUE"))? "1":"0" ); 
@@ -53,6 +58,12 @@ public class LiteralBoolean extends LiteralNumberExpression
        assert false :  " don't undertand boolAsText "+ boolAsText  ; 
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param boolAsText
+     * @param type
+     */
     public LiteralBoolean( String boolAsText , String type )
     {
        super( (boolAsText.equalsIgnoreCase("YES")|| boolAsText.equalsIgnoreCase("TRUE"))? "1":"0" ); 
@@ -74,6 +85,7 @@ public class LiteralBoolean extends LiteralNumberExpression
     //--------------------------------------------------------------------------
     /**
      *  Literal returns the number
+     * @return 
      */
     @Override 
     public BigDecimal evaluateCalculation()
@@ -92,7 +104,12 @@ public class LiteralBoolean extends LiteralNumberExpression
      */
      @Override 
       public boolean purelyLogic(){ return true ; }
-     @Override 
+ 
+    /**
+     *
+     * @return
+     */
+    @Override 
       public boolean isQuestion() 
       { return  getType().equals(BFLExpressionParser.typeQuestion); } 
      

@@ -25,11 +25,21 @@ public interface Expression
         return toString(); 
     }
     //-------------------------------------------------------------------------- 
+
+    /**
+     *
+     * @return
+     */
     default String converToSource()
     { 
         return " <--NO SOURCE -->" ; 
     } 
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
      String getType();
    // {  return "void";  }
     //default BigNumber evaluateCalculation(){      return }
@@ -76,7 +86,12 @@ public interface Expression
      * @return 
      */
      default boolean purelyLogic(){ return false ; }
-     default boolean isQuestion() { return   getType().equals(BFLExpressionParser.typeQuestion); } 
+ 
+    /**
+     *
+     * @return
+     */
+    default boolean isQuestion() { return   getType().equals(BFLExpressionParser.typeQuestion); } 
      
     //--------------------------------------------------------------------------
     /** 

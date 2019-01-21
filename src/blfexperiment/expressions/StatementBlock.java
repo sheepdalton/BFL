@@ -29,7 +29,15 @@ public class StatementBlock  implements Statement
 {
     List<Statement>  statements  = new ArrayList<>(); 
     
+    /**
+     *
+     */
     public StatementBlock(){ } 
+
+    /**
+     *
+     * @param s
+     */
     public void add( Statement s  ){ assert s!=null ; statements.add(s); } 
     //--------------------------------------------------------------------------
     /**
@@ -47,6 +55,11 @@ public class StatementBlock  implements Statement
         }
         return result ; 
     }
+
+    /**
+     *
+     * @return
+     */
     @Override 
      public String getType() {  return "void";  }
 

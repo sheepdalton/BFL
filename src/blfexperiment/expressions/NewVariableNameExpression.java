@@ -31,6 +31,12 @@ public class NewVariableNameExpression extends VariableSetExpression
 { // used for the evaluation checks.
     // used for the evaluation checks.
 
+    /**
+     *
+     * @param newVariableName
+     * @param linkToVariable
+     */
+
     public NewVariableNameExpression(String newVariableName, Variable linkToVariable)
     {
         super( newVariableName, linkToVariable ); 

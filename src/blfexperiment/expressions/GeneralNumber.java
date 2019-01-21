@@ -29,6 +29,10 @@ import java.math.BigInteger;
 public class GeneralNumber extends BigDecimal implements GeneralObject 
 {
 
+    /**
+     *
+     * @param other
+     */
     public GeneralNumber(BigDecimal other)
     {
         super(other.toString()); // this is slow for a copy. 
@@ -36,11 +40,19 @@ public class GeneralNumber extends BigDecimal implements GeneralObject
                 //other.val, other.scale, other.prec) ; 
     }
   
+    /**
+     *
+     * @param numberFromThisString
+     */
     public GeneralNumber( String numberFromThisString )
     { 
         super( numberFromThisString ); 
     }
     
+    /**
+     *
+     * @return
+     */
     @Override 
     public  String getType()
     { 

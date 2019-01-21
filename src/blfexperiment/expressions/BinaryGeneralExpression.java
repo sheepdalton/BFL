@@ -36,12 +36,20 @@ public class BinaryGeneralExpression implements Expression
         return Expression.super.toHumanString(); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String converToSource()
     {
         return Expression.super.converToSource(); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getType()
     {
@@ -78,7 +86,11 @@ public class BinaryGeneralExpression implements Expression
         return Expression.super.purelyLogic(); //To change body of generated methods, choose Tools | Templates.
     }
 
-   @Override public boolean isQuestion( ) 
+    /**
+     *
+     * @return
+     */
+    @Override public boolean isQuestion( ) 
     { 
         if( operator == '=' || operator == '≠' || 
                 operator == '<' || operator == '>' || 

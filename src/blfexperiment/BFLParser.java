@@ -37,11 +37,22 @@ import java.math.BigDecimal;
  */ 
 public class BFLParser extends BFLExpressionParser 
 {
+
+    /**
+     *
+     * @param source
+     */
     public BFLParser (  BufferedReader source ) 
     { 
         super( source); 
     }
     //---------------------------------------------------------------------------
+
+    /**
+     *
+     * @param source
+     * @param s
+     */
    protected  BFLParser(  BufferedReader source, SymbolTable s  )
    { 
       super(source , s );  assert source != null:"No null source";

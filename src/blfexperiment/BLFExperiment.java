@@ -40,13 +40,16 @@ import java.lang.ArithmeticException;
 public class BLFExperiment
 {
     /**
-     * @param args the command line arguments
      */
     public BLFExperiment( )
     {
         
     }
           
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) 
     {
         Lexer.runLexerTests(); 

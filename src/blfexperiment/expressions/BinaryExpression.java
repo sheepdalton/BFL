@@ -29,11 +29,22 @@ public class BinaryExpression implements NumericExpression
         return  "(" + before.toHumanString() + " " + (char)this.operator + " "+ after.toHumanString()+ " )"  ; 
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @param s
+     * @return
+     */
     public boolean isRawNumberType( String s )
     { 
         return   s.equals(BFLExpressionParser.typeInt) ||  s.equals(BFLExpressionParser.typeFloat) ; 
     }
     //--------------------------------------------------------------------------
+
+    /**
+     *
+     * @return
+     */
     @Override public boolean isQuestion( ) 
     { 
         if( operator == '=' || operator == '≠' || 
@@ -135,6 +146,11 @@ public class BinaryExpression implements NumericExpression
         return myType ; 
     }
     //==========================================================================
+
+    /**
+     *
+     * @param operator
+     */
     public BinaryExpression( int operator )
     { 
         this.operator  = operator; 
@@ -143,6 +159,13 @@ public class BinaryExpression implements NumericExpression
         
     }
     //==========================================================================
+
+    /**
+     *
+     * @param operator
+     * @param left
+     * @param right
+     */
     public BinaryExpression( int operator , NumericExpression left  , NumericExpression right )
     { 
         this.operator  = operator; 
@@ -152,6 +175,7 @@ public class BinaryExpression implements NumericExpression
     /**
      *  isANumber helps type check statements. Also used to optimise by 
      *  accelerating the evalaution. 
+     * @return 
     */
     @Override 
     public boolean isANumber()
@@ -195,6 +219,12 @@ public class BinaryExpression implements NumericExpression
     {
         this.after = after;
     }
+
+    /**
+     *
+     * @param it
+     * @return
+     */
     protected boolean convertToBoolean( BigDecimal it )
     { 
         if( it.compareTo(BigDecimal.ZERO) == 0 )return false; 

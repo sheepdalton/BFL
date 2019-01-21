@@ -29,6 +29,11 @@ public class LiteralStringExpression implements  NumericExpression
 {
 
     GeneralText theText ; 
+
+    /**
+     *
+     * @param theLiteralString
+     */
     public LiteralStringExpression( String theLiteralString )
     { 
        assert theLiteralString != null:" NULL literlas NOT ALLOWED.";
@@ -45,6 +50,11 @@ public class LiteralStringExpression implements  NumericExpression
     {
         return false ; 
     }
+
+    /**
+     *
+     * @return
+     */
     public String getNumberAsText()
     {
         return theText.peekText();
@@ -59,6 +69,10 @@ public class LiteralStringExpression implements  NumericExpression
       return  new BigDecimal( theText.peekText() ) ; 
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getType()
     {
