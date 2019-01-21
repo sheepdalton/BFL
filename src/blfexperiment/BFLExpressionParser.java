@@ -211,9 +211,7 @@ public class BFLExpressionParser
    //@@@TODO -handle exponet scientific notation  
    
    //@@@ TODO handle Million, , Thousand , Billion
-    LiteralNumberExpression literal = makeLiteralNumberExpression(number); 
-             
-    return literal ;    
+    return makeLiteralNumberExpression(number);    
    }
    //---------------------------------------------------------------------------
    LiteralNumberExpression makeLiteralNumberExpression( String number )
@@ -282,6 +280,7 @@ public class BFLExpressionParser
    LiteralNumberExpression parseUnits( LiteralNumberExpression ex ) throws ParseError
    { 
     Lexer.Token t = tokenStream.removeNextToken();
+    if( t.getTokenType() == Lexer.TT_WHITESPACE ) return ex ; // NO Change 
     if(  t.getTokenType() != TT_WORD ) 
     { 
         tokenStream.pushTokenBackToHead(t);
@@ -290,16 +289,18 @@ public class BFLExpressionParser
    
    Lexer.WordToken unitWord = (Lexer.WordToken)t;  
    String it = unitWord.getText(); 
-
+    
    for( String ut: allunits ) 
    { 
        if( ut.equalsIgnoreCase(it))
        { 
-           System.out.println("Setting type to '"+ ut + "' from '" + it+"'");
+           System.out.println("found tpye  type to '"+ ut + "' from '" + it+"'");
            ex.setType(ut);
            return ex ; 
        }
    }
+   this.parseErrorStop(" I havn't heard of  unit called " + it  + " I understand "+ 
+    Arrays.toString(allunits));// @@@TODO pretty print low priority.
    tokenStream.pushTokenBackToHead(t);
    return ex ; 
    }
@@ -316,12 +317,12 @@ public class BFLExpressionParser
     public static String typePound = "lb";
     public static String typeMilimeter = "mm";
     public static String typeMeter = "meter";
-    public static String typeCentiMeter = "meter";
+    public static String typeCentiMeter = "cm";
     public static String typeKilometer = "km";
     public static String typeMile = "mile";
     public static String typeYard = "yard";
     public static String typeFoot = "ft";
-    public static String typeInches = "inches";
+    public static String typeInches = "inch";
     public static String typeQuestion = "Question"; 
     
     // subset of types all stinrgs of names.
@@ -406,12 +407,41 @@ public class BFLExpressionParser
            boolean old = tokenStream.setSkipWhiteSpace(true);
            result =   parseLongNumber() ; 
            
-           tokenStream.setSkipWhiteSpace(old);
+           tokenStream.setSkipWhiteSpace(false);
            
-           if( tokenStream.hasWords(allunits ))
+           Lexer.Token tokn = tokenStream.removeNextToken();
+           
+           assert( tokn.getTokenType()!= Lexer.TT_NUMBER); // Can never be true unless parseLongNumber wrong. 
+           // these indicate normal
+           tokenStream.pushTokenBackToHead(tokn);
+           if(tokn.getTokenType()==Lexer.TT_SYMBOL || 
+                   tokn.getTokenType()==Lexer.TT_EOL || 
+                   tokn.getTokenType()==Lexer.TT_WHITESPACE || 
+                   tokn.getTokenType()==Lexer.TT_EOF )
            { 
-             result = parseUnits( result ); 
+               tokenStream.setSkipWhiteSpace(old);
+               return result ;   
            }
+           // followed by a word and NO whitespace. 
+           if( tokn.getTokenType()==Lexer.TT_WORD)
+           { 
+            if( tokenStream.hasWords( allunits ))
+            { 
+              result = parseUnits( result ); 
+            }else if( !tokenStream.hasWords(keyWords) )
+            { 
+                this.parseErrorStop("EXPECTED A UNIT or possibly Key word but not" +
+                        ((Lexer.WordToken)tokn).getText());
+                
+            }
+           }else 
+           { 
+               System.out.println(" Found tk= " + tokn);
+               assert false ;
+           } 
+           
+           
+           tokenStream.setSkipWhiteSpace(old);
        }
        return result ; 
    }
@@ -1466,14 +1496,16 @@ public class BFLExpressionParser
    //---------------------------------------------------------------------------
    static boolean testNumber()
    { 
-       System.out.print("TEST Number "); 
-        
+       System.out.print("TEST Number/Units "); 
+       BFLExpressionParser  bfl; 
+       LiteralNumberExpression ex;
+       
         try 
         { 
             String expr = "100,000ft";
             System.out.println("\nTrying '"+ expr+"'"); 
-            BFLExpressionParser  bfl = fromSource(expr); 
-            LiteralNumberExpression ex = bfl.parseLiteralNumber();
+              bfl = fromSource(expr); 
+             ex = bfl.parseLiteralNumber();
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
             LiteralNumberExpression cmp = new LiteralNumberExpression( "100000","ft");
@@ -1481,13 +1513,7 @@ public class BFLExpressionParser
             if( cmp.isCompatable(ex) == false ) System.out.println(cmp + " " + ex);
             assert cmp.isCompatable(ex) == true  ; 
             System.out.println( ex.getNumberAsText());
-            
-            bfl = fromSource("34feet"); 
-            ex = bfl.parseLiteralNumber(); 
-            assert ex!= null ; 
-            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
-            System.out.println( ex.getNumberAsText());
-            
+
             bfl = fromSource("34.000Yard"); 
             ex = bfl.parseLiteralNumber(); 
             assert ex!= null ; 
@@ -1500,8 +1526,8 @@ public class BFLExpressionParser
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
             System.out.println( ex.getNumberAsText());
             
-            bfl = fromSource("34Meters"); 
-            ex = bfl.parseLiteralNumber(); 
+            bfl = fromSource("34Meter"); 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ex = bfl.parseLiteralNumber(); 
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
             System.out.println( ex.getNumberAsText());
@@ -1526,10 +1552,26 @@ public class BFLExpressionParser
         } 
         catch(  ParseError e )
         { 
-            System.err.println("TEST EXPRESSION: PARSE ERROR->"+ e);
+            System.err.println("TEST EXPRESSION: PARSE ERROR->"+ e + "\n" );
+            e.printStackTrace();
             return false ; 
         }
         
+        try 
+        { 
+            bfl = fromSource("34feet"); // FEET IS NOT A UNIT
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText());
+            assert false ; 
+        }
+            catch(  ParseError e )
+        { 
+            System.out.println(" TEST Number OK "); 
+            return true ; 
+        }
+            
         System.out.println(" TEST Number OK "); 
         return true ; 
    }

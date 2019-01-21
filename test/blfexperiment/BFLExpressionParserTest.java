@@ -111,7 +111,7 @@ public class BFLExpressionParserTest
             //System.out.println( ex.getNumberAsText());
             assertEquals(ex.getNumberAsText(), "100000");
             
-            bfl = fromSource("34feet"); 
+            bfl = fromSource("34ft"); 
             ex = bfl.parseLiteralNumber(); 
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
@@ -132,7 +132,7 @@ public class BFLExpressionParserTest
             System.out.println( ex.getNumberAsText());
             assertEquals(ex.getNumberAsText(), "11100034");
             
-            bfl = fromSource("34Meters"); 
+            bfl = fromSource("34Meter"); 
             ex = bfl.parseLiteralNumber(); 
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
@@ -350,10 +350,16 @@ public class BFLExpressionParserTest
            
             String r ; 
             r=runSimpleExpression(" ( 90 - 100 )* 8  " ); // test compile 
+            r=runSimpleExpression("2+2" ); // test compile 
+            
+            assertEquals( "4",r);
             r=runSimpleExpression(" | 90 - 100 | " ); // test does it compile 
             assertEquals(r, "10");
             r=runSimpleExpression("30^3");
-            assertEquals(r, "27000");
+            assertEquals( "27000",r);
+            
+            r=runSimpleExpression("30 ^ 3");// possibly caused by something in parse units.
+            assertEquals( "27000",r);
             
             r=runSimpleExpression("true");
             assertEquals(r, "YES"); 
