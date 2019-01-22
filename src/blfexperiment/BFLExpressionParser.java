@@ -915,6 +915,12 @@ public class BFLExpressionParser
       boolean oldSetting =  tokenStream.setSkipWhiteSpace(true);
       boolean parsePower = false ; 
       Lexer.WordToken w =null, w2 = null; 
+      if(  tokenStream.hasThisSymbol('!'))
+      { 
+          Lexer.SingleSymbol sym = tokenStream.removeNextTokenAsSymbol();assert sym.getSymbol()=='!'; 
+          UnariyExpression ux = new UnariyExpression( '!', factor); 
+          return ux; 
+      }
       if(  tokenStream.hasWord("squared"))
       { 
           w = tokenStream.removeNextTokenAsWord();
@@ -1550,13 +1556,32 @@ public class BFLExpressionParser
              System.out.println("**TEST FOR €100 * £300 wrong passed** \n"+ e );
         }
        
-       
-       
-       
        System.out.println("TEST SimpleExpression passed");
        
        return true ;
-   }       
+   } 
+   //----------------------------------------------
+   static boolean testEvaluation()
+   { 
+       try 
+        { 
+            System.out.println(" testEvaluation 100 * 300 ");
+            BFLExpressionParser bl=  fromSource( " 100 * 300 " ) ;
+            NumericExpression e = bl.simpleMathExpression();
+            
+            GeneralObject d = e.doIt();// 
+            System.out.printf(" EXP=  %s\n",e.toString());
+            System.out.printf("Result =  %s %s \n", d.toString(), d.getType());
+            assert bl != null ;
+            
+        }
+       catch(  ParseError e )
+        { 
+             System.out.println("**TEST FOR €100 * £300 wrong passed** \n"+ e );
+             return false ; 
+        }
+       return true ; 
+   }
    //---------------------------------------------------------------------------
    static boolean testTerm()
    { 
@@ -1618,7 +1643,6 @@ public class BFLExpressionParser
    static boolean testFactor()
    { 
         System.out.print("TEST Factor "); 
-        
         try 
         { 
             String source = " student name " ; 
@@ -1881,7 +1905,7 @@ public class BFLExpressionParser
                testCurrency() && 
                testTerm()  && 
                testSimpleExpression()&&
-               testComparisonExpression(); 
+               testComparisonExpression() && testEvaluation(); 
              
     }
 

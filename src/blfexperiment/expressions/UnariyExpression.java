@@ -103,6 +103,12 @@ public class UnariyExpression  implements NumericExpression
     { 
      assert   left != null :"No left";
      BigDecimal leftVal = left.evaluateCalculation();
+     if( operator == '!')
+     { 
+         assert false ; 
+         // DO FOR LOOP HERE. 
+         return leftVal; 
+     }
      if( operator == '|') return leftVal.abs();
      if(  operator == '-') return leftVal.negate();
      if( operator == '√')

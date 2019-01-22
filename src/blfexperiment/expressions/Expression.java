@@ -51,12 +51,25 @@ public interface Expression
     //default BigNumber evaluateCalculation(){      return }
     //--------------------------------------------------------------------------
     /** 
-     * doIt is very much from valuateing statements - any result is put into IT. 
+     * doIt is the most general end of the parse tree. By defaul trys to compute
+     * faster version ( number,boolean,list,) . 
      * @return 
      */
     default GeneralObject doIt()
     { 
-        assert false ; 
+        if( isANumber())
+        { 
+            BigDecimal val = evaluateCalculation();
+            return new GeneralNumber( val); 
+        } 
+        if( purelyLogic() )
+        { 
+            boolean val = evaluateLogic(); 
+            return new GeneralBoolean( val ); 
+        }
+        // if string 
+        // if list.
+        assert false ;
         return null ; 
     }
     /**

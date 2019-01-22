@@ -59,7 +59,7 @@ public class LiteralNumberExpressionTest
     public void testGetType()
     {
         System.out.println("getType");
-        LiteralNumberExpression instance =  new LiteralNumberExpression("1.0");;
+        LiteralNumberExpression instance =  new LiteralNumberExpression("1.0");
         String expResult = BFLExpressionParser.typeFloat;
         String result = instance.getType();
         assertEquals(expResult, result);
@@ -74,7 +74,7 @@ public class LiteralNumberExpressionTest
     {
         System.out.println("setType");
         String type = "";
-        LiteralNumberExpression instance =  new LiteralNumberExpression("1.0");;
+        LiteralNumberExpression instance =  new LiteralNumberExpression("1.0");
         instance.setType(BFLExpressionParser.typeEuro);
         // TODO review the generated test code and remove the default call to fail.
          String result = instance.getType();
@@ -88,7 +88,7 @@ public class LiteralNumberExpressionTest
     public void testEvaluateCalculation()
     {
         System.out.println("evaluateCalculation");
-        LiteralNumberExpression instance = new LiteralNumberExpression("1");;
+        LiteralNumberExpression instance = new LiteralNumberExpression("1");
         BigDecimal expResult = BigDecimal.ONE;
         BigDecimal result = instance.evaluateCalculation();
         assertEquals(expResult, result);

@@ -31,7 +31,7 @@ import java.util.Objects;
    { 
        String normailsedform ; 
        String type ; //
-       BigDecimal value ; // should really be object.  
+       BigDecimal value ; // should really be Generalobject.  
        //-----------------------------------------------------------------------
 
     /**
