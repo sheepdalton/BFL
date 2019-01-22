@@ -18,6 +18,7 @@
  */
 package blfexperiment;
 
+import blfexperiment.GeneralTypes.GeneralObject;
 import blfexperiment.expressions.Variable;
 import static blfexperiment.Lexer.TT_WORD;
 import static blfexperiment.Lexer.TT_EOL;

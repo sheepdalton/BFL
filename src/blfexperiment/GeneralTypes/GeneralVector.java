@@ -16,30 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package blfexperiment.expressions;
 
-import blfexperiment.GeneralTypes.*;
-import java.math.BigDecimal;
+package blfexperiment.GeneralTypes;
 
 /**
- *
+ * Vector is effectively an array of numbers 
+ *  so implements a number of array operators on numbers 
  * @author Sheep Dalton
  */
-public interface NumericExpression extends Expression 
+public class GeneralVector extends GeneralList  
 {
-    //--------------------------------------------------------------------------
-    /**
-     *  This is more of a convenicance fuction but it makes sure all numeric cals are OK.
-     * @return 
-     */
-    //--------------------------------------------------------------------------
-    
-    default GeneralObject doIt()
-    { 
-        return new GeneralNumber( evaluateCalculation()) ; //FYI this is slow
-    }
-    //--------------------------------------------------------------------------
-    default boolean isANumber(){ return true ; } 
-    
-    //--------------------------------------------------------------------------
+
 }

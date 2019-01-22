@@ -17,44 +17,34 @@
  * MA 02110-1301  USA
  */
 
-package blfexperiment.expressions;
+package blfexperiment.GeneralTypes;
 
-import blfexperiment.BFLExpressionParser;
+import java.util.*;
 
 /**
  *
  * @author Sheep Dalton
  */
-public class GeneralText  implements GeneralObject 
+public class GeneralList  implements GeneralContainer 
 {
-  String value ; 
-  
-    /**
-     *
-     * @param theText
-     */
-    public GeneralText( String theText)
-  { 
-      value = theText; 
-  }
- 
+    List<GeneralObject> contents ; 
+    
+    GeneralList()
+    { 
+       contents =  new ArrayList<>(); 
+    }
     /**
      *
      * @return
      */
-    public String peekText(){ return value ; } 
-  @Override
-  public String toString()
-  { 
-      return "Text:" + value;
-  }
-
-    /**
-     *
-     * @return
-     */
+    @Override 
     public  String getType()
     { 
-        return BFLExpressionParser.typeText; 
+        return "list of Things"; 
     }
+    @Override 
+    public  boolean isNumber(){ return false  ; } 
+    @Override 
+    public  boolean isList(){ return true ; }
+
 }

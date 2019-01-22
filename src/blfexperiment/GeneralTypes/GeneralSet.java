@@ -16,30 +16,25 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package blfexperiment.expressions;
 
-import blfexperiment.GeneralTypes.*;
-import java.math.BigDecimal;
+package blfexperiment.GeneralTypes;
+
+import java.util.*;
 
 /**
- *
+ * Implements a set like system. Can be for numbers or strings or anything 
+ * which declares equals
  * @author Sheep Dalton
  */
-public interface NumericExpression extends Expression 
+public class GeneralSet  implements GeneralContainer  
 {
-    //--------------------------------------------------------------------------
-    /**
-     *  This is more of a convenicance fuction but it makes sure all numeric cals are OK.
-     * @return 
-     */
-    //--------------------------------------------------------------------------
+    Set<GeneralObject> info ; 
     
-    default GeneralObject doIt()
+@Override 
+    public boolean isSet(){ return true  ; }
+@Override 
+    public String getType()
     { 
-        return new GeneralNumber( evaluateCalculation()) ; //FYI this is slow
+        return "Set of things"; 
     }
-    //--------------------------------------------------------------------------
-    default boolean isANumber(){ return true ; } 
-    
-    //--------------------------------------------------------------------------
 }

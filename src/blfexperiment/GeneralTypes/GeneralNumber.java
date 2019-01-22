@@ -17,7 +17,7 @@
  * MA 02110-1301  USA
  */
 
-package blfexperiment.expressions;
+package blfexperiment.GeneralTypes;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

@@ -19,6 +19,7 @@
 
 package blfexperiment.expressions;
 
+import blfexperiment.GeneralTypes.*;
 import java.math.BigDecimal;
 
 /**

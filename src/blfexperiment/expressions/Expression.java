@@ -5,7 +5,10 @@
  */
 package blfexperiment.expressions;
 
+
+import blfexperiment.GeneralTypes.*;
 import blfexperiment.BFLExpressionParser;
+ 
 import java.math.BigDecimal;
 
 /**

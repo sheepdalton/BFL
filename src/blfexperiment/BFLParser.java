@@ -19,7 +19,7 @@
 
 package blfexperiment;
 
-import blfexperiment.expressions.GeneralObject;
+import blfexperiment.GeneralTypes.GeneralObject;
 import blfexperiment.expressions.NewVariableNameExpression;
 import blfexperiment.expressions.NumericExpression;
 import blfexperiment.expressions.PutStatement;
@@ -39,7 +39,7 @@ public class BFLParser extends BFLExpressionParser
 {
 
     /**
-     *
+     *  make a BFLParser from an input stream ( AKA A String or a File.) 
      * @param source
      */
     public BFLParser (  BufferedReader source ) 
@@ -49,7 +49,8 @@ public class BFLParser extends BFLExpressionParser
     //---------------------------------------------------------------------------
 
     /**
-     *
+     *   make a BFLParser from an input stream ( AKA A String or a File.) 
+     *   This time with a SymbolTable for example a 
      * @param source
      * @param s
      */

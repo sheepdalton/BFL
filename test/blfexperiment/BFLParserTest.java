@@ -22,7 +22,7 @@ import static blfexperiment.BFLExpressionParser.fromSource;
 import static blfexperiment.BFLExpressionParser.runSimpleExpression;
 import blfexperiment.expressions.BinaryExpression;
 import blfexperiment.expressions.Expression;
-import blfexperiment.expressions.GeneralObject;
+import blfexperiment.GeneralTypes.GeneralObject;
 import blfexperiment.expressions.LiteralNumberExpression;
 import blfexperiment.expressions.NumericExpression;
 import blfexperiment.expressions.Statement;

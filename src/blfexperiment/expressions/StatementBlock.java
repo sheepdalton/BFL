@@ -19,6 +19,7 @@
 
 package blfexperiment.expressions;
 
+import blfexperiment.GeneralTypes.GeneralObject;
 import java.util.*;
 
 /**

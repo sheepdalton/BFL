@@ -16,30 +16,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package blfexperiment.expressions;
 
-import blfexperiment.GeneralTypes.*;
-import java.math.BigDecimal;
+package blfexperiment.GeneralTypes;
 
 /**
- *
+ * General Range implements a range object for example 
  * @author Sheep Dalton
  */
-public interface NumericExpression extends Expression 
+public class GeneralRange implements GeneralContainer
 {
-    //--------------------------------------------------------------------------
-    /**
-     *  This is more of a convenicance fuction but it makes sure all numeric cals are OK.
-     * @return 
-     */
-    //--------------------------------------------------------------------------
+    GeneralObject from, too; 
     
-    default GeneralObject doIt()
+    @Override 
+    public boolean isRange(){ return true  ; }
+    @Override 
+    public String getType()
     { 
-        return new GeneralNumber( evaluateCalculation()) ; //FYI this is slow
+        return "Range"; 
     }
-    //--------------------------------------------------------------------------
-    default boolean isANumber(){ return true ; } 
-    
-    //--------------------------------------------------------------------------
 }

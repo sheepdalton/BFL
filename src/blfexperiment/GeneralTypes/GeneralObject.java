@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-package blfexperiment.expressions;
+package blfexperiment.GeneralTypes;
 
 import java.math.BigDecimal;
 
@@ -65,7 +65,17 @@ public interface GeneralObject
      *
      * @return
      */
-    default boolean iDate(){ return false ; }
+    default boolean isDate(){ return false ; }
+    /**
+     * 
+     * @return 
+     */
+    default boolean isRange(){ return false; } 
+    /**
+     * 
+     * @return 
+     */
+    default boolean isSet(){ return false; } 
     /**
      * All objects have attributes even built in objects.
      * attributes can be virtual = that is the result of a formula or calculation.

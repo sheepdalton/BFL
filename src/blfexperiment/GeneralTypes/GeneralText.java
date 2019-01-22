@@ -17,35 +17,45 @@
  * MA 02110-1301  USA
  */
 
-package blfexperiment.expressions;
+package blfexperiment.GeneralTypes;
+
+import blfexperiment.GeneralTypes.GeneralObject;
+import blfexperiment.BFLExpressionParser;
 
 /**
  *
  * @author Sheep Dalton
  */
-public class GeneralBoolean  implements GeneralObject  
+public class GeneralText  implements GeneralContainer 
 {
-      boolean value ; 
-
-    public GeneralBoolean(boolean value)
-    {
-        this.value = value;
-    }
-
-    public boolean isValue()
-    {
-        return value;
-    }
-
-    public void setValue(boolean value)
-    {
-        this.value = value;
-    }
-      
-/**
+  String value ; 
+  
+    /**
+     *
+     * @param theText
+     */
+    public GeneralText( String theText)
+  { 
+      value = theText; 
+  }
+ 
+    /**
      *
      * @return
      */
-    @Override
-     public boolean isQuestion(){ return true ; } 
+    public String peekText(){ return value ; } 
+  @Override
+  public String toString()
+  { 
+      return "Text:" + value;
+  }
+
+    /**
+     *
+     * @return
+     */
+    public  String getType()
+    { 
+        return BFLExpressionParser.typeText; 
+    }
 }
