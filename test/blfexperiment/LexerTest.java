@@ -162,47 +162,47 @@ public class LexerTest
 //    }
 //
 //    /**
-//     * Test of hasWord method, of class Lexer.
+//     * Test of hasThisWord method, of class Lexer.
 //     */
 //    @Test
 //    public void testHasWord()
 //    {
-//        System.out.println("hasWord");
+//        System.out.println("hasThisWord");
 //        String word = "";
 //        Lexer instance = null;
 //        boolean expResult = false;
-//        boolean result = instance.hasWord(word);
+//        boolean result = instance.hasThisWord(word);
 //        assertEquals(expResult, result);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
 //    }
 //
 //    /**
-//     * Test of hasWords method, of class Lexer.
+//     * Test of hasAnyOfTheseWords method, of class Lexer.
 //     */
 //    @Test
 //    public void testHasWords()
 //    {
-//        System.out.println("hasWords");
+//        System.out.println("hasAnyOfTheseWords");
 //        String[] words = null;
 //        Lexer instance = null;
 //        boolean expResult = false;
-//        boolean result = instance.hasWords(words);
+//        boolean result = instance.hasAnyOfTheseWords(words);
 //        assertEquals(expResult, result);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
 //    }
 //
 //    /**
-//     * Test of hasNumber method, of class Lexer.
+//     * Test of hasANumber method, of class Lexer.
 //     */
 //    @Test
 //    public void testHasNumber()
 //    {
-//        System.out.println("hasNumber");
+//        System.out.println("hasANumber");
 //        Lexer instance = null;
 //        boolean expResult = false;
-//        boolean result = instance.hasNumber();
+//        boolean result = instance.hasANumber();
 //        assertEquals(expResult, result);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");
@@ -242,19 +242,21 @@ public class LexerTest
 //    /**
 //     * Test of setSkipWhiteSpace method, of class Lexer.
 //     */
-//    @Test
-//    public void testSetSkipWhiteSpace()
-//    {
-//        System.out.println("setSkipWhiteSpace");
-//        boolean skipWhiteSpace = false;
-//        Lexer instance = null;
-//        boolean expResult = false;
-//        boolean result = instance.setSkipWhiteSpace(skipWhiteSpace);
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//
+    @Test
+    public void testremoveNextTokenAsLiteralString()
+    {
+        System.out.println("removeNextTokenAsLiteralString");
+        
+        
+        BufferedReader in = new BufferedReader(new StringReader("  “message” hello "));
+        Lexer lex = new Lexer(in ); lex.setSkipWhiteSpace(true);
+        assert lex.hasQuoteStringAvailable() == true ; 
+        Lexer.StringToken st = lex.removeNextTokenAsLiteralString(); 
+        assert st != null ; 
+        assertEquals("message", st.getText());
+
+    }
+
 //    /**
 //     * Test of testRemoveNextToken method, of class Lexer.
 //     */
@@ -291,8 +293,8 @@ public class LexerTest
         whiteSpace = " 1213222"; 
         in = new BufferedReader(new StringReader(whiteSpace));
         lex = new Lexer(in ); lex.setSkipWhiteSpace(true);
-        assert lex.hasNumber() == true :" hasNumber fail "; 
-        assert lex.hasNumber() == true :" hasNumber fail 2 ";
+        assert lex.hasANumber() == true :" hasNumber fail "; 
+        assert lex.hasANumber() == true :" hasNumber fail 2 ";
         Lexer.NumberToken nt=  (Lexer.NumberToken)lex.removeNextToken(); 
         if(nt.getNumberAsText().equals("1213222")==false ) 
             System.out.println("|"+nt.getNumberAsText()+"|");

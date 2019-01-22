@@ -330,6 +330,8 @@ class Lexer
         WordToken s = (WordToken)t; 
         return s; 
     }
+    
+    
     //--------------------------------------------------------------------------
     /**
      * 
@@ -383,7 +385,7 @@ class Lexer
      * 
      * @return 
      */
-    boolean hasWordAvilable()
+    boolean hasAnyWordAvilable()
     { 
       Token t = removeNextToken(); 
       pushTokenBackToHead( t );
@@ -392,11 +394,11 @@ class Lexer
     } 
     //--------------------------------------------------------------------------
     /**
-     * hasWord return true if the compiler has any of this. 
+     * hasThisWord return true if the compiler has any of this. 
      * @param word
      * @return 
      */
-    boolean hasWord( String word )
+    boolean hasThisWord( String word )
     { 
          Token t = removeNextToken(); 
          pushTokenBackToHead( t );
@@ -411,7 +413,7 @@ class Lexer
      * @param words
      * @return 
      */
-    boolean hasWords( String words[])
+    boolean hasAnyOfTheseWords( String words[])
     { 
         Token t = removeNextToken(); 
         pushTokenBackToHead( t );
@@ -429,7 +431,7 @@ class Lexer
      * Tests to see 
      * @return 
      */
-    boolean hasNumber()
+    boolean hasANumber()
     { 
         Token t = removeNextToken(); 
         pushTokenBackToHead( t );
@@ -522,12 +524,22 @@ class Lexer
         whiteSpace = " 1213222"; 
         in = new BufferedReader(new StringReader(whiteSpace));
         lex = new Lexer(in ); lex.setSkipWhiteSpace(true);
-        assert lex.hasNumber() == true :" hasNumber fail "; 
-        assert lex.hasNumber() == true :" hasNumber fail 2 ";
+        assert lex.hasANumber() == true :" hasNumber fail "; 
+        assert lex.hasANumber() == true :" hasNumber fail 2 ";
         NumberToken nt=  (NumberToken)lex.removeNextToken(); 
         if(nt.getNumberAsText().equals("1213222")==false ) 
             System.out.println("|"+nt.getNumberAsText()+"|");
         assert( nt.getNumberAsText().equals("1213222")); 
+        
+        //hasQuotedStringLiteral
+        
+        in = new BufferedReader(new StringReader("  “message” hello "));
+        lex = new Lexer(in ); lex.setSkipWhiteSpace(true);
+        assert lex.hasQuoteStringAvailable() == true ; 
+        StringToken st = lex.removeNextTokenAsLiteralString(); 
+        assert st != null ; 
+        assert st.getText().equals("message"); 
+                
         return true ; 
     }
      

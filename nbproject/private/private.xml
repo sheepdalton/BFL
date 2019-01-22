@@ -5,8 +5,14 @@
         <group>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LogicBinaryExpression.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/BFLExpressionParser.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/UnariyExpression.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/BFLParser.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/GeneralObject.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/GeneralBoolean.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/test/blfexperiment/expressions/GeneralBooleanTest.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/Variable.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/Expression.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/GeneralNumber.java</file>
         </group>
     </open-files>
 </project-private>

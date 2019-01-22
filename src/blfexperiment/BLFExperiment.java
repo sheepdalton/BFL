@@ -113,7 +113,7 @@ public class BLFExperiment
         if( lex.hasThisSymbol('$'))
         { 
             Lexer.Token dollar = lex.removeNextToken(); 
-            if( lex.hasNumber()) 
+            if( lex.hasANumber()) 
             { 
                 Lexer.Token num1 = lex.removeNextToken();
             }

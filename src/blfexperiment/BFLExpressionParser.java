@@ -202,7 +202,7 @@ public class BFLExpressionParser
    LiteralNumberExpression parseLongNumber() throws ParseError 
    {
     tokenStream.setSkipWhiteSpace(true);// Skip read uo to number 
-    if( ! tokenStream.hasNumber()) parseErrorStop("Expected number here" );
+    if( ! tokenStream.hasANumber()) parseErrorStop("Expected number here" );
     
     Lexer.NumberToken num1 = (Lexer.NumberToken)tokenStream.removeNextToken();// get number 
     tokenStream.setSkipWhiteSpace(false);
@@ -212,7 +212,7 @@ public class BFLExpressionParser
     { 
         Lexer.SingleSymbol  commaSymbol = tokenStream.removeNextTokenAsSymbol(); 
         assert commaSymbol.getSymbol() == ','  :  "hasThisSymbol failure";
-        if( ! tokenStream.hasNumber()) parseErrorStop("Expected number here 2");
+        if( ! tokenStream.hasANumber()) parseErrorStop("Expected number here 2");
         num1 = (Lexer.NumberToken) tokenStream.removeNextToken();
        
         number = number + num1.getNumberAsText();
@@ -225,7 +225,7 @@ public class BFLExpressionParser
        /*
            handle .xxx,xxx,xxx 
        */
-       if(tokenStream.hasNumber() ) 
+       if(tokenStream.hasANumber() ) 
        { 
         num1 = (Lexer.NumberToken) tokenStream.removeNextToken();
         number = number + num1.getNumberAsText();
@@ -233,7 +233,7 @@ public class BFLExpressionParser
         { 
             Lexer.SingleSymbol  commaSymbol = tokenStream.removeNextTokenAsSymbol(); 
             assert commaSymbol.getSymbol() == ','  :  "hasThisSymbol failure";
-            if( ! tokenStream.hasNumber()) parseErrorStop("Expected number here");
+            if( ! tokenStream.hasANumber()) parseErrorStop("Expected number here");
             num1 = (Lexer.NumberToken) tokenStream.removeNextToken();
             number = number + num1.getNumberAsText(); 
         }// end while.
@@ -507,11 +507,11 @@ public class BFLExpressionParser
    LiteralNumberExpression parseLiteralNumber( )throws ParseError
    { 
        LiteralNumberExpression result= null ;
-      /* System.out.println("parseLiteralNumber 1  " + tokenStream.hasNumber() 
-                + " " + tokenStream.hasThisSymbol('£') +  " " +  tokenStream.hasNumber()  );
+      /* System.out.println("parseLiteralNumber 1  " + tokenStream.hasANumber() 
+                + " " + tokenStream.hasThisSymbol('£') +  " " +  tokenStream.hasANumber()  );
        
        System.out.println("parseLiteralNumber -> 2 " + 
-                                                        tokenStream.hasNumber());
+                                                        tokenStream.hasANumber());
        */
        if(     tokenStream.hasThisSymbol('$') || 
                tokenStream.hasThisSymbol('£')  || 
@@ -521,7 +521,7 @@ public class BFLExpressionParser
        }
        else 
        {  
-           //System.out.println("parseLiteralNumber -> parseLongNumber " +   tokenStream.hasNumber());
+           //System.out.println("parseLiteralNumber -> parseLongNumber " +   tokenStream.hasANumber());
            boolean old = tokenStream.setSkipWhiteSpace(true);
            result =   parseLongNumber() ; 
            
@@ -543,10 +543,10 @@ public class BFLExpressionParser
            // followed by a word and NO whitespace. 
            if( tokn.getTokenType()==Lexer.TT_WORD)
            { 
-            if( tokenStream.hasWords( allunits ))
+            if( tokenStream.hasAnyOfTheseWords( allunits ))
             { 
               result = parseUnits( result ); 
-            }else if( !tokenStream.hasWords(keyWords) )
+            }else if( !tokenStream.hasAnyOfTheseWords(keyWords) )
             { 
                 this.parseErrorStop("EXPECTED A UNIT or possibly Key word but not" +
                         ((Lexer.WordToken)tokn).getText());
@@ -601,7 +601,7 @@ public class BFLExpressionParser
    //---------------------------------------------------------------------------
    String parseIdentifier() throws ParseError 
    { 
-     if( tokenStream.hasWords(keyWords)) this.parseErrorStop("CANNOT Start Identifier with key word ");
+     if( tokenStream.hasAnyOfTheseWords(keyWords)) this.parseErrorStop("CANNOT Start Identifier with key word ");
      Lexer.Token word =  tokenStream.removeNextToken() ;
      String IDENIFYIER = ""; 
     
@@ -702,7 +702,7 @@ public class BFLExpressionParser
         return result; 
      }// NOT 
      
-     if( tokenStream.hasWord("NOT") ||  tokenStream.hasThisSymbol('¬') ) // THIS IS LOGICAL NOT SYMBOL
+     if( tokenStream.hasThisWord("NOT") ||  tokenStream.hasThisSymbol('¬') ) // THIS IS LOGICAL NOT SYMBOL
      { 
         Lexer.Token not = tokenStream.removeNextToken();// what ever it is. 
         NumericExpression num = parseFactor(); 
@@ -722,7 +722,7 @@ public class BFLExpressionParser
     }
 // LITERAL BOOLEAN WORD
      String booleanliteralWords[] = { "YES", "NO", "TRUE", "FALSE" } ; 
-     if( tokenStream.hasWords( booleanliteralWords))
+     if( tokenStream.hasAnyOfTheseWords( booleanliteralWords))
      { 
          Lexer.WordToken wt = tokenStream.removeNextTokenAsWord();
          return new LiteralBoolean( wt.getText()); 
@@ -753,13 +753,13 @@ public class BFLExpressionParser
      }
      if( debugTrace) 
      { 
-         System.out.println("     PARASE CHECK NUMBER "+ tokenStream.hasNumber()) ; 
+         System.out.println("     PARASE CHECK NUMBER "+ tokenStream.hasANumber()) ; 
          Lexer.Token t = tokenStream.removeNextToken();
          System.out.println("     PARASE CHECK NUMBER "+ t.toString()) ; 
          tokenStream.pushTokenBackToHead(t);  
      } 
      
-     if(  tokenStream.hasNumber() ||  tokenStream.hasThisSymbol('$')
+     if(  tokenStream.hasANumber() ||  tokenStream.hasThisSymbol('$')
              || tokenStream.hasThisSymbol('£') ||  tokenStream.hasThisSymbol('€')) 
      { 
         if( debugTrace) { System.out.println("      PARASE parseLiteralNumber"); } 
@@ -773,9 +773,9 @@ public class BFLExpressionParser
      } 
     if( debugTrace) { System.out.println("     PARASE NOT A  NUMBER"); } 
      
-    if( tokenStream.hasWords(keyWords)) this.parseErrorStop("CANNOT Start variable with key word ");
+    if( tokenStream.hasAnyOfTheseWords(keyWords)) this.parseErrorStop("CANNOT Start variable with key word ");
     String IDENIFYIER = ""; 
-    if( tokenStream.hasWordAvilable() ) 
+    if( tokenStream.hasAnyWordAvilable() ) 
     { 
         IDENIFYIER = this.parseIdentifier();
     }
@@ -789,7 +789,7 @@ public class BFLExpressionParser
         // check types although even numbers have messages like 's type 's units
         // also have methods like 45's sin   45's log 
         word =  tokenStream.removeNextToken() ;
-        if( tokenStream.hasWord("s"))
+        if( tokenStream.hasThisWord("s"))
         { 
             Lexer.WordToken s  = tokenStream.removeNextTokenAsWord();
             // get an identifier 
@@ -921,7 +921,7 @@ public class BFLExpressionParser
           UnariyExpression ux = new UnariyExpression( '!', factor); 
           return ux; 
       }
-      if(  tokenStream.hasWord("squared"))
+      if(  tokenStream.hasThisWord("squared"))
       { 
           w = tokenStream.removeNextTokenAsWord();
           NumericExpression two = this.makeLiteralNumberExpression("2"); 
@@ -929,7 +929,7 @@ public class BFLExpressionParser
           tokenStream.setSkipWhiteSpace(oldSetting);
           return bx; 
       }
-      if(  tokenStream.hasWord("cubed"))
+      if(  tokenStream.hasThisWord("cubed"))
       { 
           w = tokenStream.removeNextTokenAsWord();
           NumericExpression two = this.makeLiteralNumberExpression("3"); 
@@ -937,17 +937,17 @@ public class BFLExpressionParser
           tokenStream.setSkipWhiteSpace(oldSetting);
           return bx; 
       }
-      if(  tokenStream.hasWord("to") ) w = tokenStream.removeNextTokenAsWord();// optional 
-      if(  tokenStream.hasWord("the") ) w2 = tokenStream.removeNextTokenAsWord();
-      if(  tokenStream.hasWord("to") ) this.parseErrorStop(" THE TO POWER don't you mean TO *THE* POWER?");
+      if(  tokenStream.hasThisWord("to") ) w = tokenStream.removeNextTokenAsWord();// optional 
+      if(  tokenStream.hasThisWord("the") ) w2 = tokenStream.removeNextTokenAsWord();
+      if(  tokenStream.hasThisWord("to") ) this.parseErrorStop(" THE TO POWER don't you mean TO *THE* POWER?");
 
-      if( tokenStream.hasWord("power"))
+      if( tokenStream.hasThisWord("power"))
       {         
            w = tokenStream.removeNextTokenAsWord();
            assert w.getText().equalsIgnoreCase("power"); 
            parsePower = true ; 
           //System.out.println("-----------PARSE POWER 1 -------------" + parsePower  );
-          if(  tokenStream.hasWord("of") ) w = tokenStream.removeNextTokenAsWord(); // OPTIONAL.
+          if(  tokenStream.hasThisWord("of") ) w = tokenStream.removeNextTokenAsWord(); // OPTIONAL.
       }else  if(  tokenStream.hasThisSymbol('^'))
       { 
           parsePower = true ; 
@@ -1008,7 +1008,7 @@ public class BFLExpressionParser
       
       
       while( tokenStream.hasThisSymbol('+') || tokenStream.hasThisSymbol('-')  )// || 
-             // tokenStream.hasWord("plus") ||  tokenStream.hasWord("minus")
+             // tokenStream.hasThisWord("plus") ||  tokenStream.hasThisWord("minus")
       { 
           BinaryExpression bx = null ; 
           
@@ -1242,15 +1242,15 @@ public class BFLExpressionParser
       
       Lexer.WordToken is  = null ;
       boolean foundIs = false ; 
-      if( tokenStream.hasWord("is") )  // this could be a filler word. 
+      if( tokenStream.hasThisWord("is") )  // this could be a filler word. 
       { 
           is = tokenStream.removeNextTokenAsWord(); // optional 
           foundIs = true ; 
       }
-      if( tokenStream.hasWord("more") ||  tokenStream.hasWord("greater"))
+      if( tokenStream.hasThisWord("more") ||  tokenStream.hasThisWord("greater"))
       { 
         Lexer.WordToken more = tokenStream.removeNextTokenAsWord(); 
-        if( tokenStream.hasWord("than")) // filler words OPTIONAL 
+        if( tokenStream.hasThisWord("than")) // filler words OPTIONAL 
         { 
             Lexer.WordToken than = tokenStream.removeNextTokenAsWord(); 
         }
@@ -1265,10 +1265,10 @@ public class BFLExpressionParser
         ex = bx ;   tokenStream.setSkipWhiteSpace(oldSetting);
         return ex; 
       }
-      if( tokenStream.hasWord("less"))
+      if( tokenStream.hasThisWord("less"))
       { 
         Lexer.WordToken more = tokenStream.removeNextTokenAsWord(); 
-        if( tokenStream.hasWord("than"))
+        if( tokenStream.hasThisWord("than"))
         { 
               Lexer.WordToken than = tokenStream.removeNextTokenAsWord(); // optinal 
         }
@@ -1285,15 +1285,15 @@ public class BFLExpressionParser
       }  
       // if is != null then we HAVE found IS  OR
       
-      if( tokenStream.hasWord("nearly") ) 
+      if( tokenStream.hasThisWord("nearly") ) 
       { 
         Lexer.WordToken nearly = tokenStream.removeNextTokenAsWord();// ignore optional.
-        if( tokenStream.hasWord("equal")) // Just remove it.
+        if( tokenStream.hasThisWord("equal")) // Just remove it.
         {
            Lexer.WordToken equal = tokenStream.removeNextTokenAsWord();// ignore optional.
         }
           
-        if( tokenStream.hasWord("to")) // just remove it.
+        if( tokenStream.hasThisWord("to")) // just remove it.
         { 
               Lexer.WordToken than = tokenStream.removeNextTokenAsWord(); // ignore optional.  
         } 
@@ -1303,14 +1303,14 @@ public class BFLExpressionParser
         ex = bx ;  tokenStream.setSkipWhiteSpace(oldSetting);
         return ex;
       }
-      if( tokenStream.hasWord("equal") || foundIs )
+      if( tokenStream.hasThisWord("equal") || foundIs )
       {   if( debugTrace )System.out.println("tokenStream.hasWord(\"equal\") || is != null ");
-          if( tokenStream.hasWord("equal")) // Just remove it.
+          if( tokenStream.hasThisWord("equal")) // Just remove it.
           {
             Lexer.WordToken equal = tokenStream.removeNextTokenAsWord();
           }
           
-          if( tokenStream.hasWord("to")) // just remove it.
+          if( tokenStream.hasThisWord("to")) // just remove it.
           { 
               Lexer.WordToken than = tokenStream.removeNextTokenAsWord(); // optinal 
           } 
@@ -1347,7 +1347,7 @@ public class BFLExpressionParser
       NumericExpression ex =  this.parseComparisonExpression();
       if( debugTrace )System.out.println("end simpleMathExpression in logic beofe");
      
-      if( tokenStream.hasWord("and")) // 
+      if( tokenStream.hasThisWord("and")) // 
       { 
           Lexer.WordToken and = this.tokenStream.removeNextTokenAsWord();
           if( this.debugTrace) System.out.println("PARSING 'AND' " + and + " GOT factor = " + ex);
@@ -1362,7 +1362,7 @@ public class BFLExpressionParser
            
          // if(  ! after.isQuestion() )  parseErrorStop(" AND (2) operation only works on logic expression. Had  " + after ); 
       }else 
-          if( tokenStream.hasWord("or")) // 
+          if( tokenStream.hasThisWord("or")) // 
             { 
                 Lexer.WordToken and = this.tokenStream.removeNextTokenAsWord();
                 if( this.debugTrace) System.out.println("PARSING 'OK' " + and + " GOT factor = " + ex);
@@ -1401,11 +1401,11 @@ public class BFLExpressionParser
     */
    String getIdentifier() throws ParseError 
    { 
-      if( tokenStream.hasWordAvilable() == false )this.parseErrorStop("Expected Idenifier");
+      if( tokenStream.hasAnyWordAvilable() == false )this.parseErrorStop("Expected Idenifier");
       String identifier = ""; 
       Lexer.Token tkn ; 
       do{ 
-            if( tokenStream.hasWords(keyWords) ) break ; 
+            if( tokenStream.hasAnyOfTheseWords(keyWords) ) break ; 
            
             tkn = tokenStream.removeNextToken();
             System.out.println("tkeb  " +  tkn ); 
@@ -1413,7 +1413,7 @@ public class BFLExpressionParser
             { 
                 identifier = identifier + ((Lexer.WordToken)tkn).getText() + "_";
             }
-      } while( ( tokenStream.hasWordAvilable()) );
+      } while( ( tokenStream.hasAnyWordAvilable()) );
       return identifier; 
    }
   

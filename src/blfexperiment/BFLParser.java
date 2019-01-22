@@ -192,14 +192,14 @@ public class BFLParser extends BFLExpressionParser
     {
         boolean isJustPut = true;
         tokenStream.setSkipWhiteSpace(true);
-        if (!tokenStream.hasWord("put"))
+        if (!tokenStream.hasThisWord("put"))
         {
             return null; // not a put statement
         }
         Lexer.WordToken t = (Lexer.WordToken) tokenStream.removeNextToken();
         NumericExpression exp = parseComparisonExpression();
         VariableSetExpression varExp = null;
-        if (tokenStream.hasWord("into"))
+        if (tokenStream.hasThisWord("into"))
         {
             //@@@TODO handle put as in into
             t = (Lexer.WordToken) tokenStream.removeNextToken();
@@ -235,11 +235,11 @@ public class BFLParser extends BFLExpressionParser
             System.out.println("Variable " + variableName);
             //@@@ TODO HANDLE [ EXPRESSION ]
             //@@@ TODO HANDLE AS [ TYPE ]
-            if (this.tokenStream.hasWord("As"))
+            if (this.tokenStream.hasThisWord("As"))
             {
                 Lexer.WordToken as = tokenStream.removeNextTokenAsWord();
                 assert as.getText().equalsIgnoreCase("as");
-                if (!tokenStream.hasWordAvilable())
+                if (!tokenStream.hasAnyWordAvilable())
                 {
                     parseErrorStop(" Put " + variableName + "  As.. what (Number,Kg) ?");
                 }
@@ -277,11 +277,11 @@ public class BFLParser extends BFLExpressionParser
      */
     public Statement parseStatement() throws ParseError
     {
-        if (tokenStream.hasWord("Put"))
+        if (tokenStream.hasThisWord("Put"))
         {
             return parsePutStatement();
         }
-        // if( tokenStream.hasWord("add") )  // add x to y
+        // if( tokenStream.hasThisWord("add") )  // add x to y
         return null;
     }
 
@@ -313,7 +313,7 @@ public class BFLParser extends BFLExpressionParser
                     parseErrorStop("INDENTATION ERROR Block was more indented than expected");
                 }
             }
-            if (tokenStream.hasWord("Put"))
+            if (tokenStream.hasThisWord("Put"))
             {
                 Statement s = parseStatement();
                 block.add(s);
@@ -354,7 +354,7 @@ public class BFLParser extends BFLExpressionParser
     StatementBlock parseProcedure() throws ParseError
     {
         boolean oldWS = tokenStream.setSkipWhiteSpace(true);
-        if (tokenStream.hasWord("function"))
+        if (tokenStream.hasThisWord("function"))
         {
             Lexer.WordToken w = tokenStream.removeNextTokenAsWord();
             assert w.getText().equalsIgnoreCase("function");
@@ -363,7 +363,7 @@ public class BFLParser extends BFLExpressionParser
             // CREATE A NEW LOCAL VARS.
             SymbolTable locals = this.pushSymbolTable();
             String[] prms = {"with", "param", "parameters", "Argument", "option"};
-            if (tokenStream.hasWords(prms))
+            if (tokenStream.hasAnyOfTheseWords(prms))
             {
                 //@@@ TODO PARAMETER LIST
                 assert false;
