@@ -18,20 +18,18 @@
  */
 package blfexperiment;
 
-import static blfexperiment.BFLExpressionParser.fromSource;
 import static blfexperiment.BFLExpressionParser.runSimpleExpression;
 import blfexperiment.expressions.BinaryExpression;
 import blfexperiment.expressions.LiteralNumberExpression;
 import blfexperiment.expressions.NumericExpression;
 import blfexperiment.expressions.Statement;
-import blfexperiment.expressions.UnariyExpression;
 import blfexperiment.expressions.Variable;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -87,6 +85,30 @@ public class BFLExpressionParserTest
        assert BFLExpressionParser.isACurrency("dollar") == true ; 
        assert BFLExpressionParser.isACurrency("poundSterling") == true ;
        assert BFLExpressionParser.isACurrency("euro") == true ;
+       
+    }
+
+    @Test
+    public void testParseIdentifer()
+    { 
+       System.out.println("testParseIdentifer");
+       try 
+        { 
+            BFLExpressionParser  bfl = fromSource(" hello bob of "); 
+            String s =  bfl.parseIdentifier();
+            assertEquals("_hello_bob",s);
+            bfl = fromSource(" hello bob ( "); 
+            s =  bfl.parseIdentifier();
+            assertEquals("_hello_bob",s);
+            
+            bfl = fromSource(" hello    bob  how  ( "); 
+            s =  bfl.parseIdentifier();
+            assertEquals("_hello_bob_how",s);
+        }catch(  ParseError e )
+        { 
+            System.err.println("TEST EXPRESSION: PARSE ERROR->"+ e);
+            fail("Parse Error ->" + e ) ; 
+        }
        
     }
 
@@ -203,6 +225,30 @@ public class BFLExpressionParserTest
             System.err.println("TEST testParseCurrency: PARSE ERROR->"+ e);
             fail("Parse Error ->" + e ) ;
         } 
+    }
+    public void testParseFunction() throws Exception
+    {
+        System.out.print("TEST function "); 
+       try 
+        { 
+            BFLExpressionParser bl=  fromSource( " the sin of 3.14159265359/2.0 " ) ;
+            assertNotNull("Expression not returned ",bl );
+            NumericExpression e = bl.parseFactor() ;assertNotNull("Expression not returned ",e);
+            BigDecimal d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
+            assertEquals(d.toPlainString(), "1");
+            
+            bl=  fromSource( "sin ( 3.14159265359/2.0 )  " ) ;
+            assertNotNull("Expression not returned ",bl );
+            e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
+            d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
+           assertEquals(d.toPlainString(), "1");
+//        
+        }
+        catch(  ParseError e )
+        { 
+            System.out.println("TEST Term: PARSE ERROR->"+ e);
+             fail("TEST Term: PARSE ERROR->"+e);
+        }
     }
     //--------------------------------------------------------------------------
         /**

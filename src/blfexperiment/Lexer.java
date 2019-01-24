@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * This performs low level lexical analysis ( badly ) 
@@ -327,11 +326,9 @@ class Lexer
            pushTokenBackToHead(t); assert false ; 
            return null ;
         } 
-        WordToken s = (WordToken)t; 
+        WordToken s = (WordToken)t; assert s != null ; 
         return s; 
     }
-    
-    
     //--------------------------------------------------------------------------
     /**
      * 

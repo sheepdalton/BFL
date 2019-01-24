@@ -19,13 +19,11 @@
 package blfexperiment;
 
 import static blfexperiment.Lexer.*;
-import static blfexperiment.Lexer.TT_WHITESPACE;
-import static blfexperiment.Lexer.TT_WORD;
 import java.io.BufferedReader;
 import java.io.StringReader;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -224,20 +222,38 @@ public class LexerTest
 //        fail("The test case is a prototype.");
 //    }
 //
-//    /**
-//     * Test of isSkipingWhiteSpace method, of class Lexer.
-//     */
-//    @Test
-//    public void testIsSkipingWhiteSpace()
-//    {
-//        System.out.println("isSkipingWhiteSpace");
-//        Lexer instance = null;
-//        boolean expResult = false;
-//        boolean result = instance.isSkipingWhiteSpace();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    /**
+     * Test of isSkipingWhiteSpace method, of class Lexer.
+     */
+    @Test
+    public void testRQUITemoveNextTokenAsWord()
+    {
+        
+        System.out.println("removeNextTokenAsWord");
+        String whiteSpace = " the sin of 4"; 
+        BufferedReader in = new BufferedReader(new StringReader(whiteSpace));
+        Lexer  lex = new Lexer(in ); 
+        lex.setSkipWhiteSpace(true);
+        assertEquals(true,  lex.hasThisWord("the"));
+        Lexer.WordToken the = lex.removeNextTokenAsWord();
+        assert the!=null ; 
+        assertEquals(true,  lex.hasThisWord("sin"));
+        Lexer.WordToken sine = lex.removeNextTokenAsWord();
+        assertEquals(true,  lex.hasThisWord("of"));
+        Lexer.WordToken of = lex.removeNextTokenAsWord();
+        assertEquals(true, of.getText().equalsIgnoreCase("of"));
+       
+    }
+    /*
+    if( tokenStream.hasThisWord("of"))
+         { 
+             // WHY THIS IS NOT WORKING IS BEYOND ME ??? 
+            Lexer.WordToken of = tokenStream.removeNextTokenAsWord();assert of != null; 
+            assert of.getText().equalsIgnoreCase("of");
+            Lexer.Token t = tokenStream.removeNextToken();  //tokenStream.pushTokenBackToHead(t);
+            //System.out.println("found OF getting expression  " + t + " HAND " + of);
+            assert tokenStream.hasThisWord("of") == false  ; 
+    */
 //
 //    /**
 //     * Test of setSkipWhiteSpace method, of class Lexer.

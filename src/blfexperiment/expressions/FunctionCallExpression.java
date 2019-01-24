@@ -19,6 +19,7 @@
 
 package blfexperiment.expressions;
 
+import blfexperiment.BFLExpressionParser;
 import blfexperiment.GeneralTypes.GeneralObject;
 import java.math.BigDecimal;
 import java.util.*;
@@ -40,7 +41,7 @@ public class FunctionCallExpression implements NumericExpression
     { 
         fullName = fullNameWithSpaces ; 
     }
-    void addArgument( Expression e)
+    public void addArgument( Expression e)
     { 
         arguments.add(e);
     }
@@ -71,13 +72,31 @@ public class FunctionCallExpression implements NumericExpression
     @Override
     public String getType()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return BFLExpressionParser.typeFloat ;
     }
 
     @Override
     public BigDecimal evaluateCalculation()
     {
-        return NumericExpression.super.evaluateCalculation(); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("function call " +  fullName);
+        BigDecimal d= BigDecimal.ZERO;
+        for( Expression e:  arguments)
+        { 
+            d = e.evaluateCalculation();
+        }
+        switch( fullName )
+        { 
+            case "_sin" : return  new  BigDecimal( Math.sin( d.doubleValue() ) ); 
+            case "_cos" : return  new  BigDecimal( Math.cos( d.doubleValue() ) );
+            case "_cosh": return  new  BigDecimal( Math.cosh(d.doubleValue() ) );
+            case "_acos": return  new  BigDecimal( Math.sinh(d.doubleValue() ) );
+            case "_tan" : return  new  BigDecimal( Math.tan( d.doubleValue() ) );
+            case "_random":return  new  BigDecimal( Math.random( ) ).multiply(d );
+            default : assert false ; 
+        }
+       
+       assert false ; 
+       return null; 
     }
 
     @Override

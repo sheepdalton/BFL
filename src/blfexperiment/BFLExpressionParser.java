@@ -19,18 +19,12 @@
 package blfexperiment;
 
 import blfexperiment.GeneralTypes.GeneralObject;
-import blfexperiment.expressions.Variable;
 import static blfexperiment.Lexer.TT_WORD;
-import static blfexperiment.Lexer.TT_EOL;
-import static blfexperiment.Lexer.TT_WHITESPACE;
 import blfexperiment.expressions.*;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author Sheep Dalton
@@ -120,7 +114,6 @@ public class BFLExpressionParser
        currentSymTable = currentSymTable.getParent(); 
    }
    //---------------------------------------------------------------------------
-
     /**
      *
      * @param normalisedName
@@ -578,7 +571,7 @@ public class BFLExpressionParser
 ⊆ subset or equal 
 ⊂ subset of 
 
-∈ element of  4 ∈ { 1 4 5. 6 6 7 } boolean 
+∈ element of  4 ∈ { 1 4 5. 6 6 7 } ->  boolean 
 
 
 ∧ logical and 
@@ -600,6 +593,9 @@ public class BFLExpressionParser
 
    */ 
    //---------------------------------------------------------------------------
+   /** 
+    * An indetifier CANNOT HAVE a keyword in it. 
+    */
    String parseIdentifier() throws ParseError 
    { 
      if( tokenStream.hasAnyOfTheseWords(keyWords)) this.parseErrorStop("CANNOT Start Identifier with key word ");
@@ -612,7 +608,7 @@ public class BFLExpressionParser
          if(  isKeyWord( w.getText() ))
          { 
              tokenStream.pushTokenBackToHead(w);
-             break ; 
+             return IDENIFYIER; 
          }
          IDENIFYIER = IDENIFYIER + "_" + w.getText() ; 
          //System.out.println(" PARSING VARNAME= " + varName );
@@ -622,6 +618,56 @@ public class BFLExpressionParser
      tokenStream.pushTokenBackToHead(word);
      return IDENIFYIER; 
    }
+//------------------------------------------------------------------------------
+  protected FunctionCallExpression makeFunctionCall( String name )
+  { 
+      assert null != name;
+      return new FunctionCallExpression( name); 
+  }
+/**
+  *  [THE] IDENTIFER 'of' | (  PARAM LIST  ) 
+     IF name is null will auto get identifer.
+ */
+   NumericExpression parseFunctionCall( String name ) throws ParseError 
+    {   
+    boolean oldSetting =  tokenStream.setSkipWhiteSpace(true);
+    // if name is null - then is of form the IDENT OF Argument 
+    if(  name == null )// the 
+    { 
+         name = parseIdentifier(); 
+         System.out.println(" parseFunctionCall  "+ name );
+         if( name == null || name.isEmpty())parseErrorStop("Expected a name for a function here.");
+         if( tokenStream.hasThisWord("of"))
+         { 
+            Lexer.WordToken of = tokenStream.removeNextTokenAsWord();assert of != null; 
+            assert of.getText().equalsIgnoreCase("of");
+            assert tokenStream.hasThisWord("of") == false  ; 
+           
+            NumericExpression arg = this.parseExpression();
+           
+            System.out.println(" GOT expression  " );
+            FunctionCallExpression funcn = makeFunctionCall(name);
+            funcn.addArgument(arg); 
+            System.out.println(" PARSED function "+ name );
+            tokenStream.setSkipWhiteSpace(oldSetting);
+            return funcn;
+         }
+    }
+    if( tokenStream.hasThisSymbol('(') )
+    { 
+         System.out.println(" PARSED function 2 "+ name );
+        Lexer.SingleSymbol sl = tokenStream.removeNextTokenAsSymbol(); assert sl.getSymbol()=='('; 
+        NumericExpression arg = this.parseExpression();
+        FunctionCallExpression funcn = makeFunctionCall(name);
+        funcn.addArgument(arg); 
+        if(! tokenStream.hasThisSymbol(')') ) parseErrorStop("Expected ) here.");
+        sl = tokenStream.removeNextTokenAsSymbol(); assert sl.getSymbol()==')'; 
+         tokenStream.setSkipWhiteSpace(oldSetting);
+       return funcn; 
+    }
+    assert false ; 
+    return null ; 
+    } 
    //---------------------------------------------------------------------------
    /** 
     *   Capital word word word. (<-- full stop ) 
@@ -701,8 +747,14 @@ public class BFLExpressionParser
         NumericExpression num = parseFactor(); 
         //result = makeNewUnariyExpression( '-', num ); 
         return result; 
-     }// NOT 
-     
+     }
+    // parse 'the' 
+    boolean theParsed  = false ; 
+    if(  tokenStream.hasThisWord("the") )
+    { 
+         Lexer.Token not = tokenStream.removeNextToken();// what ever it is.
+         return parseFunctionCall( null ); 
+    }
      if( tokenStream.hasThisWord("NOT") ||  tokenStream.hasThisSymbol('¬') ) // THIS IS LOGICAL NOT SYMBOL
      { 
         Lexer.Token not = tokenStream.removeNextToken();// what ever it is. 
@@ -780,9 +832,11 @@ public class BFLExpressionParser
     { 
         IDENIFYIER = this.parseIdentifier();
     }
+    
     Lexer.Token  word =  tokenStream.removeNextToken() ; // ????
     // THE NEXT WORD COULD BE INTO 
     tokenStream.pushTokenBackToHead(word);
+    if( tokenStream.hasThisSymbol('('))return parseFunctionCall(IDENIFYIER); //  functional 
    
     // IF IS IDENTIFER THEN CAN BE AT END OF IDENTIFER 
     if(tokenStream.hasThisSymbol('\'') ) // 's 
