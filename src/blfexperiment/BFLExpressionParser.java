@@ -77,6 +77,23 @@ public class BFLExpressionParser
        assert source != null:"No null source";
        this.tokenStream = new Lexer( source );
        currentSymTable = new SymbolTable(null);// gobal table 
+       initFromAllConstructors(); 
+   }
+   private void initFromAllConstructors()
+   { 
+          
+     allUnitsPlusSynomims =  new HashMap<String,String>() 
+      {{
+        put("feet", "ft");
+        put("foot", "ft");
+        put("Kilogram", "Kg");
+        put("lb", "pound");
+       }};
+     
+      for( String unit :  allunits)
+      { 
+          allUnitsPlusSynomims.put(unit+"s", unit); // Meters -> Meter
+      }
    }
    //---------------------------------------------------------------------------
 
@@ -90,6 +107,7 @@ public class BFLExpressionParser
        assert source != null:"No null source";
        this.tokenStream = new Lexer( source );
        currentSymTable = s;// gobal table 
+       initFromAllConstructors(); 
    }   
    //---------------------------------------------------------------------------
     /**
@@ -314,7 +332,7 @@ public class BFLExpressionParser
    
    Lexer.WordToken unitWord = (Lexer.WordToken)t;  
    String it = unitWord.getText(); 
-    
+   it = it.toLowerCase();
    for( String ut: allunits ) 
    { 
        if( ut.equalsIgnoreCase(it))
@@ -324,6 +342,7 @@ public class BFLExpressionParser
            return ex ; 
        }
    }
+   // @@@ TODO search all similar words in hashMap.
    this.parseErrorStop(" I havn't heard of  unit called " + it  + " I understand "+ 
     Arrays.toString(allunits));// @@@TODO pretty print low priority.
    tokenStream.pushTokenBackToHead(t);
@@ -415,6 +434,9 @@ public class BFLExpressionParser
      *
      */
     public static String typeInches = "inch";
+    
+    public static String typeDegrees = "degrees"; 
+    public static String typeRadians = "raidans"; 
 
     /**
      *
@@ -431,8 +453,9 @@ public class BFLExpressionParser
         typeKilogram , typePound, 
         typeMilimeter , typeMeter, typeYard , typeFoot, typeInches,typeCentiMeter,
         typeYard, 
-        typeCentiMeter, typeKilometer, typeMile
+        typeCentiMeter, typeKilometer, typeMile, typeRadians, typeDegrees
     };
+    Map<String,String>  allUnitsPlusSynomims = null;  
      /***
     * Post fixes of all units recognised. 
      * @param item
@@ -655,13 +678,19 @@ public class BFLExpressionParser
     }
     if( tokenStream.hasThisSymbol('(') )
     { 
-         System.out.println(" PARSED function 2 "+ name );
-        Lexer.SingleSymbol sl = tokenStream.removeNextTokenAsSymbol(); assert sl.getSymbol()=='('; 
-        NumericExpression arg = this.parseExpression();
+        System.out.println(" PARSED function 2 "+ name );
         FunctionCallExpression funcn = makeFunctionCall(name);
-        funcn.addArgument(arg); 
-        if(! tokenStream.hasThisSymbol(')') ) parseErrorStop("Expected ) here.");
-        sl = tokenStream.removeNextTokenAsSymbol(); assert sl.getSymbol()==')'; 
+        // Lexer.SingleSymbol sl = tokenStream.removeNextTokenAsSymbol(); assert sl.getSymbol()=='(';
+        do
+        { 
+            Lexer.Token t = tokenStream.removeNextToken(); 
+            NumericExpression arg = this.parseExpression();
+            funcn.addArgument(arg);
+        } while( tokenStream.hasThisSymbol(',') ||  tokenStream.hasThisWord("with")); 
+        String errors = funcn.endAndCheckTypeAndArguments();// check arguments and type 
+        if( errors != null )this.parseErrorStop(errors);
+        if(tokenStream.hasThisSymbol(')')  == false ) parseErrorStop("Expected ) here.");
+        Lexer.SingleSymbol sl = tokenStream.removeNextTokenAsSymbol(); assert sl.getSymbol()==')'; 
          tokenStream.setSkipWhiteSpace(oldSetting);
        return funcn; 
     }

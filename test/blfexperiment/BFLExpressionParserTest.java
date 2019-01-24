@@ -199,7 +199,7 @@ public class BFLExpressionParserTest
         
         try 
         { 
-        BFLExpressionParser  bfl = fromSource("$100,000"); 
+            BFLExpressionParser  bfl = fromSource("$100,000"); 
             LiteralNumberExpression ex = bfl.parseLiteralNumber();
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
@@ -242,6 +242,27 @@ public class BFLExpressionParserTest
             e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
             d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
            assertEquals(d.toPlainString(), "1");
+           
+           bl=  fromSource( "exp ( 30 )  " ) ;
+            assertNotNull("Expression not returned ",bl );
+            e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
+            d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
+           assertEquals(d.toPlainString(), "10686474581524.462890625");
+           
+            bl=  fromSource( "exp( 30 )  " ) ; assertNotNull("Expression not returned ",bl );
+            e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
+            d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
+           assertEquals(d.toPlainString(), "10686474581524.462890625");
+           
+            bl=  fromSource( "log base ten ( 100 )  " ) ; assertNotNull("Expression not returned ",bl );
+            e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
+            d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
+           assertEquals(d.toPlainString(), "2");
+           bl=  fromSource( "log base ten(100)  " ) ; assertNotNull("Expression not returned ",bl );
+            e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
+            d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
+           assertEquals(d.toPlainString(), "2");
+                   
 //        
         }
         catch(  ParseError e )

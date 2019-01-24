@@ -35,7 +35,10 @@ public class FunctionCallExpression implements NumericExpression
     String fullName; // name possibly with spaces. 
     int howManyArguments =1 ; 
     int howManyResults   =1; // in the future I can return list of results.
-    List<Expression> arguments = new ArrayList<Expression>(4); // default to 4 argument 
+    List<Expression> arguments = new ArrayList<Expression>(4); // default to 4 argument
+    //  "sine" 1 arg , "radians" 
+    //  "cos" , 1 arg , "radians" 
+    //  "Atan2" , 2 arg , "number" , "number" 
     
     public FunctionCallExpression( String fullNameWithSpaces)
     { 
@@ -86,19 +89,41 @@ public class FunctionCallExpression implements NumericExpression
         }
         switch( fullName )
         { 
+            
             case "_sin" : return  new  BigDecimal( Math.sin( d.doubleValue() ) ); 
+            // _sin radians 
+            // _sin degrees 
             case "_cos" : return  new  BigDecimal( Math.cos( d.doubleValue() ) );
             case "_cosh": return  new  BigDecimal( Math.cosh(d.doubleValue() ) );
             case "_acos": return  new  BigDecimal( Math.sinh(d.doubleValue() ) );
             case "_tan" : return  new  BigDecimal( Math.tan( d.doubleValue() ) );
             case "_random":return  new  BigDecimal( Math.random( ) ).multiply(d );
+            case "_exp":return  new  BigDecimal(  Math.exp(d.doubleValue() ));
+            case "_log":return  new  BigDecimal(  Math.log(d.doubleValue() ));
+            case "_log_base_e":return  new  BigDecimal(  Math.log(d.doubleValue() ));
+            case "_log10":return  new  BigDecimal(  Math.log10(d.doubleValue() ));
+            case "_log_base_ten":return  new  BigDecimal(  Math.log10(d.doubleValue() ));
+           
             default : assert false ; 
         }
        
        assert false ; 
        return null; 
     }
-
+    //--------------------------------------------------------------------------
+    /** Checks the args. IF all OK sends out null. If not then sends out 
+     * error message. 
+     * @return 
+     */
+    public String endAndCheckTypeAndArguments() 
+    { 
+         if( this.arguments.size()<= 0 )return "Not enough arguments"; 
+         for( Expression e: arguments )
+         { 
+             if( e.isANumber()==false )return "Argument 1 needs to result in a number"; 
+         }
+         return null; // all is OK.
+    }
     @Override
     public boolean evaluateLogic()
     {
