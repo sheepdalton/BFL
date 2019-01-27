@@ -39,8 +39,7 @@ public class BFLExpressionParser
                           "put" ,
                           "as" , 
                           "with",
-                          "and",
-                          "or", 
+                          "as", 
                           "to", 
                           "of",
                           "by", 
@@ -79,7 +78,7 @@ public class BFLExpressionParser
        currentSymTable = new SymbolTable(null);// gobal table 
        initFromAllConstructors(); 
    }
-   private void initFromAllConstructors()
+   private static void initFromAllConstructors()
    { 
           
      allUnitsPlusSynomims =  new HashMap<String,String>() 
@@ -92,8 +91,10 @@ public class BFLExpressionParser
      
       for( String unit :  allunits)
       { 
+          allUnitsPlusSynomims.put(unit, unit); // Meters -> Meter
           allUnitsPlusSynomims.put(unit+"s", unit); // Meters -> Meter
       }
+      allUnitsPlusSynomims.put("pound",typePound );
    }
    //---------------------------------------------------------------------------
 
@@ -173,8 +174,8 @@ public class BFLExpressionParser
     */
    //---------------------------------------------------------------------------
    /** 
-    *  Hexadecimal number 
-    *   #xxxxxxxxx 
+    *  Hexadecimal typeNumber 
+   #xxxxxxxxx 
     */
    void parseErrorStop( String message  )throws ParseError 
    { 
@@ -213,10 +214,10 @@ public class BFLExpressionParser
     */
    LiteralNumberExpression parseLongNumber() throws ParseError 
    {
-    tokenStream.setSkipWhiteSpace(true);// Skip read uo to number 
+    tokenStream.setSkipWhiteSpace(true);// Skip read uo to typeNumber 
     if( ! tokenStream.hasANumber()) parseErrorStop("Expected number here" );
     
-    Lexer.NumberToken num1 = (Lexer.NumberToken)tokenStream.removeNextToken();// get number 
+    Lexer.NumberToken num1 = (Lexer.NumberToken)tokenStream.removeNextToken();// get typeNumber 
     tokenStream.setSkipWhiteSpace(false);
     String number = num1.getNumberAsText(); 
     //System.out.println("READ ø " + num1 );
@@ -264,7 +265,7 @@ public class BFLExpressionParser
    //---------------------------------------------------------------------------
    /**
     * Currency is in the form 
-    *     $ or £ or € [ Long number ] ) 
+     $ or £ or € [ Long typeNumber ] ) 
     * @return 
     */
    LiteralNumberExpression parseCurrency() throws ParseError
@@ -354,93 +355,37 @@ public class BFLExpressionParser
      *
      */
     public static String typeInt = "integer"; 
-
-    /**
-     *
-     */
-    public static String typeFloat = "real";
-
-    /**
-     *
-     */
-    public static String number = "number"; 
-
-    /**
-     *
-     */
+ 
+    public static String typeFloat = "real"; 
+    public static String typeNumber = "number"; 
+ 
     public static String typeDollar = "dollar"; 
-
-    /**
-     *
-     */
     public static String typePoundSterling = "poundSterling"; 
-
-    /**
-     *
-     */
     public static String typeEuro = "euro";
-
-    /**
-     *
-     */
-    public static String typeText = "text";
     
-    /**
-     *
-     */
-    public static String typeKilogram = "kg";
+    public static String typeText = "text";
 
-    /**
-     *
-     */
+    public static String typeKilogram = "kg";
+    public static String typeGram = "gram";
+// imperial 
     public static String typePound = "lb";
 
-    /**
-     *
-     */
-    public static String typeMilimeter = "mm";
-
-    /**
-     *
-     */
-    public static String typeMeter = "meter";
-
-    /**
-     *
-     */
+// metric disance 
     public static String typeCentiMeter = "cm";
-
-    /**
-     *
-     */
     public static String typeKilometer = "km";
-
-    /**
-     *
-     */
+    public static String typeMilimeter = "mm";
+    public static String typeMeter = "meter";
+ // imperial distance   
     public static String typeMile = "mile";
-
-    /**
-     *
-     */
     public static String typeYard = "yard";
-
-    /**
-     *
-     */
     public static String typeFoot = "ft";
-
-    /**
-     *
-     */
     public static String typeInches = "inch";
+  // Angel   
+    public static String typeDegrees = "degree"; 
+    public static String typeRadians = "radian"; 
     
-    public static String typeDegrees = "degrees"; 
-    public static String typeRadians = "raidans"; 
-
-    /**
-     *
-     */
+    public static String typeSeconds = "second"; 
+    
     public static String typeQuestion = "Question"; 
     
     // subset of types all stinrgs of names.
@@ -451,11 +396,13 @@ public class BFLExpressionParser
     public static String allunits[] = 
     { 
         typeKilogram , typePound, 
-        typeMilimeter , typeMeter, typeYard , typeFoot, typeInches,typeCentiMeter,
-        typeYard, 
-        typeCentiMeter, typeKilometer, typeMile, typeRadians, typeDegrees
+        typeMilimeter , typeMeter,typeCentiMeter,
+        typeFoot, typeInches,
+        typeYard, typeGram, 
+        typeKilometer, typeMile, 
+        typeRadians, typeDegrees
     };
-    Map<String,String>  allUnitsPlusSynomims = null;  
+    static Map<String,String>  allUnitsPlusSynomims = null;  
      /***
     * Post fixes of all units recognised. 
      * @param item
@@ -473,11 +420,18 @@ public class BFLExpressionParser
     //--------------------------------------------------------------------------
     static public boolean isAUnit( String item)
     { assert item != null ; 
+        boolean test = false ; 
+        if(allUnitsPlusSynomims==null )initFromAllConstructors();assert allUnitsPlusSynomims!=null;
+        
+        test =  allUnitsPlusSynomims.containsKey(item.toLowerCase()); 
+        
+        if( test == true )return true ; 
         for( String s : allunits)
         { 
             //@@@ TODO - or equals ignore case.
             if( item.equalsIgnoreCase(s))return true ; 
         }
+        assert test == false ; 
         return false ; 
     }
     //--------------------------------------------------------------------------
@@ -517,7 +471,7 @@ public class BFLExpressionParser
     *              |-------- number-------------|
 
     *  </pre>
-    *  parse a number can return null if not number 
+  parse a typeNumber can return null if not typeNumber 
     * @return
     * @throws ParseError 
     */
@@ -617,36 +571,43 @@ public class BFLExpressionParser
    */ 
    //---------------------------------------------------------------------------
    /** 
-    * An indetifier CANNOT HAVE a keyword in it. 
+    * An indetifier CANNOT HAVE a keyword or a number in it. 
+    *  It should be to OK  to have a number.
     */
    String parseIdentifier() throws ParseError 
    { 
-     if( tokenStream.hasAnyOfTheseWords(keyWords)) this.parseErrorStop("CANNOT Start Identifier with key word ");
-     Lexer.Token word =  tokenStream.removeNextToken() ;
-     String IDENIFYIER = ""; 
+    if( tokenStream.hasAnyOfTheseWords(keyWords)) this.parseErrorStop("CANNOT Start Identifier with key word ");
+    Lexer.Token word =  tokenStream.removeNextToken() ;
+    String IDENIFYIER = ""; 
     
-     while( word.getTokenType()== Lexer.TT_WORD) // 
-     { 
-         Lexer.WordToken w  = (Lexer.WordToken)word ; 
-         if(  isKeyWord( w.getText() ))
-         { 
-             tokenStream.pushTokenBackToHead(w);
-             return IDENIFYIER; 
-         }
-         IDENIFYIER = IDENIFYIER + "_" + w.getText() ; 
-         //System.out.println(" PARSING VARNAME= " + varName );
+    while( word.getTokenType()== Lexer.TT_WORD)
+    { 
+        Lexer.WordToken w  = (Lexer.WordToken)word ; 
+        if(  isKeyWord( w.getText() ))
+        { 
+            tokenStream.pushTokenBackToHead(w);
+            return IDENIFYIER; 
+        }
+        IDENIFYIER = IDENIFYIER + "_" + w.getText() ; 
+        //System.out.println(" PARSING VARNAME= " + varName );
         
-         word =  tokenStream.removeNextToken() ;
+        word =  tokenStream.removeNextToken() ;
     }
-     tokenStream.pushTokenBackToHead(word);
-     return IDENIFYIER; 
+    tokenStream.pushTokenBackToHead(word);
+    return IDENIFYIER; 
    }
 //------------------------------------------------------------------------------
+   /** 
+    * makeFunctionCall - creates a function call. 
+    * @param name
+    * @return 
+    */
   protected FunctionCallExpression makeFunctionCall( String name )
   { 
       assert null != name;
       return new FunctionCallExpression( name); 
   }
+//------------------------------------------------------------------------------
 /**
   *  [THE] IDENTIFER 'of' | (  PARAM LIST  ) 
      IF name is null will auto get identifer.
@@ -734,12 +695,12 @@ public class BFLExpressionParser
     *              |------ ∆ DEFINED-VARIABLE-------| ∆ = increment  
     *              |                                |
     *              |-------   Function ( EXP )------|
-    *              |                                |
+    *             |                                |
     *              |-----the Function of Expr-------|
     *              |                                |
     *              |---------- √ EXP ---------------| done
     *              |                                |
-    *              |----------  EXP !  -------------| // exponent of number
+    *              |----------  EXP !  -------------| // exponent of typeNumber
     *              |                                |
     *              |---------- LITERL-DATE ---------|
     *              |                                |
@@ -748,8 +709,8 @@ public class BFLExpressionParser
     *              |-------[ literal list ] --------|
     *              |                                |
     *              |-------{ literal set } ---------|
-    * 
-    *  </pre>
+ 
+  </pre>
     * parseFactor's can be null ( no addition ) 
     *  This will get quite big. 
     * NOTUCE ABSOLITE | X | cannot be nested with out brackets
@@ -847,10 +808,10 @@ public class BFLExpressionParser
         if( debugTrace) { System.out.println("      PARASE parseLiteralNumber"); } 
       LiteralNumberExpression first = parseLiteralNumber();
        if( debugTrace) { System.out.println("      ENDD parseLiteralNumber " + first); }
-      //System.out.println(" literal number '" + first.getNumberAsText()+"'" ); 
+      //System.out.println(" literal typeNumber '" + first.getNumberAsText()+"'" ); 
       tokenStream.setSkipWhiteSpace(oldSetting);
       if( debugTrace) { System.out.println("     END PARASE  FACTOR"); } 
-      // @@@ TODO CHECK FOR Literl number access like 45's type 
+      // @@@ TODO CHECK FOR Literl typeNumber access like 45's type 
       return first ; 
      } 
     if( debugTrace) { System.out.println("     PARASE NOT A  NUMBER"); } 
@@ -893,7 +854,7 @@ public class BFLExpressionParser
     if(tokenStream.hasThisSymbol('#') ) // ARRAY ACCESSS 
     { 
         word =  tokenStream.removeNextToken() ;
-        // @@@ TODO can either be followed by number 
+        // @@@ TODO can either be followed by typeNumber 
         // @@@ TO 
         assert false ; 
         //NumericExpression ne =   parseComparisonExpression();  
@@ -986,7 +947,17 @@ public class BFLExpressionParser
     *              |                                        |
     *              |->------FACTOR ^ POWEROPERATOR----------|
     *              |                                        |
-    *              |->------FACTOR # POWEROPERATOR----------|
+    *              |->-FACTOR to the power of POWEROPERATOR-|
+    *              |                                        |
+    *              |->------FACTOR squared -----------------|
+    *              |                                        |
+    *              |->------FACTOR cubed -------------------|
+    *              |                                        |
+    *              |->----------FACTOR ! -------------------|
+    *              |                                        |
+    *              |->------FACTOR cubed -------------------|
+    *              |                                        |
+    *              |->------FACTOR  AS Identifier-----------|
     *              |                                        |
     *  </pre>
     * parseFactor's can be null ( no addition ) 
@@ -1004,6 +975,16 @@ public class BFLExpressionParser
           Lexer.SingleSymbol sym = tokenStream.removeNextTokenAsSymbol();assert sym.getSymbol()=='!'; 
           UnariyExpression ux = new UnariyExpression( '!', factor); 
           return ux; 
+      }
+      if(  tokenStream.hasThisWord("as"))
+      {
+           w = tokenStream.removeNextTokenAsWord();
+           String units = this.parseIdentifier() ;// should be sing. 
+           // @@@ TODO check is known unit. 
+           LiteralStringExpression lse = new LiteralStringExpression(units); 
+           BinaryExpression bx  = makeBinaryExpression( 'A' ,factor, lse);assert bx != null ;
+           assert false ; // not working no binary expression.
+           return bx; 
       }
       if(  tokenStream.hasThisWord("squared"))
       { 

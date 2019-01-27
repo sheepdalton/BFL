@@ -84,7 +84,7 @@ public class LiteralBoolean extends LiteralNumberExpression
     
     //--------------------------------------------------------------------------
     /**
-     *  Literal returns the number
+     *  Literal returns the typeNumber
      * @return 
      */
     @Override 

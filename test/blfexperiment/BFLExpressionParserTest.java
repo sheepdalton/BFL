@@ -40,6 +40,7 @@ public class BFLExpressionParserTest
     
     public BFLExpressionParserTest()
     {
+        
     }
     
     @Before
@@ -64,8 +65,6 @@ public class BFLExpressionParserTest
                     "put  result + 1 into output \n";
         try
         { 
-            
-       
         BFLParser  bfl = fromSource(s); 
         Statement stm =   bfl.parseBlock(0); 
        // @@@ TODO - add in execute to. 
@@ -79,13 +78,35 @@ public class BFLExpressionParserTest
     @Test
     public void testUnits()
     { 
+       System.out.println("testUnits");
        assert   BFLExpressionParser.isAUnit( "dollar" ) == false ;
        assert   BFLExpressionParser.isAUnit( "poundSterling" ) == false ; 
-       
+       assert   BFLExpressionParser.isAUnit( "fish" ) == false ; 
+        
        assert BFLExpressionParser.isACurrency("dollar") == true ; 
        assert BFLExpressionParser.isACurrency("poundSterling") == true ;
        assert BFLExpressionParser.isACurrency("euro") == true ;
        
+       assert   BFLExpressionParser.isAUnit( "Kg" ) == true ; 
+       assert   BFLExpressionParser.isAUnit( "Lb" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "mm" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "meter" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "ft" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "inch" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "cm" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "yard" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "mile" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "Km" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "yards" ) == true ;
+ assert   BFLExpressionParser.isAUnit( "inchs" ) == true ;
+assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "feet" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "radians" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "degrees" ) == true ;
+       
+       assert   BFLExpressionParser.isAUnit( "thong" ) == false ;
+       assert   BFLExpressionParser.isAUnit( "" ) == false ;
+       assert   BFLExpressionParser.isAUnit( "     " ) == false ;
     }
 
     @Test
@@ -140,6 +161,8 @@ public class BFLExpressionParserTest
             //System.out.println( ex.getNumberAsText());
             assertEquals(ex.getNumberAsText(), "34");
             
+           
+            
             bfl = fromSource("34.000Yard"); 
             ex = bfl.parseLiteralNumber(); 
             assert ex!= null ; 
@@ -158,8 +181,9 @@ public class BFLExpressionParserTest
             ex = bfl.parseLiteralNumber(); 
             assert ex!= null ; 
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
-            System.out.println( ex.getNumberAsText());
-            assertEquals(ex.getNumberAsText(), "34");
+            System.out.println("######"+ ex.getType()+"##");
+            assertEquals( "meter",ex.getType());
+            assertEquals("34",ex.getNumberAsText());
             
             bfl = fromSource("34mm"); 
             ex = bfl.parseLiteralNumber(); 
@@ -181,6 +205,35 @@ public class BFLExpressionParserTest
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
             System.out.println( ex.getNumberAsText()); 
             assertEquals(ex.getNumberAsText(), "45");
+          /*  
+             bfl = fromSource("34foot"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            //System.out.println( ex.getNumberAsText());
+            assertEquals(ex.getNumberAsText(), "34");
+            
+            bfl = fromSource("34feet"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            //System.out.println( ex.getNumberAsText());
+            assertEquals(ex.getNumberAsText(), "34");
+            
+            bfl = fromSource("45radians"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText()); 
+            assertEquals(ex.getNumberAsText(), "45");
+            
+            bfl = fromSource("45degree"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText()); 
+            assertEquals(ex.getNumberAsText(), "45"); 
+    */
         }
         catch(  ParseError e )
         { 

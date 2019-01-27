@@ -38,7 +38,7 @@ public class FunctionCallExpression implements NumericExpression
     List<Expression> arguments = new ArrayList<Expression>(4); // default to 4 argument
     //  "sine" 1 arg , "radians" 
     //  "cos" , 1 arg , "radians" 
-    //  "Atan2" , 2 arg , "number" , "number" 
+    //  "Atan2" , 2 arg , "typeNumber" , "typeNumber" 
     
     public FunctionCallExpression( String fullNameWithSpaces)
     { 
@@ -89,7 +89,6 @@ public class FunctionCallExpression implements NumericExpression
         }
         switch( fullName )
         { 
-            
             case "_sin" : return  new  BigDecimal( Math.sin( d.doubleValue() ) ); 
             // _sin radians 
             // _sin degrees 

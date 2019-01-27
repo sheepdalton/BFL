@@ -69,7 +69,7 @@ public class UnariyExpression  implements NumericExpression
     public String getType() 
     { 
        // if operator = ¬ then return question 
-        if( operator == '√' && left.isANumber()) return BFLExpressionParser.number;  
+        if( operator == '√' && left.isANumber()) return BFLExpressionParser.typeNumber;  
         
         if( isQuestion() )
         { 

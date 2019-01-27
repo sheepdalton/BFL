@@ -105,27 +105,27 @@ public class BFLParser extends BFLExpressionParser
      *                put 5 * 3 before file <i>variable</i>
      *                put 5 ^ 3 into <b>clipboard</b>  --
      *                put 5 <b>squared into</b> <i>my long var name here ok</i>
-     *                put 2 into the height of coordinate
-     *                put 2 into the coordinate.height  -- element access
-     *                put 45,330 into stuff[454]      --  array access
-     *                put $303,000 into my array#454    -- array access
-     *                       put put 89 into my array#index -- array access via
-     *                       put Bob. into the key of my dicionary -- map access
-     *                       put 993.2 * 0.1 into jamjar as integer -- type setting
-     *                       put 3-4 into the "costa" of  jamjar as dictionary
-     *                       put Hello. into word 4 of jamjar
-     *                       put Hello. after word 3 of line of thetext
-     *                       put Hello. after letter 4 of word 2 of  line 3 of sentance 2 of paragaph 4
-     *                       put Hello. into item 5 of jamjar [as list ]
-     *                       put "40043" as integer into jamjar -- conversion
-     *                       put 0322033 as letter into jamjar as letter -conversion and type
-     *                       put $20300 as number into value  -- casting
-     *                       put 3Km * 1000 as meter into length -- casting
-     *                       put  x from coordinate -- access object member
-     *                       put coordinate/x  -- \ dividion / is elemnt
-     *                       put coordinate's x -- x is
-     *                       put coordinate's length( arg1 arg2 arg )
-     *                       put student's name <b>With</b> option long form  -- p
+                put 2 into the height of coordinate
+                put 2 into the coordinate.height  -- element access
+                put 45,330 into stuff[454]      --  array access
+                put $303,000 into my array#454    -- array access
+                       put put 89 into my array#index -- array access via
+                       put Bob. into the key of my dicionary -- map access
+                       put 993.2 * 0.1 into jamjar as integer -- type setting
+                       put 3-4 into the "costa" of  jamjar as dictionary
+                       put Hello. into word 4 of jamjar
+                       put Hello. after word 3 of line of thetext
+                       put Hello. after letter 4 of word 2 of  line 3 of sentance 2 of paragaph 4
+                       put Hello. into item 5 of jamjar [as list ]
+                       put "40043" as integer into jamjar -- conversion
+                       put 0322033 as letter into jamjar as letter -conversion and type
+                       put $20300 as typeNumber into value  -- casting
+                       put 3Km * 1000 as meter into length -- casting
+                       put  x from coordinate -- access object member
+                       put coordinate/x  -- \ dividion / is elemnt
+                       put coordinate's x -- x is
+                       put coordinate's length( arg1 arg2 arg )
+                       put student's name <b>With</b> option long form  -- p
      *                       put coordinate's
      *                       put  -- blank multi line string indented
      *                           hello world
@@ -168,24 +168,24 @@ public class BFLParser extends BFLExpressionParser
      * FUTURE speculative
      *                       put the list a,b,c,d,e,f,g into things as list
      *                       expression -> variable -- put expression into var
-     *                       put message into Twitter  -- access bot assum config
-     *                       put last message from Twitter -- if configured
-     *                       put last message from Discord -- if configured
-     *                       put last message from Slack -- if configured
-     *                       put last message from SMS -- if configured
-     *                       put header( text ) into page v.html
-     *  line 20 ; 30 ; 30 ; 100 into page "x.svg" acts like plot lib.
-     *  line 20 ; 30 ; 30 ; 100 into PDF "bob.pdf" -- acts line plot lib.
-     *
-     *
-     * variable
-     *       slot of object
-     *       array[ expression]
-     *       array#expression
-     *       expression-number of array
-     *       expression  of array
-     *       name AS type
-     * </pre>
+                       put message into Twitter  -- access bot assum config
+                       put last message from Twitter -- if configured
+                       put last message from Discord -- if configured
+                       put last message from Slack -- if configured
+                       put last message from SMS -- if configured
+                       put header( text ) into page v.html
+  line 20 ; 30 ; 30 ; 100 into page "x.svg" acts like plot lib.
+  line 20 ; 30 ; 30 ; 100 into PDF "bob.pdf" -- acts line plot lib.
+
+
+ variable
+       slot of object
+       array[ expression]
+       array#expression
+       expression-typeNumber of array
+       expression  of array
+       name AS type
+ </pre>
      * @return Statement level object
      * @throws ParseError
      */

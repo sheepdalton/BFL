@@ -137,10 +137,10 @@ public class BFLParserTest
 //    public void testMakeLiteralNumberExpression()
 //    {
 //        System.out.println("makeLiteralNumberExpression");
-//        String number = "";
+//        String typeNumber = "";
 //        BFLExpressionParser instance = null;
 //        LiteralNumberExpression expResult = null;
-//        LiteralNumberExpression result = instance.makeLiteralNumberExpression(number);
+//        LiteralNumberExpression result = instance.makeLiteralNumberExpression(typeNumber);
 //        assertEquals(expResult, result);
 //        // TODO review the generated test code and remove the default call to fail.
 //        fail("The test case is a prototype.");

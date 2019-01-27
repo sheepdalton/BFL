@@ -43,7 +43,7 @@ public class LiteralNumberExpression implements NumericExpression
     }
     //--------------------------------------------------------------------------
     /**
-     *  returns the raw number  eg 000_000_000.00_000 
+     *  returns the raw typeNumber  eg 000_000_000.00_000 
      * @return 
      */
     public String getNumberAsText()
@@ -71,7 +71,7 @@ public class LiteralNumberExpression implements NumericExpression
     }
     //--------------------------------------------------------------------------
     /**
-     *  Literal returns the number
+     *  Literal returns the typeNumber
      */
     @Override 
     public BigDecimal evaluateCalculation()

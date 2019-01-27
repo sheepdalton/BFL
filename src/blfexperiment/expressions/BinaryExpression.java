@@ -110,7 +110,7 @@ public class BinaryExpression implements NumericExpression
                 }
                 
                 /// IF THE OTHER TYPE IS ARRAY/VECTOR or LIST the
-                //  AND the other operator is single number then 
+                //  AND the other operator is single typeNumber then 
                 //  we construct a new list with every item 
                 // 
                 // IF other is list of same size then inividual multiply. 
@@ -278,7 +278,7 @@ public class BinaryExpression implements NumericExpression
             System.out.println("RETURN 0  " ); 
             return BigDecimal.ZERO; 
         } 
-        // Almost equal to for numbers is within 1% of the original number 
+        // Almost equal to for numbers is within 1% of the original typeNumber 
         // useful to compare floating point numbers.
         // for strings they have sound alike .
         case '~': 
