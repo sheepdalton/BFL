@@ -205,7 +205,45 @@ assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
             System.out.println( ex.getNumberAsText()); 
             assertEquals(ex.getNumberAsText(), "45");
+            
+            if( true )
+            { 
+                bfl = fromSource("45°C "); 
+                ex = bfl.parseLiteralNumber(); 
+                assert ex!= null ; 
+                assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+                assertEquals( BFLExpressionParser.typeCentigrade  ,  ex.getType() ); 
+                assertEquals(ex.getNumberAsText(), "45");
+                
+                bfl = fromSource("45°Centigrade "); 
+                ex = bfl.parseLiteralNumber(); 
+                assert ex!= null ; 
+                assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+                assertEquals( BFLExpressionParser.typeCentigrade  ,  ex.getType() ); 
+                assertEquals(ex.getNumberAsText(), "45");
+                
+                bfl = fromSource("45°F "); 
+                ex = bfl.parseLiteralNumber(); 
+                assert ex!= null ; 
+                assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+                System.out.println( ex.getNumberAsText()); 
+                assertEquals( BFLExpressionParser.typeFahrenheit  ,  ex.getType() ); 
+                assertEquals(ex.getNumberAsText(), "45");
+                
+                bfl = fromSource("45°Fahrenheit "); 
+                ex = bfl.parseLiteralNumber(); 
+                assert ex!= null ; 
+                assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+                System.out.println( ex.getNumberAsText()); 
+                assertEquals( BFLExpressionParser.typeFahrenheit  ,  ex.getType() ); 
+                assertEquals(ex.getNumberAsText(), "45"); 
+                
+            }
+            
           /*  
+            
+            
+            
              bfl = fromSource("34foot"); 
             ex = bfl.parseLiteralNumber(); 
             assert ex!= null ; 
@@ -315,7 +353,10 @@ assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
             e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
             d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
            assertEquals(d.toPlainString(), "2");
-                   
+           
+           bl=  fromSource( "random(100)  " ) ; assertNotNull("Expression not returned ",bl );
+           e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
+           d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
 //        
         }
         catch(  ParseError e )

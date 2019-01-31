@@ -384,7 +384,12 @@ public class BFLExpressionParser
     public static String typeDegrees = "degree"; 
     public static String typeRadians = "radian"; 
     
-    public static String typeSeconds = "second"; 
+    public static String typeSeconds = "second";
+    public static String typeHours = "hour";
+    
+    public static String typeCentigrade = "centigrade"; 
+    public static String typeFahrenheit = "fahrenheit"; 
+     
     
     public static String typeQuestion = "Question"; 
     
@@ -498,12 +503,44 @@ public class BFLExpressionParser
            
            tokenStream.setSkipWhiteSpace(false);
            
+           if(  tokenStream.hasThisSymbol('°')) // 23°C 45°F 
+           { 
+              Lexer.SingleSymbol degree = tokenStream.removeNextTokenAsSymbol();
+              assert degree.getSymbol() == '°'; 
+              String dgrs[] = { "C", "F", "Centigrade", "Fahrenheit", "Celsius" } ;
+              Lexer.WordToken wx = tokenStream.removeNextTokenAsWord();
+              System.out.println( "--" + wx.getText()+"--" +  wx.getText().equalsIgnoreCase("C")); 
+              tokenStream.pushTokenBackToHead(wx);
+              if( tokenStream.hasAnyOfTheseWords(dgrs) )
+              {
+                  
+                  Lexer.WordToken w = tokenStream.removeNextTokenAsWord();
+                  if( w.getText().equalsIgnoreCase("Centigrade") || 
+                      w.getText().equalsIgnoreCase("Celsius") || 
+                      w.getText().equalsIgnoreCase("C") )
+                  {
+                      
+                      result.setType(typeCentigrade);tokenStream.setSkipWhiteSpace(old);
+                      return result; 
+                  }
+                  
+                  if( w.getText().equalsIgnoreCase("Fahrenheit") || 
+                      w.getText().equalsIgnoreCase("F") )
+                  {
+                      result.setType(typeFahrenheit);tokenStream.setSkipWhiteSpace(old);
+                      return result; 
+                  }
+              }
+              else  System.out.println(" WHAT! ");
+              this.parseErrorStop("Found  ° but expected C F or Centigrade, Celsius, Fahrenheit  ");
+           } 
            Lexer.Token tokn = tokenStream.removeNextToken();
            
            assert( tokn.getTokenType()!= Lexer.TT_NUMBER); // Can never be true unless parseLongNumber wrong. 
            // these indicate normal
            tokenStream.pushTokenBackToHead(tokn);
-           if(tokn.getTokenType()==Lexer.TT_SYMBOL || 
+            
+           if(      tokn.getTokenType()==Lexer.TT_SYMBOL || 
                    tokn.getTokenType()==Lexer.TT_EOL || 
                    tokn.getTokenType()==Lexer.TT_WHITESPACE || 
                    tokn.getTokenType()==Lexer.TT_EOF )

@@ -32,10 +32,55 @@ import java.util.*;
  */
 public class FunctionCallExpression implements NumericExpression
 {
+    static class FunctionInfo
+    { 
+        String name ; 
+        int expectedNumberOfArguments; 
+        String argumentTypes[]; 
+        String returnType ; // 
+        
+        public FunctionInfo( String name,int argCount , String argTypes[], String returnType )
+        { 
+            this.name = name ; 
+            this.expectedNumberOfArguments = argCount ; 
+            this.argumentTypes = argTypes; 
+            this.returnType = returnType; 
+        }
+    }
     String fullName; // name possibly with spaces. 
     int howManyArguments =1 ; 
     int howManyResults   =1; // in the future I can return list of results.
     List<Expression> arguments = new ArrayList<Expression>(4); // default to 4 argument
+    
+    static Map<String,FunctionInfo> functionInfo = null; 
+    static FunctionInfo getFunctionInfo( String name )
+    { 
+        if( functionInfo==null)
+        { 
+            functionInfo = new HashMap<String,FunctionInfo>()
+            {{ 
+                 put("sin", new FunctionInfo( "sin", 1 , new String[]{ BFLExpressionParser.typeNumber } , BFLExpressionParser.typeNumber));
+                 put("cos", new FunctionInfo( "cos", 1 , new String[]{ BFLExpressionParser.typeNumber } , BFLExpressionParser.typeNumber));
+                 put("log", new FunctionInfo( "log", 1 , new String[]{ BFLExpressionParser.typeNumber } , BFLExpressionParser.typeNumber));
+            }};
+        }
+        
+        return functionInfo.getOrDefault(name, null); 
+    }
+    static Map<String,String> builtInMessageSignatures  = null ; 
+    static Map<String,String> getBuiltInMessageSignatures()
+    { 
+        if(builtInMessageSignatures !=null) return builtInMessageSignatures; 
+        builtInMessageSignatures   =  new HashMap<String,String>() 
+      {{
+        put("sin", BFLExpressionParser.typeNumber);
+        put("cos", BFLExpressionParser.typeNumber);
+        put("log", BFLExpressionParser.typeNumber);
+        put("random", BFLExpressionParser.typeNumber);
+        //@@@ TODO more methods - need to change type. 
+       }};
+        return null;
+    }
     //  "sine" 1 arg , "radians" 
     //  "cos" , 1 arg , "radians" 
     //  "Atan2" , 2 arg , "typeNumber" , "typeNumber" 
@@ -57,7 +102,12 @@ public class FunctionCallExpression implements NumericExpression
     @Override
     public boolean isANumber()
     {
-        return NumericExpression.super.isANumber(); //To change body of generated methods, choose Tools | Templates.
+        assert fullName != null ;
+        if(  getBuiltInMessageSignatures().
+                 getOrDefault(fullName, BFLExpressionParser.typeNumber).
+                   equalsIgnoreCase(BFLExpressionParser.typeNumber))
+            return true ;              
+       return  false ; 
     }
 
     @Override
