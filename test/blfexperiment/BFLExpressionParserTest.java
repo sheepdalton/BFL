@@ -233,13 +233,9 @@ public class BFLExpressionParserTest
                 System.out.println( ex.getNumberAsText()); 
                 assertEquals( BFLExpressionParser.typeFahrenheit  ,  ex.getType() ); 
                 assertEquals(ex.getNumberAsText(), "45"); 
-                
             }
             
           /*  
-            
-            
-            
              bfl = fromSource("34foot"); 
             ex = bfl.parseLiteralNumber(); 
             assert ex!= null ; 

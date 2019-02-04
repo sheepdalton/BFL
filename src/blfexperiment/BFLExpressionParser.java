@@ -695,6 +695,46 @@ public class BFLExpressionParser
     assert false ; 
     return null ; 
     } 
+   protected LiteralListExpression makeLiteralListExpression()
+   { 
+       return new LiteralListExpression(); 
+   }
+   //---------------------------------------------------------------------------
+   /**
+    *  [ 3 
+    *  parseListLiteral
+    * <pre>
+    *   -------- [  Expression  , Expression ] -------
+    *   |                                            |
+    *   ---------[  Expression ]----------------------
+    *   |                                            | 
+    *   ---------- [  ] ----------------------------- 
+    * @return
+    * @throws ParseError 
+    */
+    NumericExpression parseListLiteral() throws ParseError 
+    { 
+        LiteralListExpression literlExpr = this.makeLiteralListExpression();
+        assert tokenStream.hasThisSymbol('['); 
+        
+        Lexer.SingleSymbol brkt = tokenStream.removeNextTokenAsSymbol();assert brkt.getSymbol() == '[';
+        
+        while( ! tokenStream.hasThisSymbol(']') )
+        { 
+            Expression e = this.parseExpression(); 
+            literlExpr.add(e);
+            if( tokenStream.hasThisSymbol(']') ) break ; 
+            if( tokenStream.hasThisSymbol(',') )
+            {
+                 brkt = tokenStream.removeNextTokenAsSymbol();
+            }
+            // @@@ TODO ACCEPT NEWLINE as seperator   
+        }
+        brkt = tokenStream.removeNextTokenAsSymbol();
+        if( brkt.getSymbol() != ']' )parseErrorStop("Expected a ] here ");
+  
+        return literlExpr; 
+    }
    //---------------------------------------------------------------------------
    /** 
     *   Capital word word word. (<-- full stop ) 
@@ -731,9 +771,9 @@ public class BFLExpressionParser
     *              |                                |
     *              |------ ∆ DEFINED-VARIABLE-------| ∆ = increment  
     *              |                                |
-    *              |-------   Function ( EXP )------|
-    *             |                                |
-    *              |-----the Function of Expr-------|
+    *              |-------   Function ( EXP )------|done 
+    *              |                                |
+    *              |-----the Function of Expr-------|done
     *              |                                |
     *              |---------- √ EXP ---------------| done
     *              |                                |
@@ -775,6 +815,10 @@ public class BFLExpressionParser
         //result = makeNewUnariyExpression( '-', num ); 
         return result; 
      }
+    if(  tokenStream.hasThisSymbol('[')) 
+    { 
+        return parseListLiteral(); 
+    }
     // parse 'the' 
     boolean theParsed  = false ; 
     if(  tokenStream.hasThisWord("the") )

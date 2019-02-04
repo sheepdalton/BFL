@@ -19,7 +19,6 @@
 
 package blfexperiment.expressions;
 
-import blfexperiment.GeneralTypes.GeneralObject;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -28,7 +27,7 @@ import java.util.*;
  *  [ 1 ; 2 ; 3 ; 4; 5; 6 ; 7 ] 
  * @author Sheep Dalton
  */
-public class LiteralListExpression implements Expression 
+public class LiteralListExpression implements NumericExpression 
 {
     List<Expression> listOfExpressions ; 
     public LiteralListExpression()
@@ -40,6 +39,21 @@ public class LiteralListExpression implements Expression
       // assert (listOfExpressions! = null : " null listOfExpressions "); 
        listOfExpressions.add(e); 
     }
+    
+    @Override
+    public String getType()
+    {
+        if( listOfExpressions.size() == 0 )return "Empty";
+        
+        return listOfExpressions.get(listOfExpressions.size()-1).getType() ;
+    }
+    public BigDecimal evaluateCalculation( )
+    { 
+        if( listOfExpressions.size() == 0 )return null;
+        
+        return listOfExpressions.get(listOfExpressions.size()-1).evaluateCalculation() ;
+    }
+    /*
     @Override
     public String toHumanString()
     {
@@ -52,11 +66,7 @@ public class LiteralListExpression implements Expression
         return Expression.super.converToSource(); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public String getType()
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @Override
     public GeneralObject doIt()
@@ -98,6 +108,6 @@ public class LiteralListExpression implements Expression
     public boolean isCompatable(Expression other)
     {
         return Expression.super.isCompatable(other); //To change body of generated methods, choose Tools | Templates.
-    }
+    }*/
 
 }
