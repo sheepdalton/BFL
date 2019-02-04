@@ -98,8 +98,8 @@ public class BFLExpressionParserTest
        assert   BFLExpressionParser.isAUnit( "mile" ) == true ;
        assert   BFLExpressionParser.isAUnit( "Km" ) == true ;
        assert   BFLExpressionParser.isAUnit( "yards" ) == true ;
- assert   BFLExpressionParser.isAUnit( "inchs" ) == true ;
-assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "inchs" ) == true ;
+       assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
        assert   BFLExpressionParser.isAUnit( "feet" ) == true ;
        assert   BFLExpressionParser.isAUnit( "radians" ) == true ;
        assert   BFLExpressionParser.isAUnit( "degrees" ) == true ;
@@ -108,7 +108,7 @@ assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
        assert   BFLExpressionParser.isAUnit( "" ) == false ;
        assert   BFLExpressionParser.isAUnit( "     " ) == false ;
     }
-
+    //--------------------------------------------------------------------------
     @Test
     public void testParseIdentifer()
     { 
@@ -130,9 +130,8 @@ assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
             System.err.println("TEST EXPRESSION: PARSE ERROR->"+ e);
             fail("Parse Error ->" + e ) ; 
         }
-       
     }
-
+    //--------------------------------------------------------------------------
     /**
      * Test of parseLongNumber method, of class BFLExpressionParser.
      */
@@ -144,7 +143,6 @@ assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
         
         try 
         { 
-            
             BFLExpressionParser  bfl = fromSource("100,000ft"); 
             LiteralNumberExpression ex = bfl.parseLiteralNumber();
             assert ex!= null ; 
@@ -160,8 +158,6 @@ assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
             assert ex instanceof LiteralNumberExpression : "NOT literal"; 
             //System.out.println( ex.getNumberAsText());
             assertEquals(ex.getNumberAsText(), "34");
-            
-           
             
             bfl = fromSource("34.000Yard"); 
             ex = bfl.parseLiteralNumber(); 
@@ -357,12 +353,25 @@ assert   BFLExpressionParser.isAUnit( "foot" ) == true ;
            bl=  fromSource( "random(100)  " ) ; assertNotNull("Expression not returned ",bl );
            e = bl.parseFactor(); assertNotNull("Expression not returned ",e);
            d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
-//        
         }
         catch(  ParseError e )
         { 
-            System.out.println("TEST Term: PARSE ERROR->"+ e);
-             fail("TEST Term: PARSE ERROR->"+e);
+           System.out.println("TEST faction of inbuilt function: PARSE ERROR->"+ e);
+           fail("TEST faction of inbuilt function : PARSE ERROR->"+e);
+        }
+       try 
+        { 
+            BFLExpressionParser bl=  fromSource( " the bob of 3.14159265359/2.0 " ) ;
+            assertNotNull("Expression not returned ",bl );
+            NumericExpression e = bl.parseFactor() ;assertNotNull("Expression not returned ",e);
+            fail("TEST faction parsed function which did not exist");
+
+            BigDecimal d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
+            assertEquals(d.toPlainString(), "1");
+        }
+       catch(  ParseError e )
+        { 
+           System.out.println("Inbuilt function test passed.");
         }
     }
     //--------------------------------------------------------------------------

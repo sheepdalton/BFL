@@ -440,7 +440,6 @@ public class BFLExpressionParser
         return false ; 
     }
     //--------------------------------------------------------------------------
-
     /**
      *
      */
@@ -449,7 +448,6 @@ public class BFLExpressionParser
         typeDollar, typePoundSterling , typeEuro 
     };
     //--------------------------------------------------------------------------
-
     /**
      *
      * @param item
@@ -462,8 +460,7 @@ public class BFLExpressionParser
             if( item.equals(s))return true ; 
         }
         return false ; 
-    } 
-  
+    }
    //---------------------------------------------------------------------------
    /** 
     * <pre>
@@ -518,18 +515,18 @@ public class BFLExpressionParser
                   if( w.getText().equalsIgnoreCase("Centigrade") || 
                       w.getText().equalsIgnoreCase("Celsius") || 
                       w.getText().equalsIgnoreCase("C") )
-                  {
+                   {
                       
                       result.setType(typeCentigrade);tokenStream.setSkipWhiteSpace(old);
                       return result; 
-                  }
+                   }
                   
                   if( w.getText().equalsIgnoreCase("Fahrenheit") || 
                       w.getText().equalsIgnoreCase("F") )
-                  {
+                   {
                       result.setType(typeFahrenheit);tokenStream.setSkipWhiteSpace(old);
                       return result; 
-                  }
+                   }
               }
               else  System.out.println(" WHAT! ");
               this.parseErrorStop("Found  ° but expected C F or Centigrade, Celsius, Fahrenheit  ");
@@ -558,15 +555,12 @@ public class BFLExpressionParser
             { 
                 this.parseErrorStop("EXPECTED A UNIT or possibly Key word but not" +
                         ((Lexer.WordToken)tokn).getText());
-                
             }
            }else 
            { 
                System.out.println(" Found tk= " + tokn);
                assert false ;
-           } 
-           
-           
+           }
            tokenStream.setSkipWhiteSpace(old);
        }
        return result ; 
@@ -639,10 +633,14 @@ public class BFLExpressionParser
     * @param name
     * @return 
     */
-  protected FunctionCallExpression makeFunctionCall( String name )
+  protected FunctionCallExpression makeFunctionCall( String name ) throws ParseError 
   { 
-      assert null != name;
-      return new FunctionCallExpression( name); 
+    assert null != name;
+    if ( FunctionCallExpression.hasFunctionCalled(name)) 
+                                return new FunctionCallExpression( name);
+    
+    parseErrorStop(" I don't know any inbuilt function called '" + name+"'");
+    return null ; 
   }
 //------------------------------------------------------------------------------
 /**
@@ -655,24 +653,25 @@ public class BFLExpressionParser
     // if name is null - then is of form the IDENT OF Argument 
     if(  name == null )// the 
     { 
-         name = parseIdentifier(); 
-         System.out.println(" parseFunctionCall  "+ name );
-         if( name == null || name.isEmpty())parseErrorStop("Expected a name for a function here.");
-         if( tokenStream.hasThisWord("of"))
-         { 
+        name = parseIdentifier();
+        System.out.println(" parseFunctionCall  "+ name );
+         
+        if( name == null || name.isEmpty())parseErrorStop("Expected a name for a function here.");
+        if( tokenStream.hasThisWord("of"))
+        { 
             Lexer.WordToken of = tokenStream.removeNextTokenAsWord();assert of != null; 
             assert of.getText().equalsIgnoreCase("of");
             assert tokenStream.hasThisWord("of") == false  ; 
-           
+            
             NumericExpression arg = this.parseExpression();
            
-            System.out.println(" GOT expression  " );
+            System.out.println(" GOT expression  '"+name+"'" );
             FunctionCallExpression funcn = makeFunctionCall(name);
             funcn.addArgument(arg); 
             System.out.println(" PARSED function "+ name );
             tokenStream.setSkipWhiteSpace(oldSetting);
             return funcn;
-         }
+        }
     }
     if( tokenStream.hasThisSymbol('(') )
     { 
@@ -692,6 +691,7 @@ public class BFLExpressionParser
          tokenStream.setSkipWhiteSpace(oldSetting);
        return funcn; 
     }
+    parseErrorStop("I hoped to do a function but it went wrong.");
     assert false ; 
     return null ; 
     } 
