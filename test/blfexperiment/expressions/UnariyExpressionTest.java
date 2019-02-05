@@ -18,22 +18,57 @@
  */
 package blfexperiment.expressions;
 
-import blfexperiment.GeneralTypes.GeneralNumber;
-import blfexperiment.GeneralTypes.GeneralObject;
+import org.junit.Before;
+import org.junit.Test;
 
 /**
- * This code only handles Numeric Expressions 
+ *
  * @author Sheep Dalton
  */
-public interface NumericExpression extends GeneralExpression 
+public class UnariyExpressionTest
 {
-   @Override 
-   default boolean isANumber(){ return true ; } 
-   @Override 
-    default boolean purelyLogic(){ return false ; }
     
-   default GeneralObject doIt()
-    { 
-        return new GeneralNumber( evaluateCalculation()) ; //FYI this is slow
+    public UnariyExpressionTest()
+    {
     }
+    
+    @Before
+    public void setUp()
+    {
+    }
+
+    /**
+     * Test of toString method, of class UnariyExpression.
+     */
+    @Test
+    public void testToString()
+    {
+        System.out.println("toString");
+        
+        // TODO review the generated test code and remove the default call to fail.
+       
+    }
+
+    
+
+    /**
+     * Test of evaluateCalculation method, of class UnariyExpression.
+     */
+    @Test
+    public void testEvaluateCalculation()
+    {
+        System.out.println("evaluateCalculation");
+
+    }
+
+    /**
+     * Test of evaluateLogic method, of class UnariyExpression.
+     */
+    @Test
+    public void testEvaluateLogic()
+    {
+        System.out.println("evaluateLogic");
+       
+    }
+    
 }

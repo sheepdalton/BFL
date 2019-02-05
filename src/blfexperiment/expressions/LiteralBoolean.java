@@ -32,6 +32,7 @@ public class LiteralBoolean extends LiteralNumberExpression
     
     boolean myBooleanValue = false ; 
    
+   
     //--------------------------------------------------------------------------
 
     /**
@@ -104,7 +105,12 @@ public class LiteralBoolean extends LiteralNumberExpression
      */
      @Override 
       public boolean purelyLogic(){ return true ; }
- 
+      
+    @Override
+    public boolean isANumber()
+    {
+        return false;  //To change body of generated methods, choose Tools | Templates.
+    }
     /**
      *
      * @return

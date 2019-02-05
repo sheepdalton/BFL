@@ -21,7 +21,6 @@ package blfexperiment;
 import static blfexperiment.BFLExpressionParser.runSimpleExpression;
 import blfexperiment.expressions.BinaryExpression;
 import blfexperiment.expressions.LiteralNumberExpression;
-import blfexperiment.expressions.NumericExpression;
 import blfexperiment.expressions.Statement;
 import blfexperiment.expressions.Variable;
 import java.io.BufferedReader;
@@ -30,6 +29,7 @@ import java.math.BigDecimal;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import blfexperiment.expressions.GeneralExpression;
 
 /**
  *
@@ -316,7 +316,7 @@ public class BFLExpressionParserTest
         { 
             BFLExpressionParser bl=  fromSource( " the sin of 3.14159265359/2.0 " ) ;
             assertNotNull("Expression not returned ",bl );
-            NumericExpression e = bl.parseFactor() ;assertNotNull("Expression not returned ",e);
+            GeneralExpression e = bl.parseFactor() ;assertNotNull("Expression not returned ",e);
             BigDecimal d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
             assertEquals(d.toPlainString(), "1");
             
@@ -359,7 +359,7 @@ public class BFLExpressionParserTest
         { 
             BFLExpressionParser bl=  fromSource( " the bob of 3.14159265359/2.0 " ) ;
             assertNotNull("Expression not returned ",bl );
-            NumericExpression e = bl.parseFactor() ;assertNotNull("Expression not returned ",e);
+            GeneralExpression e = bl.parseFactor() ;assertNotNull("Expression not returned ",e);
             fail("TEST faction parsed function which did not exist");
 
             BigDecimal d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
@@ -382,7 +382,7 @@ public class BFLExpressionParserTest
         { 
             BFLExpressionParser bl=  fromSource( "100 + 200 " ) ;
             assertNotNull("Expression not returned ",bl );
-            NumericExpression e = bl.parseTerm(); assertNotNull("Expression not returned ",e);
+            GeneralExpression e = bl.parseTerm(); assertNotNull("Expression not returned ",e);
             BigDecimal d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
             assertEquals(d.toPlainString(), "300");
             
@@ -482,7 +482,7 @@ public class BFLExpressionParserTest
         { 
             System.out.println(" TEST FOR FAIL €100 * £200 ");
             BFLExpressionParser bl=  fromSource( " €100 * £200 " ) ;
-            NumericExpression e = bl.simpleMathExpression();
+            GeneralExpression e = bl.simpleMathExpression();
             
             BigDecimal d = e.evaluateCalculation();
             System.out.printf(" EXP=  %s\n",e.toString());
@@ -512,7 +512,7 @@ public class BFLExpressionParserTest
             var.setValue(BigDecimal.ONE);
             BFLExpressionParser parser = new BFLExpressionParser( in, sym  );
             assert parser != null ;
-            NumericExpression e = parser.parseFactor(); assert e != null ; 
+            GeneralExpression e = parser.parseFactor(); assert e != null ; 
            
             String r ; 
             r=runSimpleExpression(" ( 90 - 100 )* 8  " ); // test compile 
@@ -599,7 +599,7 @@ public class BFLExpressionParserTest
             
             BFLExpressionParser parser =  BFLExpressionParser.fromSource( source );
             assert parser != null ;
-            NumericExpression e = parser.parseComparisonExpression(); assert e != null ; 
+            GeneralExpression e = parser.parseComparisonExpression(); assert e != null ; 
            
             String rslt = runSimpleExpression(" 5 > 6 " ); // test compile 
             assertEquals( "NO", rslt);
@@ -665,7 +665,7 @@ public class BFLExpressionParserTest
     { 
         System.out.print("TEST testParseLogicExpression "); 
         BFLExpressionParser parser; 
-      NumericExpression e ; 
+      GeneralExpression e ; 
         try
         { 
             parser =  BFLExpressionParser.fromSource( "YES" ); assert parser != null ;

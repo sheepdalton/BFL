@@ -13,9 +13,10 @@ import java.math.MathContext;
  * Binary expressions - these both describe and apply in fix operators. 
  * @author Sheep Dalton
  */
-public class BinaryExpression implements NumericExpression 
+public class BinaryExpression implements GeneralExpression 
 {
-    NumericExpression before,after ;
+    GeneralExpression before;
+    GeneralExpression after;
     int operator  ;
     
    //static int validOperators[] = { '=' , '≠' ,  ,'<' , '>' ,'\u2265' , '≤'  , '~' , '&'   ,  '|' } ; 
@@ -146,7 +147,10 @@ public class BinaryExpression implements NumericExpression
         return myType ; 
     }
     //==========================================================================
-
+    public enum Operators   
+    {
+          PLUS   , TIMES, DIVIDE , MINUS , POWER 
+    }; 
     /**
      *
      * @param operator
@@ -166,7 +170,7 @@ public class BinaryExpression implements NumericExpression
      * @param left
      * @param right
      */
-    public BinaryExpression( int operator , NumericExpression left  , NumericExpression right )
+    public BinaryExpression( int operator , GeneralExpression left  , GeneralExpression right )
     { 
         this.operator  = operator; 
         this.before = left ; 
@@ -177,20 +181,20 @@ public class BinaryExpression implements NumericExpression
      *  accelerating the evalaution. 
      * @return 
     */
+    static  String mathOpertors  = "+-*÷^"; 
     @Override 
     public boolean isANumber()
     { 
-        //@@@ TODO - long term check for objects and strings. 
+        //@@@ TODO - long term check for objects and strings.
         if(this.isQuestion()==true )return false ; 
         return  true ; 
-     
     }
     
     /**
      * getLeft 
      * @return 
      */
-    public NumericExpression getBefore()
+    public GeneralExpression getBefore()
     {
         return before;
     }
@@ -198,7 +202,7 @@ public class BinaryExpression implements NumericExpression
      * set the before.
      * @param before 
      */
-    public void setBefore(NumericExpression before)
+    public void setBefore(GeneralExpression before)
     {
         this.before = before;
     }
@@ -206,7 +210,7 @@ public class BinaryExpression implements NumericExpression
      *  get after 
      * @return 
      */
-    public NumericExpression getAfter()
+    public GeneralExpression getAfter()
     {
         return after;
     }
@@ -215,7 +219,7 @@ public class BinaryExpression implements NumericExpression
      * setRight 
      * @param after expression 
      */
-    public void setAfter(NumericExpression after)
+    public void setAfter(GeneralExpression after)
     {
         this.after = after;
     }

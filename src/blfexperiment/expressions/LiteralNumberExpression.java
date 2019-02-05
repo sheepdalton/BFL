@@ -17,7 +17,6 @@ public class LiteralNumberExpression implements NumericExpression
     String numberAsText = "0"; 
     String type = BFLExpressionParser.typeInt;
     //--------------------------------------------------------------------------
-
     /**
      *
      * @param number
@@ -26,6 +25,11 @@ public class LiteralNumberExpression implements NumericExpression
     {
        this.numberAsText = number;  
        if( number.contains("."))type = BFLExpressionParser.typeFloat;
+    }
+    @Override
+    public boolean isANumber()
+    {
+        return true;  //To change body of generated methods, choose Tools | Templates.
     }
     //--------------------------------------------------------------------------
 

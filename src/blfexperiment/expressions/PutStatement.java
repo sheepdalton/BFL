@@ -55,7 +55,7 @@ public class PutStatement implements Statement
          */
         BEFORE 
     };
-    NumericExpression e  ; 
+    GeneralExpression e  ; 
     HowToPut   how  = HowToPut.NON ; 
     VariableSetExpression variable; // if null means print out. 
     
@@ -63,7 +63,7 @@ public class PutStatement implements Statement
      *
      * @param doThis
      */
-    public PutStatement(  NumericExpression doThis ) 
+    public PutStatement(  GeneralExpression doThis ) 
     { 
         assert doThis != null ; 
         e = doThis; 
@@ -76,7 +76,7 @@ public class PutStatement implements Statement
      * @param how
      * @param target
      */
-    public PutStatement(  NumericExpression doThis ,  HowToPut how ,
+    public PutStatement(  GeneralExpression doThis ,  HowToPut how ,
                 VariableSetExpression target)
     { 
        assert doThis != null ; 

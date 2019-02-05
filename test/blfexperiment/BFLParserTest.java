@@ -24,7 +24,6 @@ import blfexperiment.expressions.BinaryExpression;
 import blfexperiment.expressions.Expression;
 import blfexperiment.GeneralTypes.GeneralObject;
 import blfexperiment.expressions.LiteralNumberExpression;
-import blfexperiment.expressions.NumericExpression;
 import blfexperiment.expressions.Statement;
 import blfexperiment.expressions.StatementBlock;
 import blfexperiment.expressions.Variable;
@@ -34,6 +33,7 @@ import java.math.BigDecimal;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import blfexperiment.expressions.GeneralExpression;
 
 /**
  *
@@ -63,7 +63,7 @@ public class BFLParserTest
    static String runSimpleExpression( String exp )throws ParseError 
    { 
        BFLParser bl=  fromSource( exp ) ;  assert bl != null ;
-       NumericExpression e = bl.simpleMathExpression();  assert e != null ;
+       GeneralExpression e = bl.simpleMathExpression();  assert e != null ;
        System.out.printf(" EXP=  %s\n",e.toString());
        BigDecimal d = e.evaluateCalculation();  assert d != null ; 
        System.out.printf( "Result =  %s \n", d.toPlainString());

@@ -20,8 +20,9 @@
 package blfexperiment.expressions;
 
 import blfexperiment.BFLExpressionParser;
+import blfexperiment.GeneralTypes.GeneralNumber;
+import blfexperiment.GeneralTypes.GeneralObject;
 import java.math.BigDecimal;
-import java.lang.ArithmeticException; 
 
 /**
  *  UnariyExpression 
@@ -30,9 +31,9 @@ import java.lang.ArithmeticException;
  *  - negate 
  * @author Sheep Dalton
  */
-public class UnariyExpression  implements NumericExpression
+public class UnariyExpression  implements GeneralExpression
 {
-    NumericExpression left  ;
+    Expression left  ;
     int operator  ;// ¬ is possible 
     
     //--------------------------------------------------------------------------
@@ -42,11 +43,23 @@ public class UnariyExpression  implements NumericExpression
      * @param operator
      * @param e
      */
-    public UnariyExpression( int operator   ,  NumericExpression e )
+    public UnariyExpression( int operator   ,  Expression e )
     { 
         this.operator = operator;
         left = e ; 
     }
+    @Override 
+        public boolean isANumber()
+    { 
+        if( isQuestion() )return false ; 
+        return left.isANumber() ; 
+    } 
+    @Override 
+   public  GeneralObject doIt()
+    { 
+        return new GeneralNumber( evaluateCalculation()) ; //FYI this is slow
+    }
+   
     //--------------------------------------------------------------------------
     @Override 
     public String toString()
@@ -128,7 +141,7 @@ public class UnariyExpression  implements NumericExpression
     //--------------------------------------------------------------------------
     public  boolean evaluateLogic()
     { 
-        return ! evaluateLogic(); 
+        return ! left.evaluateLogic(); 
     }
     //--------------------------------------------------------------------------   
 }

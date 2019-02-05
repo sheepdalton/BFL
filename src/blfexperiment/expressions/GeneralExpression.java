@@ -16,59 +16,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301  USA
  */
-
 package blfexperiment.expressions;
 
-import java.math.BigDecimal;
+import blfexperiment.GeneralTypes.*;
 
 /**
  *
  * @author Sheep Dalton
  */
-public class VariableExpression implements GeneralExpression 
+public interface GeneralExpression extends Expression 
 {
-
-    String newVariableName;
-    Variable linkToVariable; // used for the evaluation checks.
-
-    /**
-     *
-     * @param newVariableName
-     * @param linkToVariable
-     */
-    public VariableExpression(String newVariableName, Variable linkToVariable)
-    {
-        assert linkToVariable != null : "NO Variable "; 
-        this.newVariableName = newVariableName;
-        this.linkToVariable = linkToVariable;
-    }
     //--------------------------------------------------------------------------
-    @Override
-    public BigDecimal evaluateCalculation()
-    {
-        assert linkToVariable != null;
-        return linkToVariable.getValue();
-    }
-    //--------------------------------------------------------------------------
-
     /**
-     *
-     * @return
+     *  This is more of a convenicance fuction but it makes sure all numeric cals are OK.
+     * @return 
      */
-    public Variable getVariable()
-    {
-        return linkToVariable;
-    }
     //--------------------------------------------------------------------------
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public String getType()
+    
+    default GeneralObject doIt()
     { 
-        return linkToVariable.getType(); 
+        return new GeneralNumber( evaluateCalculation()) ; //FYI this is slow
     }
+    //--------------------------------------------------------------------------
+    //default boolean isANumber(){ return true ; } 
+    
     //--------------------------------------------------------------------------
 }

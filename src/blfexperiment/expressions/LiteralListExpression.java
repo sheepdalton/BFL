@@ -27,7 +27,7 @@ import java.util.*;
  *  [ 1 ; 2 ; 3 ; 4; 5; 6 ; 7 ] 
  * @author Sheep Dalton
  */
-public class LiteralListExpression implements NumericExpression 
+public class LiteralListExpression implements GeneralExpression 
 {
     List<Expression> listOfExpressions ; 
     public LiteralListExpression()
@@ -44,7 +44,6 @@ public class LiteralListExpression implements NumericExpression
     public String getType()
     {
         if( listOfExpressions.size() == 0 )return "Empty";
-        
         return listOfExpressions.get(listOfExpressions.size()-1).getType() ;
     }
     public BigDecimal evaluateCalculation( )

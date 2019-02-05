@@ -26,7 +26,7 @@ import java.math.BigDecimal;
  *
  * @author Sheep Dalton
  */
-public class LiteralStringExpression implements  NumericExpression
+public class LiteralStringExpression implements  GeneralExpression
 {
 
     GeneralText theText ; 

@@ -30,7 +30,7 @@ import java.util.*;
  * 
  * @author Sheep Dalton
  */
-public class FunctionCallExpression implements NumericExpression
+public class FunctionCallExpression implements GeneralExpression
 {
     static interface basicMathFunction
     { 
@@ -199,7 +199,7 @@ public class FunctionCallExpression implements NumericExpression
     @Override
     public GeneralObject doIt()
     {
-        return NumericExpression.super.doIt(); //To change body of generated methods, choose Tools | Templates.
+        return GeneralExpression.super.doIt(); //To change body of generated methods, choose Tools | Templates.
     }
     //--------------------------------------------------------------------------
     @Override
@@ -232,7 +232,7 @@ public class FunctionCallExpression implements NumericExpression
     @Override
     public String toHumanString()
     {
-        return NumericExpression.super.toHumanString(); //To change body of generated methods, choose Tools | Templates.
+        return GeneralExpression.super.toHumanString(); //To change body of generated methods, choose Tools | Templates.
     }
     //--------------------------------------------------------------------------
     /**
@@ -242,7 +242,7 @@ public class FunctionCallExpression implements NumericExpression
     @Override
     public String converToSource()
     {
-        return NumericExpression.super.converToSource(); //To change body of generated methods, choose Tools | Templates.
+        return GeneralExpression.super.converToSource(); //To change body of generated methods, choose Tools | Templates.
     }
     //--------------------------------------------------------------------------
     /**
@@ -324,25 +324,25 @@ public class FunctionCallExpression implements NumericExpression
     @Override
     public boolean evaluateLogic()
     {
-        return NumericExpression.super.evaluateLogic(); //To change body of generated methods, choose Tools | Templates.
+        return GeneralExpression.super.evaluateLogic(); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean purelyLogic()
     {
-        return NumericExpression.super.purelyLogic(); //To change body of generated methods, choose Tools | Templates.
+        return GeneralExpression.super.purelyLogic(); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean isQuestion()
     {
-        return NumericExpression.super.isQuestion(); //To change body of generated methods, choose Tools | Templates.
+        return GeneralExpression.super.isQuestion(); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean isCompatable(Expression other)
     {
-        return NumericExpression.super.isCompatable(other); //To change body of generated methods, choose Tools | Templates.
+        return GeneralExpression.super.isCompatable(other); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

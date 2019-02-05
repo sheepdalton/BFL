@@ -5,12 +5,10 @@
         <group>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/FunctionCallExpression.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/BFLExpressionParser.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/NumericExpression.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/test/blfexperiment/BFLExpressionParserTest.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LiteralNumberExpression.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/test/blfexperiment/BFLExpressionParserTest.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LiteralListExpression.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/Expression.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LiteralStringExpression.java</file>
         </group>
     </open-files>
 </project-private>

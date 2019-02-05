@@ -37,7 +37,7 @@ public class ArrayIndex extends UnariyExpression
      * @param e
      */
     public ArrayIndex(String newVariableName, Variable linkToVariable,
-                                NumericExpression e)
+                                GeneralExpression e)
     {
         super('[', e);
         this.newVariableName = newVariableName;

@@ -21,7 +21,6 @@ package blfexperiment;
 
 import blfexperiment.GeneralTypes.GeneralObject;
 import blfexperiment.expressions.NewVariableNameExpression;
-import blfexperiment.expressions.NumericExpression;
 import blfexperiment.expressions.PutStatement;
 import blfexperiment.expressions.Statement;
 import blfexperiment.expressions.StatementBlock;
@@ -30,6 +29,7 @@ import blfexperiment.expressions.VariableSetExpression;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import blfexperiment.expressions.GeneralExpression;
 
 /**
  * Project no on github.
@@ -198,7 +198,7 @@ public class BFLParser extends BFLExpressionParser
             return null; // not a put statement
         }
         Lexer.WordToken t = (Lexer.WordToken) tokenStream.removeNextToken();
-        NumericExpression exp = parseComparisonExpression();
+        GeneralExpression exp = parseComparisonExpression();
         VariableSetExpression varExp = null;
         if (tokenStream.hasThisWord("into"))
         {

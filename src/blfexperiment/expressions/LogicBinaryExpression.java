@@ -45,7 +45,7 @@ public class LogicBinaryExpression extends BinaryExpression
      * @param b
      * @param after
      */
-    public LogicBinaryExpression(int operator , NumericExpression b , NumericExpression after )
+    public LogicBinaryExpression(int operator , GeneralExpression b , GeneralExpression after )
     {
         super(operator, b ,after );
     }
