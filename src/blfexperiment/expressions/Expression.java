@@ -6,9 +6,8 @@
 package blfexperiment.expressions;
 
 
-import blfexperiment.GeneralTypes.*;
 import blfexperiment.BFLExpressionParser;
- 
+import blfexperiment.GeneralTypes.*; 
 import java.math.BigDecimal;
 
 /**
@@ -111,7 +110,7 @@ public interface Expression
      * if purelyLogic returns YES it's OK to call evaluateLogic 
      * @return 
      */
-     default boolean purelyLogic(){ return false ; }
+    default boolean purelyLogic(){ return false ; }
  
     /**
      *  check if the type of this expression is a question. 

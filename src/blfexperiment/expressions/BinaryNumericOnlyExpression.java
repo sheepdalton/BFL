@@ -24,7 +24,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 
 /**
- *
+ * This is an optimisation version of BinaryExpression see {@link BinaryExpression} 
+ * 
  * @author Sheep Dalton
  */
 public class BinaryNumericOnlyExpression implements NumericExpression 

@@ -33,6 +33,16 @@ import java.util.*;
  *   This Expression Parser is called in an interactive 'calcuator' mode by BFL
  *   Experiment class.  see {@link blfexperiment.BLFExperiment} This is useful in it's own right and by way of interactively 
  * learning the syntax. 
+ * <BR>
+ * Example
+ * <PRE>
+ * String expr = " 3 * 3 " ; 
+ *  BufferedReader in = new BufferedReader(new StringReader(expr));
+    BFLExpressionParser  bfl   = new BFLExpressionParser( in ) ;
+    Expression e =  bfl.parseExpression(); 
+    BigDecimal d = e.evaluateCalculation();
+    System.out.println(d);
+ * </PRE> 
  *   
  * @author Sheep Dalton
  */
@@ -1174,7 +1184,7 @@ public class BFLExpressionParser
     }
    //---------------------------------------------------------------------------
    /** 
-    *  for poweroperator see {@link parsePowerOperator} 
+    *  for power operator see {@link parsePowerOperator} 
     *  called  by see {@link simpleMathExpression} 
     * <pre>
     *    -TERM------------------------------------------------------------
@@ -1201,12 +1211,9 @@ public class BFLExpressionParser
       while( tokenStream.hasThisSymbol('+') || tokenStream.hasThisSymbol('-')  )// || 
              // tokenStream.hasThisWord("plus") ||  tokenStream.hasThisWord("minus")
       { 
-          GeneralExpression bx = null ; 
-          
+          GeneralExpression bx = null ;
           Lexer.SingleSymbol opertor = tokenStream.removeNextTokenAsSymbol();
-          
-          
-
+         
           tokenStream.setSkipWhiteSpace(true);
           if( debugTrace) { System.out.println("   PARASE parsePowerOperator 2"); } 
           GeneralExpression  right = parsePowerOperator(); 

@@ -8,9 +8,12 @@ package blfexperiment.expressions;
 import blfexperiment.BFLExpressionParser;
 import java.math.BigDecimal;
 import java.math.MathContext;
-
+//==============================================================================
 /**
- * Binary expressions - these both describe and apply in fix operators. 
+ * 
+ * Binary expressions - these both describe and apply in fix operators.  Now
+ * divided between this class and Binary Numeric Only Expression. @see BinaryNumericOnlyExpression
+ * {@link BinaryNumericOnlyExpression}
  * @author Sheep Dalton
  */
 public class BinaryExpression implements GeneralExpression 
@@ -19,6 +22,21 @@ public class BinaryExpression implements GeneralExpression
     GeneralExpression after;
     int operator  ;
     
+    
+    //--------------------------------------------------------------------------
+    /**
+     * 
+     * @param operator
+     * @param left
+     * @param right
+     */
+    public BinaryExpression( int operator , GeneralExpression left  , GeneralExpression right )
+    { 
+        this.operator  = operator; 
+        this.before = left ; 
+        this.after = right ; 
+    }
+    //--------------------------------------------------------------------------
    //static int validOperators[] = { '=' , '≠' ,  ,'<' , '>' ,'\u2265' , '≤'  , '~' , '&'   ,  '|' } ; 
     @Override 
     public String toString()
@@ -160,22 +178,8 @@ public class BinaryExpression implements GeneralExpression
         this.operator  = operator; 
         if( false )System.out.println(" new BinaryExpression  operator " + 
                 (char)( operator ) + " is ? " + isQuestion());
-        
     }
-    //==========================================================================
-
-    /**
-     *
-     * @param operator
-     * @param left
-     * @param right
-     */
-    public BinaryExpression( int operator , GeneralExpression left  , GeneralExpression right )
-    { 
-        this.operator  = operator; 
-        this.before = left ; 
-        this.after = right ; 
-    }
+   
     /**
      *  isANumber helps type check statements. Also used to optimise by 
      *  accelerating the evalaution. 
@@ -189,7 +193,7 @@ public class BinaryExpression implements GeneralExpression
         if(this.isQuestion()==true )return false ; 
         return  true ; 
     }
-    
+    //--------------------------------------------------------------------------
     /**
      * getLeft 
      * @return 
@@ -198,6 +202,7 @@ public class BinaryExpression implements GeneralExpression
     {
         return before;
     }
+    //--------------------------------------------------------------------------
     /**
      * set the before.
      * @param before 
@@ -206,6 +211,7 @@ public class BinaryExpression implements GeneralExpression
     {
         this.before = before;
     }
+    //--------------------------------------------------------------------------
     /**
      *  get after 
      * @return 
@@ -223,7 +229,7 @@ public class BinaryExpression implements GeneralExpression
     {
         this.after = after;
     }
-
+    //--------------------------------------------------------------------------
     /**
      *
      * @param it
@@ -235,38 +241,42 @@ public class BinaryExpression implements GeneralExpression
         return true ; 
     }
     //--------------------------------------------------------------------------
+    // System.out.println(".... " + before.toString() + "].." );
+    // System.out.println("r... [" + after.toString() + "]..")
     /**
      * doIt - for testing - evaluate expression 
      * @return 
      */
     @Override 
     public  BigDecimal evaluateCalculation( )
-    { 
-     
+    {
      assert   before != null :"No left";
      assert after != null : "No right"; 
      
      BigDecimal  beforeVal = before.evaluateCalculation();
      BigDecimal rigthVal = after.evaluateCalculation();
-     
-    // System.out.println(".... " + before.toString() + "].." );
-    // System.out.println("r... [" + after.toString() + "]..");
-     
+      
      switch (  operator )
      { 
-         case '+' : {  BigDecimal result = beforeVal.add(rigthVal); return result ;} 
+         case '+' : case '^' :  
+         case '-': case '*' : case '/': case '\u00D7':  
+         { 
+             assert false;  // this is handled by BinaryNumericOnlyExpression now
+         }break ; 
+        /* case '+' : {  BigDecimal result = beforeVal.add(rigthVal); return result ;} 
          case '-': { BigDecimal result = beforeVal.subtract(rigthVal); return result;} 
          case '*' : case '\u00D7': { BigDecimal result = beforeVal.multiply(rigthVal); return result;} 
          case '/':case '÷': 
          { 
              return  beforeVal.divide(rigthVal, MathContext.DECIMAL128);
-         } 
+         }  
         case '^': 
         { 
              int power = rigthVal.intValue(); 
              BigDecimal result = beforeVal.pow(power); 
              return result ; 
         }
+        */ 
         case '=': 
         { 
             System.out.println("= LEfT  " + beforeVal + "  R = "+ (rigthVal)); 
@@ -354,13 +364,12 @@ public class BinaryExpression implements GeneralExpression
            return BigDecimal.ZERO;
         } 
         
-         default: assert false : " " + (char)operator + " not implmented BinaryExpression " + operator ; 
+        default: assert false : " " + (char)operator + " not implmented BinaryExpression " + operator ; 
      }
      
      assert false :  " Not sure of operator = "+ this.operator ; 
      return null ; 
     }
-    
     //--------------------------------------------------------------------------
     @Override  
     public boolean isCompatable( Expression other )

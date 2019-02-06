@@ -44,7 +44,7 @@ public class GeneralBoolean  implements GeneralObject
       
 /**
      *
-     * @return
+     * @return boolean true ; 
      */
     @Override
      public boolean isQuestion(){ return true ; } 

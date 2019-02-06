@@ -3,18 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LogicBinaryExpression.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/GeneralExpression.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/test/blfexperiment/BFLExpressionParserTest.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/Expression.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LiteralBoolean.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/FunctionCallExpression.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/BFLExpressionParser.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/UnariyExpression.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LogicBinaryExpression.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/BFLExpressionParser.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/GeneralExpression.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/NumericExpression.java</file>
-            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LiteralNumberExpression.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LiteralListExpression.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/Expression.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/BinaryExpression.java</file>
+            <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/LiteralBoolean.java</file>
             <file>file:/Users/nickdalton/NetBeansProjects/BLFExperiment/src/blfexperiment/expressions/BinaryNumericOnlyExpression.java</file>
         </group>
     </open-files>
