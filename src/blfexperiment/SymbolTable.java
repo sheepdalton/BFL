@@ -20,16 +20,15 @@
 package blfexperiment;
 
 import blfexperiment.expressions.Variable;
-
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.*;
 
 //============================================================================== 
 /**
- * SymbolTable holds names of variables ( and later types and classes ) 
+ * SymbolTable holds names of variables ( and later types and classes )
+ * What makes this special is it uses an ensable of sound mapping systems which 
+ * forbids variables which 'read'/look to close. @see  {@link blfexperiment.expressions.Variable} OK 
+ * @version  0.9 
  * @author Sheep Dalton
  */
 //---------------------------------------------------------------------------
@@ -43,6 +42,10 @@ public class SymbolTable
    Metaphone mphon = new Metaphone();
    Map<String,String> mphonMap = new HashMap<>();
    
+   /**
+    * Tables an have a 'parent'. OK to pass null. 
+    * @param parentTable 
+    */
    SymbolTable( SymbolTable parentTable )
    { 
        table = new HashMap<>(); 
@@ -51,6 +54,11 @@ public class SymbolTable
    }
    SymbolTable getParent(){ return outerTable; } 
    //---------------------------------------------------------------------------
+   /**
+    * Not sure if this is good idea. assumes name
+    * @param normliaseVarName
+    * @return 
+    */
    Variable getOrMakeIfNull(   String normliaseVarName )
    { 
        normliaseVarName = normliaseVarName.toLowerCase();
@@ -85,6 +93,11 @@ public class SymbolTable
        return v; 
    }
    //---------------------------------------------------------------------------
+   /** 
+    * @@@ TODO - 
+    * @param s
+    * @return  the String which is convered to 'universal' or normal for.
+    */
    String normalise( String s ) { return s; } 
    //---------------------------------------------------------------------------
    /**
@@ -110,7 +123,7 @@ public class SymbolTable
     * @param normliaseVarname
     * @return 
     */
-   String similarLocalName( String normliaseVarname )
+   protected String similarLocalName( String normliaseVarname )
    { 
        normliaseVarname = normliaseVarname.toLowerCase();
        
@@ -126,7 +139,7 @@ public class SymbolTable
        return null ; 
    }
    //---------------------------------------------------------------------------
-   boolean thisIsStartOfOneOfYourStrings( String wordNormalised )
+  protected  boolean thisIsStartOfOneOfYourStrings( String wordNormalised )
    { 
        wordNormalised = wordNormalised.toLowerCase();
        for( String s : table.keySet())
@@ -136,9 +149,8 @@ public class SymbolTable
        return false ; 
    }
    //---------------------------------------------------------------------------
-
     /**
-     *
+     * TESTS the code for the lexer.  
      * @param args
      */
     public static void main(String[] args) 
@@ -206,8 +218,6 @@ public class SymbolTable
             System.out.println(cmp.encode("cristos"));
             System.out.println(cmp.encode("crystus"));
            }
-           
-           
        } //catch (EncoderException ex)
        {
            //System.out.println("ERROR " + ex);
@@ -215,3 +225,4 @@ public class SymbolTable
     }
    // Variable get 
 }
+//------------------------------------------------------------------------------

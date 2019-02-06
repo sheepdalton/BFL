@@ -19,35 +19,28 @@
 package blfexperiment;
 
 import static blfexperiment.BFLExpressionParser.debugLastExpression;
-import java.io.*;
-import java.nio.charset.Charset;
 import java.util.*;
-import java.util.logging.Level;
-import java.lang.ArithmeticException; 
 
 /**
- * This is a Minimially viable product. This is an interactive 
- *  calculator which tests BFL's expressive capablieis.
+ * This is a minimial viable product. This is an interactive 
+ *  calculator which tests BFL's expressive 
+ * see @see  {@link blfexperiment.BFLExpressionParser}
+ * OK.
+ *<BR>
+ *<B> Notes</B>
+ * <BR>
+ * The language has <i>it</i> which is the result of the previous values. <BR> 
  * 
- * Notes
- * 
- * The lanauge has it which is the result of the previous values. 
- * 
- * The langage has paste which puts in the value from the clipboard ( assuming it's text).
+ * <BR>
+ * Coming  The language has <i>paste</i> which puts in the value from the clipboard ( assuming it's text).
  * 
  * @author Sheep Dalton
  */
 public class BLFExperiment
 {
+      
     /**
-     */
-    public BLFExperiment( )
-    {
-        
-    }
-          
-    /**
-     *
+     * main - runs into loop. QUIT to leave.  
      * @param args
      */
     public static void main(String[] args) 

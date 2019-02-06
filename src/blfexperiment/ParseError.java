@@ -6,7 +6,7 @@
 package blfexperiment;
 
 /**
- *
+ * This is the simple error which records any syntax errors found.
  * @author Sheep Dalton
  */
 public class ParseError extends Exception 
@@ -14,9 +14,9 @@ public class ParseError extends Exception
     int linenumber ;
     
     /**
-     *
-     * @param message
-     * @param line
+     * 
+     * @param message  what to tell the user. 
+     * @param line  line number 
      */
     public ParseError(String message, int line ) 
     {
@@ -24,9 +24,14 @@ public class ParseError extends Exception
         this.linenumber = line ; 
     }
     //--------------------------------------------------------------------------
+    /**
+     * Convert to string.
+     * @return 
+     */
     @Override 
     public String toString()
     { 
         return super.toString() + " line "+ this.linenumber;  
     }
+    //--------------------------------------------------------------------------
 }

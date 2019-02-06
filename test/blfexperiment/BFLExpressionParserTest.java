@@ -20,6 +20,7 @@ package blfexperiment;
 
 import static blfexperiment.BFLExpressionParser.runSimpleExpression;
 import blfexperiment.expressions.BinaryExpression;
+import blfexperiment.expressions.GeneralExpression;
 import blfexperiment.expressions.LiteralNumberExpression;
 import blfexperiment.expressions.Statement;
 import blfexperiment.expressions.Variable;
@@ -29,8 +30,6 @@ import java.math.BigDecimal;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import blfexperiment.expressions.GeneralExpression;
-
 /**
  *
  * @author Sheep Dalton

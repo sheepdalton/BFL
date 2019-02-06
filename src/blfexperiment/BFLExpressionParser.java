@@ -26,7 +26,14 @@ import java.io.StringReader;
 import java.math.BigDecimal;
 import java.util.*;
 /**
- *
+ *  The BFLExpressionParser expression parser does the core of the compiler. 
+ *  it handles work like x + y * 4 - 3 ^2   ect. You could subclass this to 
+ *  handle the work in a spreadsheet or something. <BR> 
+ *  the main sublcass is the main compiler ( current in progres ). 
+ *   This Expression Parser is called in an interactive 'calcuator' mode by BFL
+ *   Experiment class.  see {@link blfexperiment.BLFExperiment} This is useful in it's own right and by way of interactively 
+ * learning the syntax. 
+ *   
  * @author Sheep Dalton
  */
 public class BFLExpressionParser
@@ -2057,8 +2064,7 @@ public class BFLExpressionParser
        return  d.toPlainString();
    }
     //--------------------------------------------------------------------------
-   /** makeRandomExpression
-   
+   /** makeRandomExpression 
    */
     static boolean BFLParserSelfTest()
     { 
@@ -2067,10 +2073,9 @@ public class BFLExpressionParser
                testCurrency() && 
                testTerm()  && 
                testSimpleExpression()&&
-               testComparisonExpression() && testEvaluation(); 
-             
+               testComparisonExpression() && testEvaluation();      
     }
-
+    
     /**
      *makeRandomExpression 
      * @return

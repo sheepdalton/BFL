@@ -12,7 +12,10 @@ import java.io.StringReader;
 import java.util.*;
 
 /**
- * This performs low level lexical analysis ( badly ) 
+ * This performs low level lexical analysis ( badly )  @see  {@link blfexperiment.BFLExpressionParser} 
+ * nessasry because we want more control over the lexing process. That is 
+ * it's not an even process. 
+ * 
  * @author Sheep Dalton
  */
 class Lexer 
