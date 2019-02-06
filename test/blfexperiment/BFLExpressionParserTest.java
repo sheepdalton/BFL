@@ -19,11 +19,7 @@
 package blfexperiment;
 
 import static blfexperiment.BFLExpressionParser.runSimpleExpression;
-import blfexperiment.expressions.BinaryExpression;
-import blfexperiment.expressions.GeneralExpression;
-import blfexperiment.expressions.LiteralNumberExpression;
-import blfexperiment.expressions.Statement;
-import blfexperiment.expressions.Variable;
+import blfexperiment.expressions.*;
 import java.io.BufferedReader;
 import java.io.StringReader;
 import java.math.BigDecimal;
@@ -41,18 +37,65 @@ public class BFLExpressionParserTest
     {
         
     }
-    
+    //--------------------------------------------------------------------------
     @Before
     public void setUp()
     {
     }
-
+    //--------------------------------------------------------------------------
     static BFLParser fromSource( String expr ) throws ParseError
    { 
        BufferedReader in = new BufferedReader(new StringReader(expr));
        BFLParser  bfl = BFLParser.make( in ) ;
        return bfl ; 
    }
+   //--------------------------------------------------------------------------
+   @Test 
+   public void testBinaryExpressionNumeric()
+    { 
+        System.out.println("testBinaryExpressionNumeric");
+        try
+        {
+            BFLExpressionParser bl =  fromSource( "2*2" ) ;  assert bl != null ;
+            GeneralExpression e = bl.parseExpression();  assert e != null ;
+            assert e instanceof BinaryNumericOnlyExpression ;
+           
+            bl =  fromSource( "2÷2" ) ;  assert bl != null ;
+            e = bl.parseExpression();  assert e != null ;
+            assertTrue( e instanceof BinaryNumericOnlyExpression );
+            
+            bl =  fromSource( "2/2" ) ;  assert bl != null ;
+            e = bl.parseExpression();  assert e != null ;
+            assertTrue( e instanceof BinaryNumericOnlyExpression );
+            
+            bl =  fromSource( "2+2" ) ;  assert bl != null ;
+            e = bl.parseExpression();  assert e != null ;
+            assert e instanceof BinaryNumericOnlyExpression ;
+            
+            bl =  fromSource( "2-2" ) ;  assert bl != null ;
+            e = bl.parseExpression();  assert e != null ;
+            assert e instanceof BinaryNumericOnlyExpression ;
+            
+             bl =  fromSource( "2^2" ) ;  assert bl != null ;
+            e = bl.parseExpression();  assert e != null ;
+            assert e instanceof BinaryNumericOnlyExpression ;
+        // THIS IS NEGATIVE -- 2= nos not binary numeric     
+             bl =  fromSource( "2=2" ) ;  assert bl != null ;
+            e = bl.parseExpression();  assert e != null ;
+            assert  !(e instanceof BinaryNumericOnlyExpression) ;
+        } catch (ParseError ex)
+        {
+            fail(" 2 * 2 caused exception - not good.");
+        }
+    }
+    /** 
+     * recycle internal test.
+     */
+    @Test
+    public void testSimpleExpression2()
+    { 
+        assert BFLExpressionParser.testSimpleExpression() == true; 
+    }
     /**
      * Test of make method, of class BFLExpressionParser.
      */
@@ -64,16 +107,16 @@ public class BFLExpressionParserTest
                     "put  result + 1 into output \n";
         try
         { 
-        BFLParser  bfl = fromSource(s); 
-        Statement stm =   bfl.parseBlock(0); 
-       // @@@ TODO - add in execute to. 
+            BFLParser  bfl = fromSource(s); 
+            Statement stm =   bfl.parseBlock(0); 
+      
         } catch(  ParseError e )
         { 
             System.err.println("TEST testparseBlock: PARSE ERROR->"+ e);
             fail("Parse Error ->" + e ) ; 
         } 
     }
-
+    //--------------------------------------------------------------------------
     @Test
     public void testUnits()
     { 
@@ -390,7 +433,6 @@ public class BFLExpressionParserTest
             e = bl.parseTerm(); assertNotNull("Expression not returned ",e);
             d = e.evaluateCalculation();assertNotNull("Expression not returned ",d);
             assertEquals(d.toPlainString(), "100");
-        
         }
         catch(  ParseError e )
         { 
@@ -445,11 +487,15 @@ public class BFLExpressionParserTest
             fail("testparseLogicExpression .");
         }
     }
+
+    /**
+     *
+     * @return true if tests passed. 
+     */
     @Test
-    public void testSimpleExpression()
+    public void  testSimpleExpression()
     { 
-        
-       
+
         System.out.println("TEST SimpleExpression "); 
        try 
         {  
@@ -495,13 +541,14 @@ public class BFLExpressionParserTest
              System.out.println("TEST FOR €100 * £200 wrong passed "+ e );
         }
        System.out.println("TEST SimpleExpression passed");
+        
     }
     //--------------------------------------------------------------------------
     @Test 
     public void testFactor() 
     { 
         System.out.print("TEST Factor "); 
-        
+
         try 
         { 
             String source = " student name " ; 
@@ -659,6 +706,7 @@ public class BFLExpressionParserTest
         }
          System.out.println(" CORRECT  "); 
     }
+    //--------------------------------------------------------------------------
     @Test
     public void testParseLogicExpression() 
     { 

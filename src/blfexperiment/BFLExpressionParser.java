@@ -29,7 +29,7 @@ import java.util.*;
  *  The BFLExpressionParser expression parser does the core of the compiler. 
  *  it handles work like x + y * 4 - 3 ^2   ect. You could subclass this to 
  *  handle the work in a spreadsheet or something. <BR> 
- *  the main sublcass is the main compiler ( current in progres ). 
+ *  the main subclass is the main compiler ( current in progress ). 
  *   This Expression Parser is called in an interactive 'calcuator' mode by BFL
  *   Experiment class.  see {@link blfexperiment.BLFExperiment} This is useful in it's own right and by way of interactively 
  * learning the syntax. 
@@ -129,9 +129,9 @@ public class BFLExpressionParser
       return sym ; 
    }
    //---------------------------------------------------------------------------
-
     /**
-     *
+     * popSymbolTable use this when a block ends and the local symbols no 
+     * longer are correct.
      */
    protected void popSymbolTable()
    {
@@ -141,7 +141,7 @@ public class BFLExpressionParser
    }
    //---------------------------------------------------------------------------
     /**
-     *
+     * debug utility function.
      * @param normalisedName
      * @return
      */
@@ -150,21 +150,31 @@ public class BFLExpressionParser
        return currentSymTable.contains(normalisedName);
    }
    //---------------------------------------------------------------------------
+   /**
+    * makes an expression parser with this source. 
+    * @param source
+    * @return 
+    */
    static BFLExpressionParser make(  BufferedReader source )
    { 
        BFLExpressionParser p = new BFLExpressionParser( source ); 
        return p ; 
    }
    //---------------------------------------------------------------------------
+   /**
+    *  makes an expression parser from source and with pre-populated symbol table.
+    * @param source
+    * @param t
+    * @return 
+    */
    static BFLExpressionParser make( BufferedReader source , SymbolTable t )
    { 
        BFLExpressionParser p = new BFLExpressionParser( source, t ); 
        return p ; 
    }
    //---------------------------------------------------------------------------
-
     /**
-     *
+     * returns true if this word is key word.
      * @param s
      * @return
      */
@@ -241,10 +251,9 @@ public class BFLExpressionParser
    if( tokenStream.hasThisSymbol('.')) // decimal point.
    { 
        Lexer.SingleSymbol  decimalPointSymbol = tokenStream.removeNextTokenAsSymbol();
-       number = number + "."; 
-       /*
-           handle .xxx,xxx,xxx 
-       */
+       number = number + ".";
+       
+       //  handle .xxx,xxx,xxx
        if(tokenStream.hasANumber() ) 
        { 
         num1 = (Lexer.NumberToken) tokenStream.removeNextToken();
@@ -265,6 +274,11 @@ public class BFLExpressionParser
     return makeLiteralNumberExpression(number);    
    }
    //---------------------------------------------------------------------------
+   /**
+    * makes a linteral number expression 
+    * @param number
+    * @return 
+    */
    LiteralNumberExpression makeLiteralNumberExpression( String number )
    { 
        return  new LiteralNumberExpression(number); 
@@ -403,7 +417,7 @@ public class BFLExpressionParser
     // subset of types all stinrgs of names.
 
     /**
-     *
+     *  list of all units names.
      */
     public static String allunits[] = 
     { 
@@ -430,6 +444,11 @@ public class BFLExpressionParser
       "kg", "gram", "lb","ton" 
    };*/
     //--------------------------------------------------------------------------
+    /**
+     * isAUnit
+     * @param item
+     * @return 
+     */
     static public boolean isAUnit( String item)
     { assert item != null ; 
         boolean test = false ; 
@@ -448,7 +467,8 @@ public class BFLExpressionParser
     }
     //--------------------------------------------------------------------------
     /**
-     *
+     * list of all currenty symbols. 
+     * @@@ EXPAND.
      */
     public static String allCurrency[] = 
     { 
@@ -517,13 +537,11 @@ public class BFLExpressionParser
               tokenStream.pushTokenBackToHead(wx);
               if( tokenStream.hasAnyOfTheseWords(dgrs) )
               {
-                  
                   Lexer.WordToken w = tokenStream.removeNextTokenAsWord();
                   if( w.getText().equalsIgnoreCase("Centigrade") || 
                       w.getText().equalsIgnoreCase("Celsius") || 
                       w.getText().equalsIgnoreCase("C") )
                    {
-                      
                       result.setType(typeCentigrade);tokenStream.setSkipWhiteSpace(old);
                       return result; 
                    }
@@ -651,7 +669,8 @@ public class BFLExpressionParser
   }
 //------------------------------------------------------------------------------
 /**
-  *  [THE] IDENTIFER 'of' | (  PARAM LIST  ) 
+  *  'THE' IDENTIFER 'of' Expression 
+  *   IDENTIFER( PARAM LIST  ) 
      IF name is null will auto get identifer.
  */
    GeneralExpression parseFunctionCall( String name ) throws ParseError 
@@ -702,6 +721,11 @@ public class BFLExpressionParser
     assert false ; 
     return null ; 
     } 
+   //---------------------------------------------------------------------------
+   /**
+    * Creates literal list expression ( for sublcasses ) 
+    * @return 
+    */
    protected LiteralListExpression makeLiteralListExpression()
    { 
        return new LiteralListExpression(); 
@@ -794,7 +818,7 @@ public class BFLExpressionParser
     *              |                                |
     *              |------ ∆ DEFINED-VARIABLE-------| ∆ = increment  
     *              |                                |
-    *              |-------   Function ( EXP )------|done 
+    *              |-------   Function ( EXP )------|done  {@link parseFunctionCall}
     *              |                                |
     *              |-----the Function of Expr-------|done
     *              |                                |
@@ -1011,9 +1035,16 @@ public class BFLExpressionParser
     * @param after
     * @return 
     */
-   BinaryExpression makeBinaryExpression(  int what , GeneralExpression before, 
+   GeneralExpression makeBinaryExpression( int what ,GeneralExpression before, 
                                                         GeneralExpression after )
    { 
+       if( before instanceof NumericExpression && 
+           after  instanceof  NumericExpression && 
+              BinaryNumericOnlyExpression.isBinaryOperator( what) )
+       { 
+           return new BinaryNumericOnlyExpression( what,
+                         (NumericExpression)before , (NumericExpression)after); 
+       }
        return new BinaryExpression( what , before , after ); 
    }
    //---------------------------------------------------------------------------
@@ -1043,11 +1074,12 @@ public class BFLExpressionParser
    }
    //---------------------------------------------------------------------------
    /** 
+    * for FACTOR see {@link parseFactor} 
     * <pre>
     *    -POWEROPERATOR----------------------------------------->
     *              |                                        ^
     *              |                                        |
-    *              |-> FACTOR TO THE POWER OF POWEROPERATOR-|
+    *              |-> FACTOR TO THE POWER OF POWEROPERATOR -|
     *              |                                        |
     *              |->------FACTOR ^ POWEROPERATOR----------|
     *              |                                        |
@@ -1086,7 +1118,7 @@ public class BFLExpressionParser
            String units = this.parseIdentifier() ;// should be sing. 
            // @@@ TODO check is known unit. 
            LiteralStringExpression lse = new LiteralStringExpression(units); 
-           BinaryExpression bx  = makeBinaryExpression( 'A' ,factor, lse);assert bx != null ;
+           GeneralExpression bx  = makeBinaryExpression( 'A' ,factor, lse);assert bx != null ;
            assert false ; // not working no binary expression.
            return bx; 
       }
@@ -1094,7 +1126,7 @@ public class BFLExpressionParser
       { 
           w = tokenStream.removeNextTokenAsWord();
           GeneralExpression two = this.makeLiteralNumberExpression("2"); 
-          BinaryExpression bx  = makeBinaryExpression( '^' ,factor, two);assert bx != null ; 
+          GeneralExpression bx  = makeBinaryExpression( '^' ,factor, two);assert bx != null ; 
           tokenStream.setSkipWhiteSpace(oldSetting);
           return bx; 
       }
@@ -1102,7 +1134,7 @@ public class BFLExpressionParser
       { 
           w = tokenStream.removeNextTokenAsWord();
           GeneralExpression two = this.makeLiteralNumberExpression("3"); 
-          BinaryExpression bx  = makeBinaryExpression( '^' ,factor, two);assert bx != null ; 
+          GeneralExpression bx  = makeBinaryExpression( '^' ,factor, two);assert bx != null ; 
           tokenStream.setSkipWhiteSpace(oldSetting);
           return bx; 
       }
@@ -1126,25 +1158,15 @@ public class BFLExpressionParser
        
       if( true == parsePower )
       { 
-          
-          BinaryExpression bx = null ; 
+        GeneralExpression power = parseFactor();
+        System.out.println( "power = "  + power.toString());
   
-              bx  = makeBinaryExpression( '^' );assert bx != null ; 
-              bx.setBefore(factor);
-              
-              GeneralExpression power = parseFactor();
-              System.out.println( "power = "  + power.toString());
-              
-              
-              if( !power.isANumber())
+        if( !power.isANumber())
                   parseErrorStop(" cannot raise to non integer types (Sorry)" ); 
-              bx.setAfter(power);
-              
-              tokenStream.setSkipWhiteSpace(oldSetting);
-              
-              //System.out.println( " RETURNING "  + bx );
-              
-              return bx; 
+             
+        GeneralExpression bx  = makeBinaryExpression( '^' ,factor ,power  );  assert bx != null ; 
+        tokenStream.setSkipWhiteSpace(oldSetting);
+        return bx; 
           
       }
       tokenStream.setSkipWhiteSpace(oldSetting);
@@ -1152,6 +1174,8 @@ public class BFLExpressionParser
     }
    //---------------------------------------------------------------------------
    /** 
+    *  for poweroperator see {@link parsePowerOperator} 
+    *  called  by see {@link simpleMathExpression} 
     * <pre>
     *    -TERM------------------------------------------------------------
     *              |                                        |
@@ -1163,8 +1187,6 @@ public class BFLExpressionParser
     *              |                                        | 
     *              |--POWEROPERATOR '...' POWEROPERATOR-----| literal range 
     *              |                                        |
- 
-
     *  </pre>
     * parseFactor's can be null ( no addition ) 
     */
@@ -1179,21 +1201,19 @@ public class BFLExpressionParser
       while( tokenStream.hasThisSymbol('+') || tokenStream.hasThisSymbol('-')  )// || 
              // tokenStream.hasThisWord("plus") ||  tokenStream.hasThisWord("minus")
       { 
-          BinaryExpression bx = null ; 
+          GeneralExpression bx = null ; 
           
           Lexer.SingleSymbol opertor = tokenStream.removeNextTokenAsSymbol();
           
-          bx  = makeBinaryExpression( opertor.getSymbol() );
           
-          bx.setBefore(factor);
-          assert bx!= null ; 
 
           tokenStream.setSkipWhiteSpace(true);
           if( debugTrace) { System.out.println("   PARASE parsePowerOperator 2"); } 
           GeneralExpression  right = parsePowerOperator(); 
+          bx  = makeBinaryExpression( opertor.getSymbol(), factor, right  );
+          assert bx!= null ;
           if( debugTrace) { System.out.println("   END PARASE parsePowerOperator 2"); } 
-          bx.setAfter(right);
-          
+         
           String theCombinedType = bx.getType(); 
           if( theCombinedType.contains("Error") )parseErrorStop(" Cannot combine types " + theCombinedType ); 
          factor =  bx ;
@@ -1203,7 +1223,7 @@ public class BFLExpressionParser
       return factor ;  
    }
    //---------------------------------------------------------------------------
-     /** 
+     /**  for term see {@link parseTerm}
     * <pre>
     *    -SimpleExpression-----------------------------------------
     *              |                              |
@@ -1252,21 +1272,19 @@ public class BFLExpressionParser
               ||  tokenStream.hasThisSymbol('\u00D7') //  x 
               || tokenStream.hasThisSymbol('÷')   )
       { 
-          BinaryExpression bx = null ; 
+          GeneralExpression bx = null ; 
           Lexer.Token operator =  tokenStream.removeNextToken( ) ; 
           if( operator.getTokenType() == Lexer.TT_SYMBOL )
           { assert operator instanceof Lexer.SingleSymbol ; 
             Lexer.SingleSymbol sym = (Lexer.SingleSymbol)operator; 
-            bx  = makeBinaryExpression( sym.getSymbol() );
-            bx.setBefore(term);
-            term = bx ; 
-            assert bx!= null ; 
+           
             
             if( debugTrace) { System.out.println(" PARASE TERM 2"); } 
             GeneralExpression  right = parseTerm(); 
-             if( debugTrace) { System.out.println(" END PARASE TERM 2"); } 
+            bx  = makeBinaryExpression( sym.getSymbol() , term ,right );   assert bx!= null ; 
+            term = bx ; 
+            if( debugTrace) { System.out.println(" END PARASE TERM 2"); } 
             tokenStream.setSkipWhiteSpace(oldSetting);
-            bx.setAfter(right);
             
             String theCombinedType = bx.getType(); 
             if( theCombinedType.contains("Error") )parseErrorStop(" Cannot combine types " + theCombinedType ); 
@@ -1282,7 +1300,7 @@ public class BFLExpressionParser
    }
    
    //---------------------------------------------------------------------------
-  /** 
+  /**  for simpleMathExpression see {@link simpleMathExpression} 
     * <pre>
     parseComparisonExpression----------------------------------------------------
          |                                                  ^
@@ -1326,7 +1344,7 @@ public class BFLExpressionParser
           Lexer.SingleSymbol sym =  tokenStream.removeNextTokenAsSymbol() ;
           assert ( sym.getSymbol() == '=' )  ; 
           GeneralExpression ex2 =  simpleMathExpression();
-          BinaryExpression bx  = makeBinaryExpression( '=', ex, ex2 ); assert bx != null;
+          GeneralExpression bx  = makeBinaryExpression( '=', ex, ex2 ); assert bx != null;
           tokenStream.setSkipWhiteSpace(oldSetting);
           return bx; 
       }
@@ -1335,7 +1353,7 @@ public class BFLExpressionParser
       {
           Lexer.SingleSymbol sym =  tokenStream.removeNextTokenAsSymbol() ;
           GeneralExpression ex2 =  simpleMathExpression();
-          BinaryExpression bx  = makeBinaryExpression( '~' , ex,ex2); assert bx != null;
+          GeneralExpression bx  = makeBinaryExpression( '~' , ex,ex2); assert bx != null;
           tokenStream.setSkipWhiteSpace(oldSetting);
           return  bx;  
       }
@@ -1344,7 +1362,7 @@ public class BFLExpressionParser
       { 
         Lexer.SingleSymbol sym =  tokenStream.removeNextTokenAsSymbol() ;
         GeneralExpression ex2 =  simpleMathExpression();
-        BinaryExpression bx  = makeBinaryExpression( '≤' , ex, ex2  );
+        GeneralExpression bx  = makeBinaryExpression( '≤' , ex, ex2  );
         System.out.println(" PARSING  < <<<<="+ bx);
         tokenStream.setSkipWhiteSpace(oldSetting);
         return bx ;
@@ -1359,7 +1377,7 @@ public class BFLExpressionParser
         { 
             Lexer.SingleSymbol equal =  tokenStream.removeNextTokenAsSymbol() ;
             GeneralExpression ex2 =  simpleMathExpression();
-            BinaryExpression bx  = makeBinaryExpression( '≤' , ex, ex2); 
+            GeneralExpression bx  = makeBinaryExpression( '≤' , ex, ex2); 
             tokenStream.setSkipWhiteSpace(oldSetting);
             return bx ;
         }
@@ -1373,7 +1391,7 @@ public class BFLExpressionParser
             return bx ; 
         }
         GeneralExpression ex2 =  simpleMathExpression();
-        BinaryExpression bx  = makeBinaryExpression( '<' , ex, ex2 );
+        GeneralExpression bx  = makeBinaryExpression( '<' , ex, ex2 );
         ex = bx ;  tokenStream.setSkipWhiteSpace(oldSetting);
         return bx; 
       }
@@ -1468,7 +1486,7 @@ public class BFLExpressionParser
         } 
          
         GeneralExpression ex2 =  simpleMathExpression();
-        BinaryExpression bx  = this.makeBinaryExpression('~' , ex, ex2);
+        GeneralExpression bx  = this.makeBinaryExpression('~' , ex, ex2);
         ex = bx ;  tokenStream.setSkipWhiteSpace(oldSetting);
         return ex;
       }
@@ -1503,9 +1521,17 @@ public class BFLExpressionParser
       return ex; 
    }
    //---------------------------------------------------------------------------
-
     /**
-     *
+     * for parseComparisonExpression see {}@link parseComparisonExpression}
+     * called by {@link parseExpression} 
+     * <PRE>
+     *      parseLogicExpression: 
+     *      -------parseComparisonExpression------------------------------------
+     *                                       |                                 |
+     *                                        -- AND parseComparisonExpression-|
+     *                                       |                                 |
+     *                                        -- OR  parseComparisonExpression-|
+     * </PRE> 
      * @return
      * @throws ParseError
      */
@@ -1568,7 +1594,7 @@ public class BFLExpressionParser
     * @return
     * @throws ParseError 
     */
-   String getIdentifier() throws ParseError 
+   protected String getIdentifier() throws ParseError 
    { 
       if( tokenStream.hasAnyWordAvilable() == false )this.parseErrorStop("Expected Idenifier");
       String identifier = ""; 
@@ -1681,7 +1707,11 @@ public class BFLExpressionParser
        return true ; 
    }
    
-   //---------------------------------------------------------------------------
+   //--------------------------------------------------------------------------
+   /** 
+    *  internal checking code - in addition to the unit test.
+    * @return 
+    */
    static boolean testSimpleExpression()
    {       
        System.out.print("TEST SimpleExpression "); 
