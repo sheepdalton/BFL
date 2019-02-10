@@ -47,7 +47,7 @@ public class VariableExpression implements GeneralExpression
     public BigDecimal evaluateCalculation()
     {
         assert linkToVariable != null;
-        return linkToVariable.getValue();
+        return linkToVariable.getNumericValue();
     }
     //--------------------------------------------------------------------------
 

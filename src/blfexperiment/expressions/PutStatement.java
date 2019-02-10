@@ -92,6 +92,7 @@ public class PutStatement implements Statement
     @Override
     public GeneralObject evaluteStatement()
     {
+       
       BigDecimal d = e.evaluateCalculation();
       if( variable == null  )
       { 

@@ -47,7 +47,7 @@ public class ArrayIndex extends UnariyExpression
       public BigDecimal evaluateCalculation()
     {
         assert linkToVariable != null;
-        return linkToVariable.getValue();
+        return linkToVariable.getNumericValue();
     }
     //--------------------------------------------------------------------------
 

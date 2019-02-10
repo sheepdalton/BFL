@@ -36,7 +36,7 @@ import java.util.*;
  * 
  * @author Sheep Dalton
  */
-public class BLFExperiment
+public class BLFCalculator
 {
       
     /**
@@ -52,7 +52,7 @@ public class BLFExperiment
         if( slf )
         { 
           Scanner sc = new Scanner(System.in); 
-          System.out.println("---------------BFL WELCOME-----------------------");
+          System.out.println("---------------BFL CALCULATOR WELCOME----------------------");
           System.out.println("TRY ME with 2 * 2 \nQUIT on a line to finish ");
           String name ; 
           while( ((name = sc.nextLine())!= null) && ! name.equalsIgnoreCase("QUIT"))

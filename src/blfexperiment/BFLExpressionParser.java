@@ -113,10 +113,9 @@ public class BFLExpressionParser
       }
       allUnitsPlusSynomims.put("pound",typePound );
    }
-   //---------------------------------------------------------------------------
-
+   //--------------------------------------------------------------------------
     /**
-     *
+     * contructor for BFLExpressionParser with souce code and symbol table.
      * @param source
      * @param s
      */
@@ -129,7 +128,8 @@ public class BFLExpressionParser
    }   
    //---------------------------------------------------------------------------
     /**
-     *
+     * pushSymbolTable is called when you open a new block with local variables. 
+     * automatically grabs. 
      * @return
      */
    protected SymbolTable pushSymbolTable()
@@ -285,19 +285,19 @@ public class BFLExpressionParser
    }
    //---------------------------------------------------------------------------
    /**
-    * makes a linteral number expression 
+    * makes a linteral number expression - subclasses can over ride this.
     * @param number
     * @return 
     */
-   LiteralNumberExpression makeLiteralNumberExpression( String number )
+   protected LiteralNumberExpression makeLiteralNumberExpression( String number )
    { 
        return  new LiteralNumberExpression(number); 
    }
    //---------------------------------------------------------------------------
    /**
     * Currency is in the form 
-     $ or £ or € [ Long typeNumber ] ) 
-    * @return 
+     $ or £ or € [ Long typeNumber ] )  assumes the symbol is there.
+    * @return LiteralNumberExpression
     */
    LiteralNumberExpression parseCurrency() throws ParseError
    { 
@@ -328,6 +328,7 @@ public class BFLExpressionParser
    //---------------------------------------------------------------------------
    /** 
     * Parse Units handles 
+    * <PRE>
     *    10Millionft 
     *    10ft , 30,000feet 
     *    0.1ft 
@@ -347,7 +348,7 @@ public class BFLExpressionParser
     *    1gram 
     *    1lb 
     *    30.22Ton
-    *    
+    *  </PRE> 
     * @param  -LiteralNumberExpression the values 
     * @return
     * @throws ParseError 
@@ -486,7 +487,7 @@ public class BFLExpressionParser
     };
     //--------------------------------------------------------------------------
     /**
-     *
+     * isACurrency returns a true 
      * @param item
      * @return
      */
@@ -505,9 +506,9 @@ public class BFLExpressionParser
     *              |                               |
     *              |-------Currency.Number---------|
     *              |                               |
-    *              |--------Number.Unit-------------|
+    *              |--------Number.Unit------------|
     *              |                               |
-    *              |-------- number-------------|
+    *              |--------- number---------------|
 
     *  </pre>
   parse a typeNumber can return null if not typeNumber 
@@ -779,9 +780,9 @@ public class BFLExpressionParser
             Expression e = this.parseExpression(); 
             literlExpr.add(e);
             if( tokenStream.hasThisSymbol(']') ) break ; 
-            if( tokenStream.hasThisSymbol(',')  )// or ;  ? 
+            if( tokenStream.hasThisSymbol(';')  )// or ;  ? 
             {
-                 brkt = tokenStream.removeNextTokenAsSymbol();
+                brkt = tokenStream.removeNextTokenAsSymbol();
             }
             // @@@ TODO ACCEPT NEWLINE as seperator ???  
         }
@@ -979,15 +980,10 @@ public class BFLExpressionParser
             assert false ; // reutrn new attribute access 
         }else this.parseErrorStop("EXPECTED s as in 's for attrbite access");
     }
-    // put array[ 3 ; 4] 
-    if( tokenStream.hasThisSymbol('['))   
-    { 
-        // check this refers to an array 
-        word =  tokenStream.removeNextToken() ;
-        GeneralExpression ne =   parseExpression(); 
-        if(!  tokenStream.hasThisSymbol(']') )
-                this.parseErrorStop("EXPECTED ] for array access");
-        // can have ';' in array acce 
+    
+    if( tokenStream.hasThisSymbol('[')) //.. put array[ 3 ; 4] 
+    {  
+       return  parseListLiteral(); 
     }
     if(tokenStream.hasThisSymbol('#') ) // ARRAY ACCESSS 
     { 
@@ -2043,9 +2039,10 @@ public class BFLExpressionParser
        BigDecimal d = BigDecimal.ZERO; 
        //System.out.printf(" EXP=  %s\n",e.toString());
        Variable it= null ; 
-       if( e.isANumber())
+       
+       if( e.isANumber() )
        { 
-          d = e.evaluateCalculation();
+           d = e.evaluateCalculation();
            assert d != null ;
            it = testSymTable.getOrMakeIfNull("_it"); 
            it.setValue(d);
@@ -2085,18 +2082,15 @@ public class BFLExpressionParser
         //e.toHumanString(); 
         String s = "NOT SURE" ;  
         if( b ==false ) s = "NO"; else s = "YES";
-        
         System.out.printf( "Answer 3 to your (question)  %s  \n", s ) ; // d.compareTo(BigDecimal.ONE));
         return s ; 
        }
        else 
        {
-           System.out.println( "Answer2 = "+ e.doIt().toString() ); 
+           GeneralObject go = e.doIt(); 
+           System.out.println( "General Object doit = "+ go.toString() ); 
            return e.doIt().toString()  ; 
        }
-       
-       ///System.out.println( " TYPE of IT + " +  it.getType()); 
-       
        
        return  d.toPlainString();
    }

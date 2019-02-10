@@ -19,6 +19,7 @@
 package blfexperiment;
 
 import static blfexperiment.BFLExpressionParser.runSimpleExpression;
+import blfexperiment.GeneralTypes.GeneralObject;
 import blfexperiment.expressions.*;
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -48,6 +49,131 @@ public class BFLExpressionParserTest
        BufferedReader in = new BufferedReader(new StringReader(expr));
        BFLParser  bfl = BFLParser.make( in ) ;
        return bfl ; 
+   }
+    //--------------------------------------------------------------------------
+   @Test
+   public void testLiteraList()
+   { 
+       System.out.print("TEST Lists "); 
+       BFLExpressionParser  bfl;  Expression ex;
+       
+        try 
+        { 
+            bfl = fromSource("[ 1 ; 2; 3 ; 4 ; 5] "); 
+            ex = bfl.parseFactor();
+            assert ex!= null ; 
+            assert ex instanceof LiteralListExpression : "NOT literal"; 
+            LiteralListExpression lx = new LiteralListExpression(); 
+            lx.add(new LiteralNumberExpression( "1" ));
+            lx.add(new LiteralNumberExpression( "2" ));
+            lx.add(new LiteralNumberExpression( "3" ));
+            lx.add(new LiteralNumberExpression( "4" ));
+            lx.add(new LiteralNumberExpression( "5" ));
+            assert  lx.isCompatable(ex);
+            
+            BFLExpressionParser bl =  fromSource( "[ 1 ; 2; 3 ; 4 ; 5]*2");
+            GeneralExpression e = bl.parseExpression(); 
+            GeneralObject go = e.doIt();
+            assert go.toString().equals( "[ 2 ; 4 ; 6 ; 8 ; 10]" );
+            
+            bl =  fromSource( "[ 1 ; 2; 3 ; 4 ; 5] -1 ");
+            e = bl.parseExpression(); 
+            go = e.doIt(); 
+            assert go.toString().equals( "[ 0 ; 1 ; 2 ; 3 ; 4]" );
+            
+            bl =  fromSource( "[ 2 ; 4 ; 6 ; 8 ; 10] / 2 ");
+            e = bl.parseExpression();  go = e.doIt(); 
+            assert go.toString().equals( "[ 1 ; 2 ; 3 ; 4 ; 5]" );
+        }
+        catch(  ParseError e )
+        { 
+            System.err.println("TEST EXPRESSION: PARSE ERROR->"+ e + "\n" );
+            e.printStackTrace();
+            fail("LiteraList vars ok");
+        }
+         System.out.println(" OK "); 
+   }
+   //---------------------------------------------------------------------------
+  @Test
+   public  void testNumber()
+   { 
+       System.out.print("TEST Number/Units "); 
+       BFLExpressionParser  bfl; 
+       LiteralNumberExpression ex;
+       
+        try 
+        { 
+            String expr = "100,000ft";
+            System.out.println("\nTrying '"+ expr+"'"); 
+            bfl = fromSource(expr); 
+            ex = bfl.parseLiteralNumber();
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            LiteralNumberExpression cmp = new LiteralNumberExpression( "100000","ft");
+            assert ( cmp.getType().equalsIgnoreCase("ft")); 
+            if( cmp.isCompatable(ex) == false ) System.out.println(cmp + " " + ex);
+            assert cmp.isCompatable(ex) == true  ; 
+            System.out.println( ex.getNumberAsText());
+
+            bfl = fromSource("34.000Yard"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText());
+            
+            bfl = fromSource("111,000,34Inch"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText());
+            
+            bfl = fromSource("34Meter");                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText());
+            
+            bfl = fromSource("34mm"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText());
+            
+            bfl = fromSource("12cm"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText());
+            
+            bfl = fromSource("45km"); 
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText()); 
+        } 
+        catch(  ParseError e )
+        { 
+            System.err.println("TEST EXPRESSION: PARSE ERROR->"+ e + "\n" );
+            e.printStackTrace();
+            fail("Ligit vars ok");
+        }
+        
+        try 
+        { 
+            bfl = fromSource("34feet"); // FEET IS NOT A UNIT
+            ex = bfl.parseLiteralNumber(); 
+            assert ex!= null ; 
+            assert ex instanceof LiteralNumberExpression : "NOT literal"; 
+            System.out.println( ex.getNumberAsText());
+            fail(" should not work.");
+        }
+            catch(  ParseError e )
+        { 
+            System.out.println(" TEST Number OK "); 
+            
+        }
+            
+        System.out.println(" TEST Number OK "); 
+      
    }
    //--------------------------------------------------------------------------
    @Test 
@@ -487,7 +613,7 @@ public class BFLExpressionParserTest
             fail("testparseLogicExpression .");
         }
     }
-
+    //--------------------------------------------------------------------------
     /**
      *
      * @return true if tests passed. 

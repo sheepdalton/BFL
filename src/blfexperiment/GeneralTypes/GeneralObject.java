@@ -27,7 +27,6 @@ import java.math.BigDecimal;
  */
 public interface GeneralObject
 {
-
     /**
      *
      * @return
@@ -42,6 +41,7 @@ public interface GeneralObject
     */
     
     default boolean isNumber(){ return false ; } 
+    default BigDecimal getAsNumber(){ return BigDecimal.ZERO; } 
 
     /**
      *

@@ -6,6 +6,7 @@
 package blfexperiment.expressions;
 
 import blfexperiment.BFLExpressionParser;
+import blfexperiment.GeneralTypes.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 //==============================================================================
@@ -20,8 +21,12 @@ public class BinaryExpression implements GeneralExpression
 {
     GeneralExpression before;
     GeneralExpression after;
-    int operator  ;
+    int operator  ;// character '*' etc 
     
+    public enum Operators   // this is in progress 
+    {
+          PLUS   , TIMES, DIVIDE , MINUS , POWER 
+    }; 
     
     //--------------------------------------------------------------------------
     /**
@@ -43,14 +48,13 @@ public class BinaryExpression implements GeneralExpression
     { 
        return  "{" + before.toString() + " " + (char)this.operator + " "+ after.toString()+ " }"  ; 
     }
+    //--------------------------------------------------------------------------
     public String toHumanString()
     { 
         return  "(" + before.toHumanString() + " " + (char)this.operator + " "+ after.toHumanString()+ " )"  ; 
     }
     //--------------------------------------------------------------------------
-
     /**
-     *
      * @param s
      * @return
      */
@@ -59,7 +63,6 @@ public class BinaryExpression implements GeneralExpression
         return   s.equals(BFLExpressionParser.typeInt) ||  s.equals(BFLExpressionParser.typeFloat) ; 
     }
     //--------------------------------------------------------------------------
-
     /**
      *
      * @return
@@ -164,11 +167,7 @@ public class BinaryExpression implements GeneralExpression
         }
         return myType ; 
     }
-    //==========================================================================
-    public enum Operators   
-    {
-          PLUS   , TIMES, DIVIDE , MINUS , POWER 
-    }; 
+    //--------------------------------------------------------------------------
     /**
      *
      * @param operator
@@ -179,7 +178,7 @@ public class BinaryExpression implements GeneralExpression
         if( false )System.out.println(" new BinaryExpression  operator " + 
                 (char)( operator ) + " is ? " + isQuestion());
     }
-   
+    //--------------------------------------------------------------------------
     /**
      *  isANumber helps type check statements. Also used to optimise by 
      *  accelerating the evalaution. 
@@ -191,7 +190,10 @@ public class BinaryExpression implements GeneralExpression
     { 
         //@@@ TODO - long term check for objects and strings.
         if(this.isQuestion()==true )return false ; 
-        return  true ; 
+        assert before != null ; 
+        assert after != null ; 
+        if( before.isANumber() && after.isANumber())return true ; 
+        return  false ; 
     }
     //--------------------------------------------------------------------------
     /**
@@ -241,6 +243,55 @@ public class BinaryExpression implements GeneralExpression
         return true ; 
     }
     //--------------------------------------------------------------------------
+    /**
+     *  this handles operations like 
+     *     [ 1;4;5;6] * 5 -> [ [5;20;25;3] 
+     *     [ 1;4;5;6] + 1 
+     *     [ 1;4;5;6] *  [ 1;4;5;6]] 
+     *     [ 1;4;5;6] DOT Product [ 1;4;5;6]] 
+     *      4 in [ 1;4;5;6] 
+     *     [ 4 ; 5 ] in 1;4;5;6] 
+     *    [ 4;5] union [ 3,2]
+     *     [ 1;4;5;6] = [ 1;4;5;6] 
+     *     [ 1;4;5;6] ~ [ 1;4;5;6] // almost is t-test at 99%
+     *     the sin of  [ 1;4;5;6]  -> [ sin(1); sin(4);
+     *    
+     *      [ 1;4;5;6]'s count 
+     *      [ 1;4;5;6]'s average 
+     *      [ 1;4;5;6]'s mean   
+     *      lst[3] 
+     *      list#3 
+     * 
+     * 
+     * @return 
+     */
+    @Override
+    public GeneralObject doIt()
+    {
+         assert   before != null :"No left"; assert   after  != null :"No left";
+         if( before.isANumber() &&  after.isANumber() )
+         { 
+            return  GeneralExpression.super.doIt(); 
+         }
+         if( before.isList() && after.isANumber())
+         { 
+            GeneralObject val = before.doIt(); 
+           
+             if( !(val instanceof GeneralList ))
+             { 
+                 System.out.println( " not list "  + before );
+             }
+             assert val instanceof GeneralList ; 
+             GeneralList thelist = (GeneralList)val ; 
+             GeneralObject afterVal = after.doIt(); 
+             assert afterVal instanceof BigDecimal; 
+             BigDecimal thenum = (BigDecimal)afterVal; 
+             return thelist.apply(this.operator , thenum); 
+         }
+         // handle 4 * [ 3, 3] 
+         return  GeneralExpression.super.doIt(); 
+    }
+    //--------------------------------------------------------------------------
     // System.out.println(".... " + before.toString() + "].." );
     // System.out.println("r... [" + after.toString() + "]..")
     /**
@@ -258,12 +309,12 @@ public class BinaryExpression implements GeneralExpression
       
      switch (  operator )
      { 
-         case '+' : case '^' :  
+         /*case '+' : case '^' :  
          case '-': case '*' : case '/': case '\u00D7':  
          { 
              assert false;  // this is handled by BinaryNumericOnlyExpression now
-         }break ; 
-        /* case '+' : {  BigDecimal result = beforeVal.add(rigthVal); return result ;} 
+         }break ; */
+         case '+' : {  BigDecimal result = beforeVal.add(rigthVal); return result ;} 
          case '-': { BigDecimal result = beforeVal.subtract(rigthVal); return result;} 
          case '*' : case '\u00D7': { BigDecimal result = beforeVal.multiply(rigthVal); return result;} 
          case '/':case '÷': 
@@ -276,7 +327,7 @@ public class BinaryExpression implements GeneralExpression
              BigDecimal result = beforeVal.pow(power); 
              return result ; 
         }
-        */ 
+        
         case '=': 
         { 
             System.out.println("= LEfT  " + beforeVal + "  R = "+ (rigthVal)); 

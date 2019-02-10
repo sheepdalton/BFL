@@ -19,6 +19,8 @@
 
 package blfexperiment.expressions;
 
+import blfexperiment.GeneralTypes.GeneralNumber;
+import blfexperiment.GeneralTypes.GeneralObject;
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -31,7 +33,7 @@ import java.util.Objects;
    { 
        String normailsedform ; 
        String type ; //
-       BigDecimal value ; // should really be Generalobject.  
+       GeneralObject value ; // should really be Generalobject.  
        //-----------------------------------------------------------------------
 
     /**
@@ -42,7 +44,6 @@ import java.util.Objects;
         {
             this.normailsedform = name.intern();// canoncical versoin save space
         }
-
     /**
      *
      * @return
@@ -57,9 +58,9 @@ import java.util.Objects;
      * @param type
      */
     public void setType(String type)
-        {
+    {
             this.type = type;
-        }
+    }
         
     /**
      *
@@ -72,22 +73,24 @@ import java.util.Objects;
      *  object , text or number this is convenciance function. 
      * @return 
      */
-    public BigDecimal getValue()
+    public BigDecimal getNumericValue()
     {
+        assert value.isNumber(); 
+        return value.getAsNumber(); 
+    }
+   
+    public GeneralObject getValue()
+    { 
         return value;
     }
-
     /**
      *
      * @param value
      */
     public void setValue(BigDecimal value)
     {
-        this.value = value;
+        this.value = new GeneralNumber(value);
     }
-        
-      
-
     @Override
     public int hashCode()
     {

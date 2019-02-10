@@ -26,10 +26,10 @@ import static org.junit.Assert.*;
  *
  * @author Sheep Dalton
  */
-public class BLFExperimentTest
+public class BLFCalculatorTest
 {
     
-    public BLFExperimentTest()
+    public BLFCalculatorTest()
     {
     }
     

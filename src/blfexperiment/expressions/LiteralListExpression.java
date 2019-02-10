@@ -19,6 +19,8 @@
 
 package blfexperiment.expressions;
 
+import blfexperiment.GeneralTypes.GeneralList;
+import blfexperiment.GeneralTypes.GeneralObject;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -34,24 +36,58 @@ public class LiteralListExpression implements GeneralExpression
     { 
      listOfExpressions = new ArrayList<>(); 
     }
+    //--------------------------------------------------------------------------
+    /**
+     * adds an expression e. 
+     * @param e 
+     */
     public void add( Expression e )
     { 
       // assert (listOfExpressions! = null : " null listOfExpressions "); 
        listOfExpressions.add(e); 
     }
-    
+    //--------------------------------------------------------------------------
     @Override
     public String getType()
     {
-        if( listOfExpressions.size() == 0 )return "Empty";
-        return listOfExpressions.get(listOfExpressions.size()-1).getType() ;
+        if( listOfExpressions.size() == 0 )return "List of Empty";
+        return "List of " + listOfExpressions.get( listOfExpressions.size()-1).getType() ;
     }
+    //--------------------------------------------------------------------------
+    @Override
+    public GeneralObject doIt()
+    {
+        GeneralList gl = new GeneralList(); 
+        for( Expression e: listOfExpressions )
+        { 
+            gl.add( e.doIt()); 
+        }
+        return gl;    //To change body of generated methods, choose Tools | Templates.
+    }
+    //--------------------------------------------------------------------------
+    @Override public boolean isList(){ return true ; }
+    //--------------------------------------------------------------------------
     public BigDecimal evaluateCalculation( )
     { 
+        assert false ; 
         if( listOfExpressions.size() == 0 )return null;
         
         return listOfExpressions.get(listOfExpressions.size()-1).evaluateCalculation() ;
     }
+    //--------------------------------------------------------------------------
+    @Override
+    public boolean isCompatable(Expression other)
+    {
+        if(! (other instanceof LiteralListExpression) )return false ;
+        LiteralListExpression le = (LiteralListExpression)other; 
+        for( int i = 0 ; i <  listOfExpressions.size() ; i++ )
+        { 
+          if( !listOfExpressions.get(i).isCompatable( listOfExpressions.get(i)))
+              return false ;     
+        }
+        return true ; //To change body of generated methods, choose Tools | Templates.
+    }
+    //--------------------------------------------------------------------------
     /*
     @Override
     public String toHumanString()
@@ -67,11 +103,7 @@ public class LiteralListExpression implements GeneralExpression
 
     
 
-    @Override
-    public GeneralObject doIt()
-    {
-        return Expression.super.doIt(); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 
     @Override
     public BigDecimal evaluateCalculation()
@@ -103,10 +135,6 @@ public class LiteralListExpression implements GeneralExpression
         return  false ;  //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    public boolean isCompatable(Expression other)
-    {
-        return Expression.super.isCompatable(other); //To change body of generated methods, choose Tools | Templates.
-    }*/
+    */
 
 }

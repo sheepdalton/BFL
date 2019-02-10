@@ -111,6 +111,12 @@ public interface Expression
      * @return 
      */
     default boolean purelyLogic(){ return false ; }
+    default boolean isList(){ return false ; }
+    default boolean isText(){ return false ; }
+    default boolean isRange(){ return false ; }
+    default boolean isVector(){ return false ; }
+    default boolean isDateTime(){ return false ; }
+    default boolean isGeneralObject(){ return false ; }
  
     /**
      *  check if the type of this expression is a question. 
